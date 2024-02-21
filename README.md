@@ -11,4 +11,11 @@ Bubble создан для того, чтобы помочь людям лучш
 ## Основной функционал приложения 🏗:
 
 ### Стек 📋:
-
+  * Jetpack Compose
+  * Clean architecture
+  * MVI architectural pattern
+  * Kotlin coroutines + Flow
+  * Dagger Hilt
+  * Jetpack Compose Navigation
+    
+### Архитектура 🛠:

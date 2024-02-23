@@ -1,12 +1,39 @@
-package com.example.bubble.ui.theme
+package com.example.bubble.core.ui.theme
 
-import androidx.compose.material3.Typography
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+val bubbleTypography = BubbleTypography(
+    heading = TextStyle(
+        fontFamily = FontFamily.Default, // Ubuntu
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp
+    ),
+    body = TextStyle(
+        fontFamily = FontFamily.Default, // JetBrains
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+    ),
+    title = TextStyle(
+        fontFamily = FontFamily.Default, // JetBrains
+        fontWeight = FontWeight.Medium,
+        fontSize = 15.sp
+    )
+)
+
+val bubbleShapes = BubbleShapes(
+    basePadding = 10.dp,
+    itemsPadding = 15.dp,
+    textPadding = 5.dp,
+    cornerStyle = RoundedCornerShape(10.dp)
+)
+
 // Set of Material typography styles to start with
+/*
 val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
@@ -15,7 +42,8 @@ val Typography = Typography(
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     )
-    /* Other default text styles to override
+    */
+/* Other default text styles to override
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
@@ -30,5 +58,5 @@ val Typography = Typography(
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
     )
-    */
-)
+    *//*
+)*/

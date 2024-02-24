@@ -12,6 +12,9 @@ kotlin = "1.9.22"
 hilt = "2.50"
 daggerCompiler = "2.50"
 
+# Room
+room = "2.6.1"
+
 junit = "4.13.2"
 junitVersion = "1.1.5"
 lifecycleRuntimeKtx = "2.7.0"
@@ -54,6 +57,10 @@ androidx-ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graph
 material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
 
 #retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref="retrofit" }
+
+# room
+kotlinx-room = { module = "androidx.room:room-runtime", version.ref = "room"}
+kotlinx-android-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "app"}

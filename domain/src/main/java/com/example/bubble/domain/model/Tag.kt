@@ -1,14 +1,13 @@
 package com.example.bubble.domain.model
 
 data class Tag(
-    val name: TagNames,
-    val color: TagColors,
+    val name: String
 )
 
-enum class TagNames{
-    STUDY, WORK, SELF_DEVELOP, READ, HOME
-}
-
-enum class TagColors{
-    RED, YELLOW, BLUE, ORANGE, PURPLE, GREEN, TURQUOISE, TOXIC_GREEN
+enum class TagNames(val color: String){
+    STUDY("Red"),
+    WORK("Yellow"),
+    READ("Blue"),
+    HOME("Orange"),
+    SELF_DEVELOP("Purple"),
 }

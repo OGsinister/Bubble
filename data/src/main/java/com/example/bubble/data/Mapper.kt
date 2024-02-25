@@ -1,10 +1,14 @@
 package com.example.bubble.data
 
 import com.example.bubble.data.model.AwardEntity
+import com.example.bubble.data.model.BubbleEntity
 import com.example.bubble.data.model.HistoryEntity
+import com.example.bubble.data.model.TagEntity
 import com.example.bubble.data.model.WaterEntity
 import com.example.bubble.domain.model.Award
+import com.example.bubble.domain.model.Bubble
 import com.example.bubble.domain.model.History
+import com.example.bubble.domain.model.Tag
 import com.example.bubble.domain.model.Water
 
 fun AwardEntity.toAward(): Award {
@@ -29,7 +33,21 @@ fun Award.toAwardEntity(): AwardEntity{
 fun HistoryEntity.toHistory(): History{
     return History(
         isDone = isDone,
-        bubble = bubble
+        bubble = bubble.toBubble()
+    )
+}
+
+fun BubbleEntity.toBubble(): Bubble {
+    return Bubble(
+        volume = volume,
+        dateTime = dateTime,
+        tag = tag.toTag()
+    )
+}
+
+fun TagEntity.toTag(): Tag{
+    return Tag(
+        name = name
     )
 }
 

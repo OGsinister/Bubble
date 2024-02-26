@@ -7,17 +7,13 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.bubble.data.dao.AwardDao
 import com.example.bubble.data.dao.HistoryDao
-import com.example.bubble.data.dao.WaterDao
-import com.example.bubble.data.model.AwardEntity
-import com.example.bubble.data.model.HistoryEntity
-import com.example.bubble.data.model.WaterEntity
+import com.example.bubble.data.dbo.AwardEntity
+import com.example.bubble.data.dbo.HistoryEntity
 
-@Database(entities = [AwardEntity::class, HistoryEntity::class, WaterEntity::class], version = 1)
-@TypeConverters(Converter::class)
+@Database(entities = [AwardEntity::class, HistoryEntity::class], version = 1)
 abstract class BubbleDatabase: RoomDatabase() {
     abstract fun awardDao(): AwardDao
     abstract fun historyDao(): HistoryDao
-    abstract fun waterDao(): WaterDao
 
     companion object{
         const val DATABASE_NAME = "Bubble"
@@ -26,8 +22,8 @@ abstract class BubbleDatabase: RoomDatabase() {
 
 fun bubbleDatabase(applicationContext: Context): BubbleDatabase {
     return Room.databaseBuilder(
-        checkNotNull(applicationContext.applicationContext),
-        BubbleDatabase::class.java,
-        BubbleDatabase.DATABASE_NAME
+        context = checkNotNull(applicationContext.applicationContext),
+        klass = BubbleDatabase::class.java,
+        name = BubbleDatabase.DATABASE_NAME
     ).build()
 }

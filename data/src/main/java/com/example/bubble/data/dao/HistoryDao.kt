@@ -4,14 +4,14 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.bubble.data.model.HistoryEntity
-import com.example.bubble.data.model.WaterEntity
+import com.example.bubble.data.dbo.BubbleEntity
+import com.example.bubble.data.dbo.HistoryEntity
 
 @Dao
 interface HistoryDao {
     @Query("SELECT * FROM History")
-    fun getHistory(): HistoryEntity
+    fun getHistory(): List<HistoryEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addBubbleToHistory(waterEntity: WaterEntity)
+    suspend fun addToHistory(historyEntity: HistoryEntity)
 }

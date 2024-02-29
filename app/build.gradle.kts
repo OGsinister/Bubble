@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.ksp)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -68,8 +70,17 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    ksp(libs.dagger.compiler)
+    // Hilt
+    kapt(libs.dagger.compiler)
+    kapt(libs.hilt.android.compiler)
     implementation(libs.dagger.hilt.android)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    // Room
+    implementation(libs.kotlinx.room)
+    ksp(libs.kotlinx.android.room.compiler)
 
     implementation(project(":domain"))
     implementation(project(":data"))

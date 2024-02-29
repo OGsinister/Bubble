@@ -1,13 +1,17 @@
 package com.example.bubble.data.repository
 
+import android.util.Log
 import com.example.bubble.data.BubbleDatabase
-import com.example.bubble.data.dbo.AwardEntity
-import com.example.bubble.domain.utils.DatabaseResource
+import com.example.bubble.data.local.database.dbo.AwardEntity
+import com.example.bubble.data.utils.DatabaseResource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.IOException
+import javax.inject.Inject
 
-class AwardRepository(private val database: BubbleDatabase) {
+class AwardRepository @Inject constructor(
+    private val database: BubbleDatabase
+) {
     fun getAllAwards(): Flow<DatabaseResource<List<AwardEntity>>>{
         return flow {
 
@@ -17,9 +21,9 @@ class AwardRepository(private val database: BubbleDatabase) {
                 val cachedAwards = database.awardDao()
                     .getAllAwards()
                 if(cachedAwards.isEmpty()){
-                    emit(DatabaseResource.Empty(data = emptyList()))
+                    emit(DatabaseResource.Empty(emptyData = emptyList(), message = "Empty list"))
                 }
-                emit(DatabaseResource.Success(data = cachedAwards))
+                emit(DatabaseResource.LoadedData(loadedData = cachedAwards))
             }catch (e: IOException){
                 emit(DatabaseResource.Error(message = e.localizedMessage))
             }catch (e: Exception){

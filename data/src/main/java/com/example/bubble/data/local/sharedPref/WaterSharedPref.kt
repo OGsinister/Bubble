@@ -1,12 +1,14 @@
-package com.example.bubble.data.local
+package com.example.bubble.data.local.sharedPref
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.bubble.data.repository.WaterRepository
 import com.example.bubble.domain.utils.Constants
+import javax.inject.Inject
 
-class WaterSharedPref(
+class WaterSharedPref @Inject constructor(
     private val context: Context
-) {
+): WaterRepository {
     private val prefName = Constants.waterSharedPrefName
     private var waterSharedPref: SharedPreferences =
         context.getSharedPreferences(prefName, Context.MODE_PRIVATE)
@@ -16,14 +18,12 @@ class WaterSharedPref(
         private const val TOKEN = Constants.waterSharedPrefToken
     }
 
-    public fun updateWater(value: Float?){
+    override fun updateWater(newValue: Float) {
         val currentValue = getWater()
-        value?.let {
-            editor.putFloat(TOKEN, it + currentValue).commit()
-        }
+        editor.putFloat(TOKEN, currentValue + newValue).commit()
     }
 
-    public fun getWater(): Float{
+    override fun getWater(): Float {
         return waterSharedPref.getFloat(TOKEN, 0.0f)
     }
 }

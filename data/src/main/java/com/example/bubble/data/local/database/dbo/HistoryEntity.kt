@@ -1,4 +1,4 @@
-package com.example.bubble.data.dbo
+package com.example.bubble.data.local.database.dbo
 
 import androidx.room.ColumnInfo
 import androidx.room.Embedded

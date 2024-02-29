@@ -1,11 +1,10 @@
-package com.example.bubble.data.dao
+package com.example.bubble.data.local.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.bubble.data.dbo.BubbleEntity
-import com.example.bubble.data.dbo.HistoryEntity
+import com.example.bubble.data.local.database.dbo.HistoryEntity
 
 @Dao
 interface HistoryDao {

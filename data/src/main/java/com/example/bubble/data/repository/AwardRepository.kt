@@ -20,10 +20,13 @@ class AwardRepository @Inject constructor(
                 emit(DatabaseResource.Loading())
                 val cachedAwards = database.awardDao()
                     .getAllAwards()
-                if(cachedAwards.isEmpty()){
+
+                if(cachedAwards.isNotEmpty()){
+                    emit(DatabaseResource.LoadedData(loadedData = cachedAwards))
+                }else{
                     emit(DatabaseResource.Empty(emptyData = emptyList(), message = "Empty list"))
                 }
-                emit(DatabaseResource.LoadedData(loadedData = cachedAwards))
+
             }catch (e: IOException){
                 emit(DatabaseResource.Error(message = e.localizedMessage))
             }catch (e: Exception){

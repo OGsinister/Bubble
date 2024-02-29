@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.bubble.award.presentation.CheckUI
+import com.example.bubble.award.presentation.AwardScreen
 import com.example.bubble.core.ui.theme.BubbleTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BubbleTheme{
-                CheckUI()
+                AwardScreen()
             }
         }
     }

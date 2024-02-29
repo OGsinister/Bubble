@@ -25,13 +25,6 @@ fun Award.toAwardEntity(): AwardEntity {
     )
 }
 
-fun HistoryEntity.toHistory(): History{
-    return History(
-        isDone = isDone,
-        bubble = bubble.toBubble()
-    )
-}
-
 fun BubbleEntity.toBubble(): Bubble {
     return Bubble(
         volume = volume,

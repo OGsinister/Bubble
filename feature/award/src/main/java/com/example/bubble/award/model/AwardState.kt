@@ -1,5 +1,7 @@
 package com.example.bubble.award.model
 
+import com.example.bubble.domain.model.Award
+
 internal sealed class AwardState{
     data object DefaultState: AwardState()
     data object IsLoadingState: AwardState()

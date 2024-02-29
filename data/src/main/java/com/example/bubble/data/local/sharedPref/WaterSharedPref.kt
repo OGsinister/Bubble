@@ -9,13 +9,13 @@ import javax.inject.Inject
 class WaterSharedPref @Inject constructor(
     private val context: Context
 ): WaterRepository {
-    private val prefName = Constants.waterSharedPrefName
+    private val prefName = Constants.WATER_SHARED_PREF_NAME
     private var waterSharedPref: SharedPreferences =
         context.getSharedPreferences(prefName, Context.MODE_PRIVATE)
     private var editor: SharedPreferences.Editor = waterSharedPref.edit()
 
     companion object{
-        private const val TOKEN = Constants.waterSharedPrefToken
+        private const val TOKEN = Constants.WATER_SHARED_PREF_TOKEN
     }
 
     override fun updateWater(newValue: Float) {

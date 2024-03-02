@@ -1,7 +1,7 @@
 package com.example.bubble.data.repository
 
 interface WaterRepository {
-    fun updateWater(newValue: Float)
+    fun updateBubbleCount(newBubble: Int)
 
-    fun getWater(): Float?
+    fun getBubbleCount(): Int?
 }

@@ -22,7 +22,15 @@ class UpdateAwardUseCase @Inject constructor(
             }
 
             AwardCodes.FIRST_BUBBLE_CANCELLED -> TODO("Not implemented")
-            AwardCodes.FIRST_BUBBLE_DONE -> TODO("Not implemented")
+            AwardCodes.FIRST_BUBBLE_DONE -> {
+                val awardFromJson = awardSharedPref.getAward()
+                val awardEntity = awardFromJson.find {
+                    it.id == code.id
+                }
+                if (awardEntity != null) {
+                    repository.updateAward(awardEntity)
+                }
+            }
         }
     }
 }

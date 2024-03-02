@@ -65,6 +65,8 @@ dependencies {
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.android.compiler)
     implementation(libs.dagger.hilt.android)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(project(":domain"))

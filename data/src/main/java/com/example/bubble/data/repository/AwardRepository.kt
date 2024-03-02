@@ -1,8 +1,8 @@
 package com.example.bubble.data.repository
 
-import android.util.Log
 import com.example.bubble.data.BubbleDatabase
 import com.example.bubble.data.local.database.dbo.AwardEntity
+import com.example.bubble.data.local.sharedPref.AwardSharedPref
 import com.example.bubble.data.utils.DatabaseResource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -10,7 +10,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 class AwardRepository @Inject constructor(
-    private val database: BubbleDatabase
+    private val database: BubbleDatabase,
+    private val awardSharedPref: AwardSharedPref
 ) {
     fun getAllAwards(): Flow<DatabaseResource<List<AwardEntity>>>{
         return flow {
@@ -20,6 +21,8 @@ class AwardRepository @Inject constructor(
                 emit(DatabaseResource.Loading())
                 val cachedAwards = database.awardDao()
                     .getAllAwards()
+
+                awardSharedPref.updateAward(cachedAwards)
 
                 if(cachedAwards.isNotEmpty()){
                     emit(DatabaseResource.LoadedData(loadedData = cachedAwards))
@@ -35,7 +38,13 @@ class AwardRepository @Inject constructor(
         }
     }
 
+    suspend fun updateAward(awardEntity: AwardEntity){
+        awardEntity.id?.let {
+            return database.awardDao().updateAward(it)
+        }
+    }
+
     suspend fun addAward(awardEntity: AwardEntity){
-        return database.awardDao().addAward(awardEntity)
+        database.awardDao().addAward(awardEntity)
     }
 }

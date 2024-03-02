@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
@@ -38,15 +40,11 @@ fun AwardScreen(
     ) {
         when(state.value){
             is AwardState.LoadedAwardsState -> {
-                AwardItem(
-                    modifier = modifier,
-                    item =  Award("Пунктуальный", "Вы заходили 10 дней подряд", 1, true)
-                )
-                /*LazyColumn {
+                LazyColumn {
                     items((state.value as AwardState.LoadedAwardsState).data){
                         AwardItem(modifier = modifier, item = it)
                     }
-                }*/
+                }
             }
             is AwardState.EmptyDataState -> {
                 Text(text = "EmptyDataState")
@@ -69,13 +67,17 @@ fun AwardItem(
     modifier: Modifier,
     item: Award
 ){
+    val cardColor = if(item.isOpen == true){
+        BubbleTheme.colors.notificationColor
+    }else{
+        BubbleTheme.colors.secondaryBackgroundColor
+    }
+
     Card(
         modifier = modifier
             .padding(BubbleTheme.shapes.itemsPadding)
             .clip(BubbleTheme.shapes.cornerStyle),
-        colors = CardDefaults.cardColors(
-            BubbleTheme.colors.notificationColor
-        )
+        colors = CardDefaults.cardColors(cardColor)
     ) {
         Row(
             modifier = modifier

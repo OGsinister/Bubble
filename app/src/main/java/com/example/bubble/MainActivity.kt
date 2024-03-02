@@ -16,10 +16,25 @@ class MainActivity : ComponentActivity() {
         setContent {
             BubbleTheme{
                 AwardScreen()
+                //CheckAwardSet()
             }
         }
     }
 }
+
+/*@Composable
+fun CheckAwardSet(
+    viewModel: MainViewModel = hiltViewModel()
+){
+    Column(modifier = Modifier.fillMaxSize()) {
+        Button(onClick = {
+            //viewModel.addAward()
+            viewModel.updateAchiv(AwardCodes.FIRST_BUBBLE_CLICK)
+        }) {
+            Text(text = "Click")
+        }
+    }
+}*/
 
 @Composable
 @Preview(showBackground = true)

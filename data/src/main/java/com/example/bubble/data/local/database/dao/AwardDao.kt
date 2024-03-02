@@ -11,6 +11,9 @@ interface AwardDao {
     @Query("SELECT * FROM Award")
     fun getAllAwards(): List<AwardEntity>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addAward(awardEntity: AwardEntity)
+
+    @Query("UPDATE Award SET is_open = 1 WHERE id = :id")
+    suspend fun updateAward(id: Int)
 }

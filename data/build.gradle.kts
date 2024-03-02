@@ -53,5 +53,9 @@ dependencies {
 
     implementation("javax.inject:javax.inject:1")
 
+    implementation("com.google.code.gson:gson:2.10.1")
+
+    implementation(libs.dagger.hilt.android)
+
     implementation(project(":domain"))
 }

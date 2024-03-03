@@ -34,7 +34,8 @@ object BubbleTheme{
 data class BubbleTypography(
     val heading: TextStyle,
     val body: TextStyle,
-    val title: TextStyle
+    val title: TextStyle,
+    val cardElement: TextStyle
 )
 
 data class BubbleShapes(

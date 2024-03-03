@@ -69,6 +69,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.hilt.navigation.compose)
 
+    // Lottie
+    implementation("com.airbnb.android:lottie-compose:6.1.0")
+
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":core"))

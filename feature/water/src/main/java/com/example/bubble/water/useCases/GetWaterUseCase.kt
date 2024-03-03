@@ -1,6 +1,5 @@
 package com.example.bubble.water.useCases
 
-import android.provider.ContactsContract.Data
 import android.util.Log
 import com.example.bubble.data.local.sharedPref.WaterSharedPref
 import com.example.bubble.data.utils.DatabaseResource
@@ -14,15 +13,9 @@ class GetWaterUseCase @Inject constructor(
 ) {
     operator fun invoke(): Flow<DatabaseResource<Water>> {
         return flow {
-            emit(DatabaseResource.Default())
-
+            emit(DatabaseResource.Loading())
             try {
-                emit(DatabaseResource.Loading())
                 val waterCount = waterSharedPref.getBubbleCount()
-
-                if(waterCount == 0){
-                    emit(DatabaseResource.Empty(message = "Empty"))
-                }
 
                 emit(DatabaseResource.LoadedData(
                     loadedData = Water(
@@ -44,6 +37,7 @@ fun makeComparison(bubbleCount: Int): String?{
 
     when(totalBubbleVolume){
         0f -> { return "Вы не лопали шары" }
+        0.5f -> { return "Это как стакан воды 🥛"}
         in 1f..5f -> { return "Это чуть больше литрового сока 👍" }
         in 10f..20f -> { return "Это примерно как половина набранной ванны" }
     }

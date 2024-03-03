@@ -22,6 +22,11 @@ val bubbleTypography = BubbleTypography(
         fontFamily = FontFamily.Default, // JetBrains
         fontWeight = FontWeight.Medium,
         fontSize = 15.sp
+    ),
+    cardElement = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.ExtraBold,
+        fontSize = 100.sp
     )
 )
 

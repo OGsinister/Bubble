@@ -58,4 +58,5 @@ dependencies {
     implementation(libs.dagger.hilt.android)
 
     implementation(project(":domain"))
+    implementation(project(":core"))
 }

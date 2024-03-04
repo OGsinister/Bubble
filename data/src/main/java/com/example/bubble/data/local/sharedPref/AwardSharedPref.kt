@@ -2,8 +2,8 @@ package com.example.bubble.data.local.sharedPref
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.bubble.core.utils.Constants
 import com.example.bubble.data.local.database.dbo.AwardEntity
-import com.example.bubble.domain.utils.Constants
 import com.google.gson.Gson
 import javax.inject.Inject
 import javax.inject.Singleton

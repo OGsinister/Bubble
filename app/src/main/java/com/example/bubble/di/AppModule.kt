@@ -1,6 +1,7 @@
 package com.example.bubble.di
 
 import android.content.Context
+import com.example.bubble.core.utils.BubbleDispatchers
 import com.example.bubble.data.BubbleDatabase
 import com.example.bubble.data.bubbleDatabase
 import dagger.Module
@@ -18,4 +19,8 @@ object AppModule {
     fun provideBubbleDatabase(@ApplicationContext context: Context): BubbleDatabase{
         return bubbleDatabase(context)
     }
+
+    @Provides
+    @Singleton
+    fun provideDispatchers() = BubbleDispatchers()
 }

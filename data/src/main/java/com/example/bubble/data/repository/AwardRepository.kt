@@ -1,5 +1,6 @@
 package com.example.bubble.data.repository
 
+import android.util.Log
 import com.example.bubble.data.BubbleDatabase
 import com.example.bubble.data.local.database.dbo.AwardEntity
 import com.example.bubble.data.local.sharedPref.AwardSharedPref
@@ -15,20 +16,19 @@ class AwardRepository @Inject constructor(
 ) {
     fun getAllAwards(): Flow<DatabaseResource<List<AwardEntity>>>{
         return flow {
-
-            emit(DatabaseResource.Default())
+            emit(DatabaseResource.Loading())
             try {
-                emit(DatabaseResource.Loading())
                 val cachedAwards = database.awardDao()
                     .getAllAwards()
 
-                awardSharedPref.updateAward(cachedAwards)
-
                 if(cachedAwards.isNotEmpty()){
                     emit(DatabaseResource.LoadedData(loadedData = cachedAwards))
+                    awardSharedPref.updateAward(cachedAwards)
                 }else{
-                    emit(DatabaseResource.Empty(emptyData = emptyList(), message = "Empty list"))
+                    emit(DatabaseResource.Empty(message = "Empty list"))
                 }
+
+                Log.d("Checks", cachedAwards.toString())
 
             }catch (e: IOException){
                 emit(DatabaseResource.Error(message = e.localizedMessage))

@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.bubble.award.utils.AwardCodes
 import com.example.bubble.core.ui.theme.BubbleTheme
+import com.example.bubble.history.presentation.HistoryScreen
 import com.example.bubble.water.presentation.WaterScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,6 +26,7 @@ class MainActivity : ComponentActivity() {
                 //AwardScreen()
                 //CheckAwardSet()
                 WaterScreen()
+                HistoryScreen()
             }
         }
     }
@@ -36,8 +38,7 @@ fun CheckAwardSet(
 ){
     Column(modifier = Modifier.fillMaxSize()) {
         Button(onClick = {
-            //viewModel.addAward()
-            viewModel.updateAchiv(AwardCodes.FIRST_BUBBLE_DONE)
+            viewModel.updateAchiv(AwardCodes.FIRST_BUBBLE_CLICK)
         }) {
             Text(text = "Click")
         }

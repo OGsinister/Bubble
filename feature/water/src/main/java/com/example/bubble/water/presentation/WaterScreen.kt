@@ -30,6 +30,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.bubble.core.ui.theme.BubbleTheme
+import com.example.bubble.domain.model.Water
 import com.example.bubble.water.R
 import com.example.bubble.water.WaterViewModel
 import com.example.bubble.water.model.WaterState
@@ -39,7 +40,8 @@ fun WaterScreen(
     modifier: Modifier = Modifier,
     viewModel: WaterViewModel = hiltViewModel()
 ) {
-    val state = viewModel.waterState.collectAsState()
+    val state by viewModel.waterState.collectAsState()
+    val currentState = state
 
     /*Box(
         modifier = modifier
@@ -54,6 +56,44 @@ fun WaterScreen(
         }
     }*/
 
+    if(currentState !is WaterState.DefaultState){
+        Column(
+            modifier = modifier
+                .padding(BubbleTheme.shapes.basePadding)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if(currentState is WaterState.IsLoadingState){
+                CircularProgressIndicator()
+            }
+
+            if(currentState is WaterState.EmptyDataState){
+                EmptyWaterScreen(currentState.message)
+            }
+
+            if(currentState is WaterState.ErrorState){
+                ErrorWaterScreen(currentState.message)
+            }
+
+            if(currentState is WaterState.LoadedWaterState){
+                WaterContentScreen(modifier = modifier, water = currentState.data)
+            }
+        }
+    }
+}
+
+@Composable
+private fun EmptyWaterScreen(message: String){
+    Text(text = message)
+}
+
+@Composable
+private fun ErrorWaterScreen(error: String){
+    Text(text = error)
+}
+
+@Composable
+private fun WaterContentScreen(modifier: Modifier, water: Water){
     val isLottiePlaying by remember{
         mutableStateOf(true)
     }
@@ -72,99 +112,76 @@ fun WaterScreen(
         restartOnPlay = false
     )
 
-    Column(
+    Card(
         modifier = modifier
-            .padding(top = 50.dp)
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        when(state.value){
-            is WaterState.LoadedAwardsState -> {
-                Card(
-                    modifier = modifier
-                        .padding(BubbleTheme.shapes.basePadding)
-                        .fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = BubbleTheme.colors.primaryBackgroundColor
-                    )
-                ){
-                    Column(
-                        modifier = modifier
-                            .padding(BubbleTheme.shapes.basePadding)
-                            .fillMaxWidth(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ){
-                        Text(
-                            text = stringResource(id = R.string.user_pop),
-                            style = BubbleTheme.typography.heading,
-                            color = BubbleTheme.colors.primaryTextColor
-                        )
-                    }
+            .padding(BubbleTheme.shapes.basePadding)
+            .fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = BubbleTheme.colors.primaryBackgroundColor
+        )
+    ){
+        Column(
+            modifier = modifier
+                .padding(BubbleTheme.shapes.basePadding)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            Text(
+                text = stringResource(id = R.string.user_pop),
+                style = BubbleTheme.typography.heading,
+                color = BubbleTheme.colors.primaryTextColor
+            )
+        }
 
-                    Box(
-                        contentAlignment = Alignment.Center
-                    ){
-                        LottieAnimation(
-                            composition = composition,
-                            progress = {
-                                progress
-                            },
-                            modifier = Modifier.size(400.dp)
-                        )
+        Box(
+            contentAlignment = Alignment.Center
+        ){
+            LottieAnimation(
+                composition = composition,
+                progress = {
+                    progress
+                },
+                modifier = Modifier.size(400.dp)
+            )
 
-                        Text(
-                            text = (state.value as WaterState.LoadedAwardsState).data.commonWater.toString(),
-                            style = BubbleTheme.typography.cardElement,
-                            color = BubbleTheme.colors.primaryTextColor
-                        )
+            Text(
+                text = water.currentWater.toString(),
+                style = BubbleTheme.typography.cardElement,
+                color = BubbleTheme.colors.primaryTextColor
+            )
 
-                        Column(
-                            modifier = modifier
-                                .align(Alignment.BottomCenter)
-                                .padding(bottom = 10.dp)
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.popped_bubbles),
-                                style = BubbleTheme.typography.heading,
-                                color = BubbleTheme.colors.primaryTextColor
-                            )
-                        }
-                    }
+            Column(
+                modifier = modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 10.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.popped_bubbles),
+                    style = BubbleTheme.typography.heading,
+                    color = BubbleTheme.colors.primaryTextColor
+                )
+            }
+        }
 
-                    Column(
-                        modifier = modifier
-                            .background(BubbleTheme.colors.notificationColor.copy(alpha = 0.3f))
-                            .clip(BubbleTheme.shapes.cornerStyle)
-                            .padding(BubbleTheme.shapes.itemsPadding)
-                            .fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ){
-                        Text(
-                            text = (state.value as WaterState.LoadedAwardsState).data.comparison.toString(),
-                            style = BubbleTheme.typography.title,
-                            color = BubbleTheme.colors.primaryTextColor
-                        )
-                    }
-                }
-            }
-            is WaterState.ErrorState -> {
-                Text(text = "error (")
-            }
-            WaterState.IsLoadingState -> {
-                CircularProgressIndicator()
-            }
-            WaterState.DefaultState -> {
-                Text("Default")
-            }
-
-            is WaterState.EmptyDataState -> {
-                Text("Empty")
-            }
+        Column(
+            modifier = modifier
+                .background(BubbleTheme.colors.notificationColor.copy(alpha = 0.3f))
+                .clip(BubbleTheme.shapes.cornerStyle)
+                .padding(BubbleTheme.shapes.itemsPadding)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            Text(
+                text = water.comparison.toString(),
+                style = BubbleTheme.typography.title,
+                color = BubbleTheme.colors.primaryTextColor
+            )
         }
     }
 }
+
 
 @Composable
 @Preview(showBackground = true)

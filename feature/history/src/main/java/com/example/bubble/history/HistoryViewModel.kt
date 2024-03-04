@@ -6,7 +6,6 @@ import com.example.bubble.history.model.HistoryState
 import com.example.bubble.history.useCase.GetHistoryUseCase
 import com.example.bubble.history.utils.toHistoryState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -18,7 +17,7 @@ class HistoryViewModel @Inject constructor(
     private val getHistoryUseCase: GetHistoryUseCase
 ): ViewModel() {
 
-    internal val state: Flow<HistoryState> = getHistoryUseCase()
+    internal val state: StateFlow<HistoryState> = getHistoryUseCase()
         .map {
             it.toHistoryState()
         }

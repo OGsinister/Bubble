@@ -22,6 +22,6 @@ class AwardViewModel @Inject constructor(
             it.toAwardState()
         }
         .stateIn(viewModelScope, SharingStarted.Lazily, AwardState.DefaultState)
-
+    
 }
 

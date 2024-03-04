@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,41 +34,69 @@ fun AwardScreen(
     modifier: Modifier = Modifier,
     viewModel: AwardViewModel = hiltViewModel()
 ) {
-    val state = viewModel.state.collectAsState()
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-    ) {
-        when(state.value){
-            is AwardState.LoadedAwardsState -> {
-                LazyColumn {
-                    items((state.value as AwardState.LoadedAwardsState).data){
-                        AwardItem(modifier = modifier, item = it)
-                    }
-                }
+    val state by viewModel.state.collectAsState()
+    val currentState = state
+
+
+    if(currentState != AwardState.DefaultState){
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+        ) {
+            if(currentState is AwardState.IsLoadingState){
+                LoadingStateScreen()
             }
-            is AwardState.EmptyDataState -> {
-                Text(text = "EmptyDataState")
+
+            if(currentState is AwardState.EmptyDataState){
+                EmptyDataScreen(currentState.message)
             }
-            is AwardState.ErrorState -> {
-                Text(text = "ErrorState")
+
+            if(currentState is AwardState.ErrorState){
+                ErrorStateScreen(currentState.message)
             }
-            AwardState.DefaultState -> {
-                Text(text = "Default")
-            }
-            AwardState.IsLoadingState -> {
-                CircularProgressIndicator()
+
+            if(currentState is AwardState.LoadedAwardsState){
+                LoadedAwardStateScreen(modifier, currentState.data)
             }
         }
     }
 }
 
 @Composable
-fun AwardItem(
+private fun LoadingStateScreen(){
+    CircularProgressIndicator()
+}
+
+@Composable
+private fun EmptyDataScreen(message: String){
+    Text(text = message)
+}
+
+@Composable
+private fun ErrorStateScreen(error: String){
+    Text(text = error)
+}
+
+@Composable
+private fun LoadedAwardStateScreen(modifier: Modifier, awards: List<Award>){
+    LazyColumn {
+        items(
+            items = awards,
+            key = {
+                it.id ?: 0
+            }
+        ){
+            AwardItem(modifier = modifier, item = it)
+        }
+    }
+}
+
+@Composable
+private fun AwardItem(
     modifier: Modifier,
     item: Award
 ){
-    val cardColor = if(item.isOpen == true){
+    val cardColor = if(item.isUnlocked == true){
         BubbleTheme.colors.notificationColor
     }else{
         BubbleTheme.colors.secondaryBackgroundColor

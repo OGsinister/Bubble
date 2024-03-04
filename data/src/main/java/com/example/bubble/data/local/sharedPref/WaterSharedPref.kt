@@ -3,7 +3,7 @@ package com.example.bubble.data.local.sharedPref
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.bubble.data.repository.WaterRepository
-import com.example.bubble.domain.utils.Constants
+import com.example.bubble.core.utils.Constants
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

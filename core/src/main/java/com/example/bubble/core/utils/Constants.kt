@@ -1,4 +1,4 @@
-package com.example.bubble.domain.utils
+package com.example.bubble.core.utils
 
 object Constants {
     const val WATER_SHARED_PREF_NAME = "WaterPref"

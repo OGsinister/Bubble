@@ -11,6 +11,6 @@ data class AwardEntity(
     @ColumnInfo(name = "name") val name: String? = null,
     @ColumnInfo(name = "title") val title: String? = null,
     @ColumnInfo(name = "icon") val icon: Int? = null,
-    @ColumnInfo(name = "is_open") val isOpen: Boolean? = null
+    @ColumnInfo(name = "is_open") val isUnlocked: Boolean? = false
 )
 

@@ -18,7 +18,7 @@ class HistoryRepository @Inject constructor(
             try{
                 val cachedHistory = database.historyDao().getHistory()
                 if(cachedHistory.isEmpty()){
-                    emit(DatabaseResource.Empty(emptyData = emptyList(), message = "Empty list"))
+                    emit(DatabaseResource.Empty(message = "Empty list"))
                 }
                 emit(DatabaseResource.LoadedData(loadedData = cachedHistory))
             }catch (e: IOException){

@@ -17,9 +17,13 @@ class GetWaterUseCase @Inject constructor(
             try {
                 val waterCount = waterSharedPref.getBubbleCount()
 
+                if(waterCount == 0){
+                    emit(DatabaseResource.Empty(message = "Empty"))
+                }
+
                 emit(DatabaseResource.LoadedData(
                     loadedData = Water(
-                        commonWater = waterCount,
+                        currentWater = waterCount,
                         title = "Столько шаров вы лопнули",
                         comparison = makeComparison(waterCount)
                     )
@@ -37,7 +41,7 @@ fun makeComparison(bubbleCount: Int): String?{
 
     when(totalBubbleVolume){
         0f -> { return "Вы не лопали шары" }
-        0.5f -> { return "Это как стакан воды 🥛"}
+        0.5f -> { return "Это как стакан воды 🥛" }
         in 1f..5f -> { return "Это чуть больше литрового сока 👍" }
         in 10f..20f -> { return "Это примерно как половина набранной ванны" }
     }

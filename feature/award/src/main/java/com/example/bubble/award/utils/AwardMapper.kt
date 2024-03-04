@@ -10,14 +10,14 @@ internal fun AwardEntity.toUIAward(): Award {
         name = name,
         title = title,
         icon = icon,
-        isOpen = isOpen
+        isUnlocked = isUnlocked
     )
 }
 
 internal fun DatabaseResource<List<Award>>.toAwardState(): AwardState {
     return when(this){
         is DatabaseResource.Default -> AwardState.DefaultState
-        is DatabaseResource.Empty -> AwardState.EmptyDataState(emptyData, message)
+        is DatabaseResource.Empty -> AwardState.EmptyDataState(message = message)
         is DatabaseResource.Error -> AwardState.ErrorState(message)
         is DatabaseResource.LoadedData -> AwardState.LoadedAwardsState(loadedData)
         is DatabaseResource.Loading -> AwardState.IsLoadingState

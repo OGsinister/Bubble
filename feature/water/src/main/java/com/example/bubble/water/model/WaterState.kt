@@ -6,6 +6,6 @@ sealed interface WaterState{
     data object DefaultState: WaterState
     data object IsLoadingState: WaterState
     data class EmptyDataState(val message: String): WaterState
-    data class LoadedWaterState(val data: Water): WaterState
+    data class LoadedDataState(val data: Water): WaterState
     data class ErrorState(val message: String): WaterState
 }

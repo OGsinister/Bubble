@@ -40,7 +40,7 @@ internal fun DatabaseResource<Water>.toWaterState(): WaterState {
     return when(this){
         is DatabaseResource.Default -> WaterState.DefaultState
         is DatabaseResource.Error -> WaterState.ErrorState(message)
-        is DatabaseResource.LoadedData -> WaterState.LoadedWaterState(loadedData)
+        is DatabaseResource.LoadedData -> WaterState.LoadedDataState(loadedData)
         is DatabaseResource.Loading -> WaterState.IsLoadingState
         is DatabaseResource.Empty -> WaterState.EmptyDataState(message = message)
     }

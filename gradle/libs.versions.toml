@@ -8,6 +8,7 @@ espressoCore = "3.5.1"
 app = "8.3.0-rc02"
 hiltAndroidCompiler = "2.50"
 hiltNavigationCompose = "1.2.0"
+javaxInject = "1"
 kotlin = "1.9.22"
 
 # DI
@@ -56,8 +57,8 @@ androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "daggerCompiler" }
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 
-
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
+javax-inject = { module = "javax.inject:javax.inject", version.ref = "javaxInject" }
 junit = { module = "junit:junit", version.ref = "junit" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 

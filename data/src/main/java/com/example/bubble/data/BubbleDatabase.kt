@@ -6,13 +6,19 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.bubble.data.local.database.dao.AwardDao
 import com.example.bubble.data.local.database.dao.HistoryDao
+import com.example.bubble.data.local.database.dao.TaskDao
 import com.example.bubble.data.local.database.dbo.AwardEntity
 import com.example.bubble.data.local.database.dbo.HistoryEntity
+import com.example.bubble.data.local.database.dbo.TaskEntity
 
-@Database(entities = [AwardEntity::class, HistoryEntity::class], version = 1)
+@Database(
+    entities = [AwardEntity::class, HistoryEntity::class, TaskEntity::class],
+    version = 1
+)
 abstract class BubbleDatabase: RoomDatabase() {
     abstract fun awardDao(): AwardDao
     abstract fun historyDao(): HistoryDao
+    abstract fun taskDao(): TaskDao
 
     companion object{
         const val DATABASE_NAME = "Bubble"

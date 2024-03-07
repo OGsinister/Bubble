@@ -18,7 +18,7 @@ internal fun DatabaseResource<List<History>>.toHistoryState(): HistoryState {
         is DatabaseResource.Default -> HistoryState.DefaultState
         is DatabaseResource.Empty -> HistoryState.EmptyDataState(message = message)
         is DatabaseResource.Error -> HistoryState.ErrorState(message)
-        is DatabaseResource.LoadedData -> HistoryState.LoadedAwardsState(loadedData)
+        is DatabaseResource.LoadedData -> HistoryState.LoadedDataState(loadedData)
         is DatabaseResource.Loading -> HistoryState.IsLoadingState
     }
 }

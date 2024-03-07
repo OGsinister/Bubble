@@ -2,8 +2,10 @@ package com.example.bubble.data.utils
 
 import com.example.bubble.data.local.database.dbo.AwardEntity
 import com.example.bubble.data.local.database.dbo.BubbleEntity
+import com.example.bubble.data.local.database.dbo.TaskEntity
 import com.example.bubble.domain.model.Award
 import com.example.bubble.domain.model.Bubble
+import com.example.bubble.domain.model.Task
 
 fun AwardEntity.toAward(): Award {
     return Award(
@@ -27,6 +29,26 @@ fun BubbleEntity.toBubble(): Bubble {
     return Bubble(
         volume = volume,
         dateTime = dateTime
+    )
+}
+
+fun TaskEntity.toUITask(): Task {
+    return Task(
+        id = id,
+        name = name,
+        description = description,
+        dateTime = dateTime,
+        tag = tag
+    )
+}
+
+fun Task.toTaskEntity(): TaskEntity {
+    return TaskEntity(
+        id = id,
+        name = name,
+        description = description,
+        dateTime = dateTime,
+        tag = tag
     )
 }
 

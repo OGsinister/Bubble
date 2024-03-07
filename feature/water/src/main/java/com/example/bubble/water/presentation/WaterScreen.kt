@@ -75,7 +75,7 @@ fun WaterScreen(
                 ErrorWaterScreen(currentState.message)
             }
 
-            if(currentState is WaterState.LoadedWaterState){
+            if(currentState is WaterState.LoadedDataState){
                 WaterContentScreen(modifier = modifier, water = currentState.data)
             }
         }
@@ -181,8 +181,6 @@ private fun WaterContentScreen(modifier: Modifier, water: Water){
         }
     }
 }
-
-
 @Composable
 @Preview(showBackground = true)
 fun TestAnimationPreview() {

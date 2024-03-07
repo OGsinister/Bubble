@@ -43,8 +43,8 @@ fun HistoryScreen(
                 ErrorStateScreen(modifier)
             }
 
-            if(currentState is HistoryState.LoadedAwardsState){
-                HistoryContent(
+            if(currentState is HistoryState.LoadedDataState){
+                HistoryContentScreen(
                     modifier = modifier,
                     history = currentState.data
                 )
@@ -54,7 +54,7 @@ fun HistoryScreen(
 }
 
 @Composable
-fun HistoryContent(
+fun HistoryContentScreen(
     modifier: Modifier,
     history: List<History>
 ) {

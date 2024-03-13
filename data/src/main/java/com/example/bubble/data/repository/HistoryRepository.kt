@@ -1,5 +1,6 @@
 package com.example.bubble.data.repository
 
+import android.util.Log
 import com.example.bubble.data.BubbleDatabase
 import com.example.bubble.data.local.database.dbo.HistoryEntity
 import com.example.bubble.data.utils.DatabaseResource
@@ -17,14 +18,16 @@ class HistoryRepository @Inject constructor(
             emit(DatabaseResource.Default())
             try{
                 val cachedHistory = database.historyDao().getHistory()
+                Log.d("checkData",cachedHistory.toString())
                 if(cachedHistory.isEmpty()){
                     emit(DatabaseResource.Empty(message = "Empty list"))
+                }else{
+                    emit(DatabaseResource.LoadedData(loadedData = cachedHistory))
                 }
-                emit(DatabaseResource.LoadedData(loadedData = cachedHistory))
             }catch (e: IOException){
-                emit(DatabaseResource.Error(message = e.localizedMessage))
+                emit(DatabaseResource.Error(message = e.localizedMessage!!))
             }catch (e: Exception){
-                emit(DatabaseResource.Error(message = e.localizedMessage))
+                emit(DatabaseResource.Error(message = e.localizedMessage!!))
             }
         }
     }

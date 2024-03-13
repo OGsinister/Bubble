@@ -2,20 +2,23 @@ package com.example.bubble.history.presentation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.bubble.core.ui.theme.BubbleTheme
+import com.example.bubble.domain.model.History
 import com.example.bubble.history.HistoryViewModel
 import com.example.bubble.history.model.HistoryState
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
-import com.example.bubble.domain.model.History
 
 @Composable
 fun HistoryScreen(
@@ -40,7 +43,7 @@ fun HistoryScreen(
             }
 
             if(currentState is HistoryState.ErrorState){
-                ErrorStateScreen(modifier)
+                ErrorStateScreen(modifier, currentState.message)
             }
 
             if(currentState is HistoryState.LoadedDataState){
@@ -58,7 +61,7 @@ fun HistoryContentScreen(
     modifier: Modifier,
     history: List<History>
 ) {
-    LazyColumn {
+    LazyColumn(modifier = modifier.fillMaxWidth()) {
         items(
             items = history,
             key = { checkNotNull(it.id) }
@@ -76,14 +79,22 @@ fun HistoryItemScreen(
     modifier: Modifier,
     history: History
 ) {
-
+    Column(modifier = modifier.fillMaxWidth()) {
+        Card(modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)) {
+            Text(text = history.id.toString())
+            Text(text = history.isDone.toString())
+        }
+    }
 }
 
 @Composable
 fun ErrorStateScreen(
     modifier: Modifier,
+    errorMessage: String
 ) {
-    Text(text = "Error")
+    Text(text = errorMessage)
 }
 
 @Composable

@@ -2,9 +2,11 @@ package com.example.bubble.data.utils
 
 import com.example.bubble.data.local.database.dbo.AwardEntity
 import com.example.bubble.data.local.database.dbo.BubbleEntity
+import com.example.bubble.data.local.database.dbo.HistoryEntity
 import com.example.bubble.data.local.database.dbo.TaskEntity
 import com.example.bubble.domain.model.Award
 import com.example.bubble.domain.model.Bubble
+import com.example.bubble.domain.model.History
 import com.example.bubble.domain.model.Task
 
 fun AwardEntity.toAward(): Award {
@@ -24,11 +26,28 @@ fun Award.toAwardEntity(): AwardEntity {
         title = title
     )
 }
+fun AwardEntity.toUIAward(): Award {
+    return Award(
+        name = name,
+        title = title,
+        icon = icon,
+        isUnlocked = isUnlocked
+    )
+}
 
 fun BubbleEntity.toBubble(): Bubble {
     return Bubble(
-        volume = volume,
+        id = id,
+        tag = bubbleTag,
         dateTime = dateTime
+    )
+}
+
+fun Bubble.toBubbleEntity(): BubbleEntity{
+    return BubbleEntity(
+        id = checkNotNull(id),
+        bubbleTag = tag!!,
+        dateTime = dateTime!!
     )
 }
 
@@ -52,6 +71,22 @@ fun Task.toTaskEntity(): TaskEntity {
     )
 }
 
+fun HistoryEntity.toUIHistory(): History {
+    return History(
+        id = id,
+        isDone = isDone,
+        bubble = bubble.toBubble()
+    )
+}
+
+fun History.toHistoryEntity(): HistoryEntity {
+    return HistoryEntity(
+        id = id!!,
+        isDone = isDone,
+        bubble = bubble.toBubbleEntity()
+    )
+}
+
 fun <I,O> DatabaseResource<I>.map(mapper: (I) -> O): DatabaseResource<O> {
     return when(this){
         is DatabaseResource.Default -> DatabaseResource.Default()
@@ -64,3 +99,5 @@ fun <I,O> DatabaseResource<I>.map(mapper: (I) -> O): DatabaseResource<O> {
         is DatabaseResource.Loading -> DatabaseResource.Loading()
     }
 }
+
+

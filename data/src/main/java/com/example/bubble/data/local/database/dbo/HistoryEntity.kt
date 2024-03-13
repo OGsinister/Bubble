@@ -10,10 +10,11 @@ data class HistoryEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") val id: Int,
     @ColumnInfo(name = "is_done") val isDone: Boolean,
-    @Embedded val bubble: BubbleEntity
+    @Embedded(prefix = "bubble") val bubble: BubbleEntity
 )
 
 data class BubbleEntity(
-    @ColumnInfo(name = "volume") val volume: Float,
+    @ColumnInfo(name = "id") val id: Int,
+    @ColumnInfo(name = "bubble_tag") val bubbleTag: String,
     @ColumnInfo(name = "date_time") val dateTime: String
 )

@@ -49,6 +49,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation("androidx.graphics:graphics-shapes:1.0.0-alpha05")
+
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:3.0-alpha-1")
+
 
     // Coroutines
     implementation(libs.kotlinx.coroutines.core)
@@ -59,6 +63,9 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     implementation(libs.dagger.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
+
+    // Lottie
+    implementation("com.airbnb.android:lottie-compose:6.1.0")
 
     implementation(project(":domain"))
     implementation(project(":data"))

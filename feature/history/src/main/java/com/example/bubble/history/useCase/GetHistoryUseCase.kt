@@ -3,8 +3,8 @@ package com.example.bubble.history.useCase
 import com.example.bubble.data.repository.HistoryRepository
 import com.example.bubble.data.utils.DatabaseResource
 import com.example.bubble.data.utils.map
+import com.example.bubble.data.utils.toUIHistory
 import com.example.bubble.domain.model.History
-import com.example.bubble.history.utils.toUIHistory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn

@@ -70,6 +70,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+
     // Hilt
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.android.compiler)
@@ -89,5 +90,4 @@ dependencies {
     implementation(project(":feature:award"))
     implementation(project(":feature:history"))
     implementation(project(":feature:water"))
-    implementation(project(":feature:sound"))
 }

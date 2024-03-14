@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.bubble.core.ui.theme.BubbleTheme
+import com.example.bubble.home.presentation.CustomCircleAnimation
 import com.example.bubble.home.presentation.HomeScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,6 +27,7 @@ class MainActivity : ComponentActivity() {
                 //WaterScreen()
                 //HistoryScreen()
                 HomeScreen()
+                //CustomCircleAnimation()
             }
         }
     }

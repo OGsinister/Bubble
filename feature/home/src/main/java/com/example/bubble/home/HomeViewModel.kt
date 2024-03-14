@@ -117,6 +117,8 @@ class HomeViewModel @Inject constructor(
 
                        if(currentTime.value % 6L == 0L && _currentTime.value > 5_000L){
                             showAffirmation()
+                       }else{
+                            stopAffirmation()
                        }
                        //_currentTime.value = millisUntilFinished
                    }
@@ -124,7 +126,6 @@ class HomeViewModel @Inject constructor(
                    override fun onFinish() {
                        _currentTime.value = 0L
                        isActive = false
-                       //_currentTime.value = 0L
                        event(HomeEvents.StopFocus(result = FocusResult.SUCCESS))
                    }
                }.start()
@@ -151,8 +152,13 @@ class HomeViewModel @Inject constructor(
                 affirmationResource = AffirmationResource.YOU_CAN_EVERYTHING,
                 isVisible = true
             )
-            delay(5000L)
+        }
+    }
+
+    private fun stopAffirmation(){
+        viewModelScope.launch(bubbleDispatchers.main) {
             _affirmation.value = Affirmation(
+                affirmationResource = null,
                 isVisible = false
             )
         }

@@ -7,6 +7,6 @@ enum class AffirmationResource(val id: Int){
 }
 
 data class Affirmation(
-    val affirmationResource: AffirmationResource = AffirmationResource.YOU_CAN_EVERYTHING,
+    val affirmationResource: AffirmationResource? = AffirmationResource.YOU_CAN_EVERYTHING,
     val isVisible: Boolean = false
 )

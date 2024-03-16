@@ -4,6 +4,7 @@ sealed class HomeEvents {
     data object RunFocus:  HomeEvents()
     data class StopFocus(val result: FocusResult): HomeEvents()
     data class SelectTag(val tag: String): HomeEvents()
+    data class SelectTime(val time: SelectedTime): HomeEvents()
 }
 
 enum class FocusResult(val cause: String){

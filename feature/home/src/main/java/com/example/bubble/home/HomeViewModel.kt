@@ -1,6 +1,7 @@
 package com.example.bubble.home
 
 import android.os.CountDownTimer
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bubble.core.utils.BubbleDispatchers
@@ -17,8 +18,8 @@ import com.example.bubble.home.model.BubbleTimer
 import com.example.bubble.home.model.FocusResult
 import com.example.bubble.home.model.HomeEvents
 import com.example.bubble.home.model.HomeState
+import com.example.bubble.home.model.SelectedTime
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -45,7 +46,10 @@ class HomeViewModel @Inject constructor(
     private var _affirmation = MutableStateFlow(Affirmation())
     internal val affirmation = _affirmation.asStateFlow()
 
-    private var _bubbleTimer = MutableStateFlow(BubbleTimer())
+    private var _bubbleTimer = MutableStateFlow<BubbleTimer>(BubbleTimer())
+    internal val bubbleTimer: StateFlow<BubbleTimer> = _bubbleTimer.asStateFlow()
+
+    internal var showTimeBottomSheet = mutableStateOf(false)
 
     internal fun event(event: HomeEvents){
         when(event){
@@ -83,6 +87,10 @@ class HomeViewModel @Inject constructor(
                 _bubble.value = _bubble.value.copy(
                     tag = event.tag
                 )
+            }
+
+            is HomeEvents.SelectTime -> {
+                changeMillisInFuture(event.time)
             }
         }
     }
@@ -156,6 +164,14 @@ class HomeViewModel @Inject constructor(
             _affirmation.value = Affirmation(
                 affirmationResource = null,
                 isVisible = false
+            )
+        }
+    }
+
+    private fun changeMillisInFuture(selectedTime: SelectedTime){
+        viewModelScope.launch(bubbleDispatchers.main) {
+            _bubbleTimer.value = BubbleTimer(
+                millisInFuture = selectedTime.time
             )
         }
     }

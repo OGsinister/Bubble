@@ -1,10 +1,13 @@
 package com.example.bubble.home.presentation
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector4D
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,10 +15,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,18 +28,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import com.example.bubble.core.ui.theme.BubbleTheme
 import com.example.bubble.home.HomeViewModel
+import com.example.bubble.home.R
+import com.example.bubble.home.model.BubbleTimer
 import com.example.bubble.home.model.FocusResult
 import com.example.bubble.home.model.HomeEvents
 import com.example.bubble.home.model.HomeState
 import com.example.bubble.home.utils.BubbleButton
 import com.example.bubble.home.utils.CustomCircleAnimation
+import com.example.bubble.home.utils.TimeBottomSheet
 import com.example.bubble.home.utils.rememberLifecycleEvent
+import com.example.bubble.home.utils.toTimeUIFormat
 import kotlin.random.Random
 
 @Composable
@@ -46,6 +53,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val bubbleTimer by viewModel.bubbleTimer.collectAsState()
 
     val repeatableColorOne = remember { Animatable(Color.Magenta) }
     val repeatableColorTwo = remember { Animatable(Color(0xFF009688)) }
@@ -74,7 +82,8 @@ fun HomeScreen(
         when (state) {
             HomeState.DefaultState -> {
                 DefaultHomeScreen(
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    bubbleTimer = bubbleTimer
                 )
             }
 
@@ -101,11 +110,6 @@ fun FocusHomeScreen(
     val lifecycleEvent = rememberLifecycleEvent()
     val currentTime by viewModel.currentTime.collectAsState()
     val affirmation by viewModel.affirmation.collectAsState()
-
-    val timerFormat =
-        "${(currentTime / 1000 / 60).toString().padStart(2, '0')}:" +
-        "${(currentTime / 1000 % 60).toString().padStart(2, '0')} "
-
 
     LaunchedEffect(key1 = lifecycleEvent) {
         if (lifecycleEvent == Lifecycle.Event.ON_STOP) {
@@ -155,7 +159,7 @@ fun FocusHomeScreen(
         contentAlignment = Alignment.Center
     ){
         Text(
-            text = timerFormat,
+            text = currentTime.toTimeUIFormat(),
             color = Color.White,
             style = BubbleTheme.typography.timerText
         )
@@ -199,37 +203,71 @@ fun FocusHomeScreen(
 @Composable
 fun DefaultHomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel,
+    bubbleTimer: BubbleTimer
 ) {
+    val showBottomSheet = viewModel.showTimeBottomSheet
+
     Column(
         modifier = modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        Text(
-            text = "Начните фокусировку"
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.6f),
+            contentAlignment = Alignment.Center
+        ){
+            Image(
+                modifier = Modifier
+                    .size(256.dp),
+                painter = painterResource(id = R.drawable.ic_default_screen_image),
+                contentDescription = "Default screen image"
+            )
+        }
 
         Row(
             modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                .fillMaxWidth()
+                .fillMaxHeight(0.4f),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
         ){
             Text(
-                text = "12:30",
+                modifier = Modifier
+                    .clickable {
+                        showBottomSheet.value = true
+                    },
+                text = bubbleTimer.millisInFuture.toTimeUIFormat(),
                 color = Color.White
             )
-            BubbleButton(
-                onClick = {
-                    viewModel.event(HomeEvents.RunFocus)
-                },
-                text = "Начать"
-            )
+
+            Box(
+                modifier = Modifier
+                    .size(170.dp)
+                    .fillMaxWidth(0.3f),
+                contentAlignment = Alignment.Center
+            ){
+                BubbleButton(
+                    onClick = {
+                        viewModel.event(HomeEvents.RunFocus)
+                    },
+                    text = "Начать"
+                )
+            }
             Text(
                 text = "tag",
                 color = Color.White
             )
         }
+    }
+
+    if(showBottomSheet.value){
+        TimeBottomSheet(
+            viewModel = viewModel,
+            bubbleTimer = bubbleTimer
+        )
     }
 }

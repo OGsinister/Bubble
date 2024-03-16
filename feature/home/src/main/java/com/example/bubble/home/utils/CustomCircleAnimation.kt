@@ -1,6 +1,5 @@
-package com.example.bubble.home.presentation
+package com.example.bubble.home.utils
 
-import androidx.compose.animation.Animatable
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector4D
@@ -23,7 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,13 +35,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.unit.dp
-import kotlin.random.Random
 
 @Composable
 fun CustomCircleAnimation(
     modifier: Modifier = Modifier,
     repeatableColorOne: Animatable<Color, AnimationVector4D>,
-    repeatableColorTwo: Animatable<Color, AnimationVector4D>
+    repeatableColorTwo: Animatable<Color, AnimationVector4D>,
+    onClick: () -> Unit
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "")
     val borderTopStart by getBorder(
@@ -83,50 +82,38 @@ fun CustomCircleAnimation(
             repeatMode = RepeatMode.Reverse
         ), label = ""
     )
-    val isBubbleVisible = remember { mutableStateOf(true) }
-    AnimatedVisibility(
-        visible = isBubbleVisible.value,
-        enter = scaleIn(),
-        exit = scaleOut()
-    ) {
-        Button(
-            onClick = {
-                isBubbleVisible.value = !isBubbleVisible.value
-            },
-            modifier = modifier
-                .size(150.dp)
-                .rotate(angle)
-                .border(
-                    width = buttonShapeWidth.dp,
-                    brush = Brush.linearGradient(
+
+    Button(
+        onClick = {
+            onClick()
+        },
+        modifier = modifier
+            .size(150.dp)
+            .rotate(angle)
+            .border(
+                width = buttonShapeWidth.dp,
+                color = repeatableColorTwo.value,
+                shape = RoundedCornerShape(
+                    topStart = borderTopStart.toFloat(),
+                    topEnd = borderTopEnd.toFloat(),
+                    bottomStart = borderBottomStart.toFloat(),
+                    bottomEnd = borderBottomEnd.toFloat()
+                )
+            )
+            .drawBehind {
+                drawCircle(
+                    brush = Brush.radialGradient(
                         colors = listOf(
                             repeatableColorOne.value,
                             repeatableColorTwo.value
                         ),
+                        center = Offset(size.width / 2, size.height / 2),
                         tileMode = TileMode.Repeated,
-                    ),
-                    shape = RoundedCornerShape(
-                        topStart = borderTopStart.toFloat(),
-                        topEnd = borderTopEnd.toFloat(),
-                        bottomStart = borderBottomStart.toFloat(),
-                        bottomEnd = borderBottomEnd.toFloat()
                     )
                 )
-                .drawBehind {
-                    drawCircle(
-                        brush = Brush.radialGradient(
-                            colors = listOf(
-                                repeatableColorOne.value,
-                                repeatableColorTwo.value
-                            ),
-                            center = Offset(size.width / 2, size.height / 2),
-                            tileMode = TileMode.Repeated,
-                        )
-                    )
-                },
-            colors = ButtonDefaults.buttonColors(Color.Transparent)
-        ) {}
-    }
+            },
+        colors = ButtonDefaults.buttonColors(Color.Transparent)
+    ) {}
 }
 
 @Composable

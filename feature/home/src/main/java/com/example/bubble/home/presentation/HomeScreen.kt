@@ -1,28 +1,27 @@
 package com.example.bubble.home.presentation
 
 import androidx.compose.animation.Animatable
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector4D
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -31,10 +30,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
+import com.example.bubble.core.ui.theme.BubbleTheme
 import com.example.bubble.home.HomeViewModel
 import com.example.bubble.home.model.FocusResult
 import com.example.bubble.home.model.HomeEvents
 import com.example.bubble.home.model.HomeState
+import com.example.bubble.home.utils.BubbleButton
+import com.example.bubble.home.utils.CustomCircleAnimation
 import com.example.bubble.home.utils.rememberLifecycleEvent
 import kotlin.random.Random
 
@@ -45,20 +47,14 @@ fun HomeScreen(
 ) {
     val state by viewModel.state.collectAsState()
 
-    val repeatableColorOne = remember {
-        Animatable(Color.Magenta)
-    }
-    val repeatableColorTwo = remember {
-        Animatable(Color(0xFFF8EE94))
-    }
-    val listColors = remember {
-        listOf(
-            Color(0xFF987683ff),
-            Color(0xFF9874369),
-            Color(0xFF98822221)
+    val repeatableColorOne = remember { Animatable(Color.Magenta) }
+    val repeatableColorTwo = remember { Animatable(Color(0xFF009688)) }
+    val listColors = remember { listOf(
+            Color(0xFF987683),
+            Color(0xFF673AB7),
+            Color(0xFF2196F3)
         )
     }
-    var isShowBubbleAnimation by remember { mutableStateOf(false) }
 
     Column(
         modifier = modifier
@@ -77,7 +73,9 @@ fun HomeScreen(
     ) {
         when (state) {
             HomeState.DefaultState -> {
-                DefaultHomeScreen(viewModel)
+                DefaultHomeScreen(
+                    viewModel = viewModel
+                )
             }
 
             HomeState.FocusRunning -> {
@@ -88,17 +86,6 @@ fun HomeScreen(
                     listColors = listColors
                 )
             }
-        }
-
-        Button(onClick = {
-            isShowBubbleAnimation = !isShowBubbleAnimation
-            if(isShowBubbleAnimation) viewModel.event(HomeEvents.RunFocus)
-            else viewModel.event(HomeEvents.StopFocus(result = FocusResult.FAIL))
-
-        }) {
-            Text(
-                text = if(!isShowBubbleAnimation) "Start" else "Stop"
-            )
         }
     }
 }
@@ -117,7 +104,7 @@ fun FocusHomeScreen(
 
     val timerFormat =
         "${(currentTime / 1000 / 60).toString().padStart(2, '0')}:" +
-                "${(currentTime / 1000 % 60).toString().padStart(2, '0')} "
+        "${(currentTime / 1000 % 60).toString().padStart(2, '0')} "
 
 
     LaunchedEffect(key1 = lifecycleEvent) {
@@ -128,45 +115,82 @@ fun FocusHomeScreen(
 
     Column(
         modifier = modifier
+            .fillMaxHeight(0.4f)
             .fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = timerFormat
-        )
-
-        Spacer(modifier = Modifier.padding(10.dp))
-
-        AnimatedVisibility(
-            visible = affirmation.isVisible,
-            enter = scaleIn(),
-            exit = scaleOut()
-        ) {
-            affirmation.affirmationResource?.let {
-                Text(text = stringResource(id = it.id))
+        Box(
+            modifier = Modifier
+                .size(200.dp),
+            contentAlignment = Alignment.Center
+        ){
+            if(affirmation.isVisible){
+                affirmation.affirmationResource?.let {
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.TopCenter),
+                        text = stringResource(id = it.id),
+                        color = Color.White
+                    )
+                }
             }
+
+            CustomCircleAnimation(
+                repeatableColorOne = repeatableColorOne,
+                repeatableColorTwo = repeatableColorTwo,
+                onClick = {
+                    if(currentTime == 0L){
+                        viewModel.event(HomeEvents.StopFocus(result = FocusResult.SUCCESS))
+                    }
+                }
+            )
         }
+    }
 
-        Spacer(modifier = Modifier.padding(10.dp))
-
-        CustomCircleAnimation(
-            repeatableColorOne = repeatableColorOne,
-            repeatableColorTwo = repeatableColorTwo
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.3f),
+        contentAlignment = Alignment.Center
+    ){
+        Text(
+            text = timerFormat,
+            color = Color.White,
+            style = BubbleTheme.typography.timerText
         )
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.3f)
+            .size(170.dp),
+        contentAlignment = Alignment.BottomCenter
+    ){
+        Button(
+            onClick = {
+                viewModel.event(HomeEvents.StopFocus(result = FocusResult.FAIL))
+            }
+        ) {
+            Text(
+                text = "Сдаться",
+                color = Color.White
+            )
+        }
     }
 
     LaunchedEffect(Unit) {
         while (true) {
             listColors.forEach {
                 repeatableColorOne.animateTo(
-                    it,
+                    targetValue = it,
                     animationSpec = tween(3500)
                 )
             }
             repeatableColorTwo.animateTo(
                 Color(Random.nextLong().toInt()),
-                animationSpec = tween(800)
+                animationSpec = tween(3500)
             )
         }
     }
@@ -174,7 +198,38 @@ fun FocusHomeScreen(
 
 @Composable
 fun DefaultHomeScreen(
+    modifier: Modifier = Modifier,
     viewModel: HomeViewModel
 ) {
-    
+    Column(
+        modifier = modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        Text(
+            text = "Начните фокусировку"
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ){
+            Text(
+                text = "12:30",
+                color = Color.White
+            )
+            BubbleButton(
+                onClick = {
+                    viewModel.event(HomeEvents.RunFocus)
+                },
+                text = "Начать"
+            )
+            Text(
+                text = "tag",
+                color = Color.White
+            )
+        }
+    }
 }

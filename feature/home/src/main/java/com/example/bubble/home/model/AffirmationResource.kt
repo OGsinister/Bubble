@@ -3,7 +3,8 @@ package com.example.bubble.home.model
 import com.example.bubble.home.R
 
 enum class AffirmationResource(val id: Int){
-    YOU_CAN_EVERYTHING(id = R.string.you_can_everything)
+    YOU_CAN_EVERYTHING(id = R.string.you_can_everything),
+    GOOD_FOR_YOU(id = R.string.good_for_you)
 }
 
 data class Affirmation(

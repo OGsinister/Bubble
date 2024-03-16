@@ -39,14 +39,13 @@ class HomeViewModel @Inject constructor(
     private var _bubble = MutableStateFlow(Bubble())
     internal val bubble: StateFlow<Bubble> = _bubble.asStateFlow()
 
-    private var _bubbleTimer = MutableStateFlow(BubbleTimer())
-    private val bubbleTimer: StateFlow<BubbleTimer> = _bubbleTimer.asStateFlow()
-
     private var _currentTime = MutableStateFlow(0L)
     internal val currentTime = _currentTime.asStateFlow()
 
     private var _affirmation = MutableStateFlow(Affirmation())
     internal val affirmation = _affirmation.asStateFlow()
+
+    private var _bubbleTimer = MutableStateFlow(BubbleTimer())
 
     internal fun event(event: HomeEvents){
         when(event){
@@ -100,7 +99,7 @@ class HomeViewModel @Inject constructor(
 
     @NeedRefactoring
     private fun createBubble() {
-        _bubble.value = Bubble(
+        _bubble.value = _bubble.value.copy(
             id = 1,
             tag = "Tag",
             dateTime = "12"
@@ -120,7 +119,6 @@ class HomeViewModel @Inject constructor(
                        }else{
                             stopAffirmation()
                        }
-                       //_currentTime.value = millisUntilFinished
                    }
 
                    override fun onFinish() {
@@ -135,7 +133,7 @@ class HomeViewModel @Inject constructor(
 
     private fun stopTimer(){
         viewModelScope.launch(bubbleDispatchers.main) {
-            bubbleTimer.value.apply {
+            _bubbleTimer.value.apply {
                 timer?.cancel()
                 timer = null
             }
@@ -144,12 +142,10 @@ class HomeViewModel @Inject constructor(
 
     private fun showAffirmation(){
         viewModelScope.launch(bubbleDispatchers.main) {
-            /*_affirmation.value = Affirmation(
-                affirmationResource = AffirmationResource.random(),
-                isVisible = true
-            )*/
             _affirmation.value = Affirmation(
-                affirmationResource = AffirmationResource.YOU_CAN_EVERYTHING,
+                affirmationResource = AffirmationResource.entries
+                    .toTypedArray()
+                    .random(),
                 isVisible = true
             )
         }

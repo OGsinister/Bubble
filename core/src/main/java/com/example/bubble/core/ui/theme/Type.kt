@@ -27,6 +27,11 @@ val bubbleTypography = BubbleTypography(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.ExtraBold,
         fontSize = 100.sp
+    ),
+    timerText = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Bold,
+        fontSize = 40.sp
     )
 )
 

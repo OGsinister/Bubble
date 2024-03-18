@@ -32,6 +32,11 @@ val bubbleTypography = BubbleTypography(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
         fontSize = 40.sp
+    ),
+    smallText = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.ExtraLight,
+        fontSize = 12.sp
     )
 )
 

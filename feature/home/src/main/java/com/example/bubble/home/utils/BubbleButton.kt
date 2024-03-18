@@ -9,9 +9,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,7 +20,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.bubble.home.HomeViewModel
+import com.example.bubble.core.ui.theme.BubbleTheme
 
 @Composable
 fun BubbleButton(
@@ -61,7 +60,8 @@ fun BubbleButton(
                 .alpha(bubbleButtonAlpha),
             onClick = {
                 onClick()
-            }
+            },
+            colors = ButtonDefaults.buttonColors(BubbleTheme.colors.bubbleButtonColor)
         ) {}
         Button(
             modifier = modifier
@@ -69,7 +69,8 @@ fun BubbleButton(
                 .size(minPulsingSize),
             onClick = {
                 onClick()
-            }
+            },
+            colors = ButtonDefaults.buttonColors(BubbleTheme.colors.bubbleButtonColor)
         ) {
             Text(
                 text = text,

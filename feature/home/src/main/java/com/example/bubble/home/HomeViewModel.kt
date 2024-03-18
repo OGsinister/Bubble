@@ -5,8 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bubble.core.utils.BubbleDispatchers
-import com.example.bubble.core.utils.NeedRefactoring
-import com.example.bubble.core.utils.NullPointerMayBe
+import com.example.bubble.core.ui.utils.NeedRefactoring
 import com.example.bubble.data.local.sharedPref.WaterSharedPref
 import com.example.bubble.data.repository.HistoryRepository
 import com.example.bubble.data.utils.toHistoryEntity
@@ -19,6 +18,8 @@ import com.example.bubble.home.model.FocusResult
 import com.example.bubble.home.model.HomeEvents
 import com.example.bubble.home.model.HomeState
 import com.example.bubble.home.model.SelectedTime
+import com.example.bubble.core.ui.utils.TagUI
+import com.example.bubble.home.utils.toTag
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -49,7 +50,13 @@ class HomeViewModel @Inject constructor(
     private var _bubbleTimer = MutableStateFlow<BubbleTimer>(BubbleTimer())
     internal val bubbleTimer: StateFlow<BubbleTimer> = _bubbleTimer.asStateFlow()
 
+    private var _tag = MutableStateFlow(TagUI())
+    internal val tag: StateFlow<TagUI> = _tag.asStateFlow()
+
     internal var showTimeBottomSheet = mutableStateOf(false)
+    internal var showTagBottomSheet = mutableStateOf(false)
+    internal var dialogState = mutableStateOf(false)
+    internal var showDialog = mutableStateOf(false)
 
     internal fun event(event: HomeEvents){
         when(event){
@@ -60,27 +67,21 @@ class HomeViewModel @Inject constructor(
             }
 
             is HomeEvents.StopFocus -> {
-                _state.value = HomeState.DefaultState
                 stopTimer()
                 viewModelScope.launch(bubbleDispatchers.io) {
                     when(event.result){
                         FocusResult.FAIL -> {
-                            val history = createHistory(false)
-
-                            // null pointer exception
-                            repository.addBubbleToHistory(history.toHistoryEntity())
+                            addToHistory(isDone = event.result.value)
+                            showDialog(event.result.value)
                         }
                         FocusResult.SUCCESS -> {
-                            val history = createHistory(true)
-
-                            @NullPointerMayBe
-                            // null pointer exception
-                            repository.addBubbleToHistory(history.toHistoryEntity())
+                            updateWater(count = Bubble.BUBBLE_COUNT)
+                            addToHistory(isDone = event.result.value)
+                            showDialog(event.result.value)
                         }
                     }
                 }
-
-                updateWater(count = Bubble.BUBBLE_COUNT)
+                _state.value = HomeState.DefaultState
             }
 
             is HomeEvents.SelectTag -> {
@@ -96,22 +97,20 @@ class HomeViewModel @Inject constructor(
     }
 
     @NeedRefactoring
-    private fun createHistory(isDone: Boolean): History {
-        return History(
-            // need to refactor
-            id = (0..111).random(),
-            isDone = isDone,
-            bubble = _bubble.value
-        )
-    }
-
-    @NeedRefactoring
     private fun createBubble() {
-        _bubble.value = _bubble.value.copy(
-            id = 1,
-            tag = "Tag",
+        _bubble.value = Bubble(
+            id = 0,
+            tag = _tag.value.toTag(),
             dateTime = "12"
         )
+    }
+    private fun showDialog(result: Boolean){
+        dialogState.value = result
+        showDialog.value = true
+    }
+
+    internal fun updateCurrentTag(currentTag: TagUI){
+        _tag.value = currentTag
     }
 
     private fun startTimer(){
@@ -132,7 +131,9 @@ class HomeViewModel @Inject constructor(
                    override fun onFinish() {
                        _currentTime.value = 0L
                        isActive = false
+
                        event(HomeEvents.StopFocus(result = FocusResult.SUCCESS))
+                       addToHistory(isDone = true)
                    }
                }.start()
            }
@@ -178,5 +179,16 @@ class HomeViewModel @Inject constructor(
 
     private fun updateWater(count: Int){
         sharedPref.updateBubbleCount(count)
+    }
+
+    private fun addToHistory(isDone: Boolean){
+        val history = History(
+            id = 0,
+            isDone = isDone,
+            bubble = _bubble.value
+        )
+        viewModelScope.launch(bubbleDispatchers.io) {
+            repository.addBubbleToHistory(history.toHistoryEntity())
+        }
     }
 }

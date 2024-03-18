@@ -9,8 +9,8 @@ data class BubbleColors(
     val secondaryTextColor: Color,
     val notificationColor: Color,
     val errorColor: Color,
-
-    //val tagColors: Color,
+    val bubbleButtonColor: Color,
+    val tagBackgroundColor: Color,
 )
 
 val bubbleLightPalette = BubbleColors(
@@ -19,5 +19,7 @@ val bubbleLightPalette = BubbleColors(
     primaryTextColor = Color(0xFFFFFFFF),
     secondaryTextColor = Color(0XFF000000),
     notificationColor = Color(0xFF15CCC1),
-    errorColor = Color(0xFFFF0606)
+    errorColor = Color(0xFFFF0606),
+    bubbleButtonColor = Color(0xFF15CCC1),
+    tagBackgroundColor = Color(0x66FFFFFF)
 )

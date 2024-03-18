@@ -3,11 +3,13 @@ package com.example.bubble.data.utils
 import com.example.bubble.data.local.database.dbo.AwardEntity
 import com.example.bubble.data.local.database.dbo.BubbleEntity
 import com.example.bubble.data.local.database.dbo.HistoryEntity
+import com.example.bubble.data.local.database.dbo.TagEntity
 import com.example.bubble.data.local.database.dbo.TaskEntity
 import com.example.bubble.domain.model.Award
 import com.example.bubble.domain.model.Bubble
 import com.example.bubble.domain.model.History
 import com.example.bubble.domain.model.Task
+import com.example.bubble.domain.model.Tag
 
 fun AwardEntity.toAward(): Award {
     return Award(
@@ -38,15 +40,15 @@ fun AwardEntity.toUIAward(): Award {
 fun BubbleEntity.toBubble(): Bubble {
     return Bubble(
         id = id,
-        tag = bubbleTag,
+        tag = tag.toTag(),
         dateTime = dateTime
     )
 }
 
 fun Bubble.toBubbleEntity(): BubbleEntity{
     return BubbleEntity(
-        id = checkNotNull(id),
-        bubbleTag = tag!!,
+        id = id!!,
+        tag = tag?.toTagEntity()!!,
         dateTime = dateTime!!
     )
 }
@@ -84,6 +86,22 @@ fun History.toHistoryEntity(): HistoryEntity {
         id = id!!,
         isDone = isDone,
         bubble = bubble.toBubbleEntity()
+    )
+}
+
+fun Tag.toTagEntity(): TagEntity{
+    return TagEntity(
+        id = id,
+        name = tagName,
+        color = tagColor
+    )
+}
+
+fun TagEntity.toTag(): Tag{
+    return Tag(
+        id = id,
+        tagName = name!!,
+        tagColor = color
     )
 }
 

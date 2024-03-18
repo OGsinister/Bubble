@@ -53,7 +53,6 @@ dependencies {
 
     debugImplementation("com.squareup.leakcanary:leakcanary-android:3.0-alpha-1")
 
-
     // Coroutines
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)

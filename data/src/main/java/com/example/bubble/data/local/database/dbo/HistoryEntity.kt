@@ -15,6 +15,13 @@ data class HistoryEntity(
 
 data class BubbleEntity(
     @ColumnInfo(name = "id") val id: Int,
-    @ColumnInfo(name = "bubble_tag") val bubbleTag: String,
+    @Embedded(prefix = "tag") val tag: TagEntity,
     @ColumnInfo(name = "date_time") val dateTime: String
+)
+
+data class TagEntity(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id") val id: Int,
+    @ColumnInfo(name = "name") val name: Int? = 0,
+    @ColumnInfo(name = "color") val color: Int = 0
 )

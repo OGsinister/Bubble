@@ -5,10 +5,11 @@ import android.os.CountDownTimer
 data class BubbleTimer(
     var timer: CountDownTimer? = null,
     var isActive: Boolean = false,
-    val millisInFuture: Long = SelectedTime.TEN_MINUTES.time
+    val millisInFuture: Long = SelectedTime.TEST.time
 )
 
 enum class SelectedTime(val time: Long){
+    TEST(5_000),
     TEN_MINUTES(600_000L),
     FIFTEEN_MINUTES(900_000L),
     TWENTY_MINUTES(1_200_000L),

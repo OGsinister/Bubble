@@ -37,7 +37,8 @@ data class BubbleTypography(
     val title: TextStyle,
     val cardElement: TextStyle,
     val timerText: TextStyle,
-    val smallText: TextStyle
+    val smallText: TextStyle,
+    val userNameText: TextStyle
 )
 
 data class BubbleShapes(

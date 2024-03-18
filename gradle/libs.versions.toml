@@ -28,8 +28,7 @@ ksp = "1.9.22-1.0.17"
 uiGraphicsAndroid = "1.6.2"
 material3Android = "1.2.0"
 uiTooling = "1.6.2"
-
-#retrofit = "2.9.0"
+navigation = "2.7.7"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
@@ -53,6 +52,7 @@ androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigation"}
 
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "daggerCompiler" }
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
@@ -66,8 +66,6 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines"}
 androidx-ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graphics-android", version.ref = "uiGraphicsAndroid" }
 material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
-
-#retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref="retrofit" }
 
 # room
 kotlinx-room = { module = "androidx.room:room-runtime", version.ref = "room"}

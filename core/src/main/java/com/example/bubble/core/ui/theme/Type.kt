@@ -37,6 +37,11 @@ val bubbleTypography = BubbleTypography(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.ExtraLight,
         fontSize = 12.sp
+    ),
+    userNameText = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp
     )
 )
 

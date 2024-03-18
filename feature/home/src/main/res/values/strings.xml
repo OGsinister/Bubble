@@ -13,4 +13,11 @@
     <string name="dialog_text_success">Вы успешно справились 👍</string>
     <string name="select_tag">Выберите тэг</string>
     <string name="tag">Тэг</string>
+    <string name="home">Главная</string>
+    <string name="water">Вода</string>
+    <string name="awards">Награды</string>
+    <string name="history">История</string>
+    <string name="statistic">Статистика</string>
+    <string name="settings">Настройки</string>
+    <string name="relax">Релакс</string>
 </resources>

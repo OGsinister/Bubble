@@ -7,7 +7,8 @@ data class TagUI(
     val id: Int = 0,
     val name: Int? = TagNames.WORK.tagName,
     val color: Color = TagColors.WORK_COLOR.color,
-    val icon: Int = TagIcons.WORK_ICON.icon
+    val icon: Int = TagIcons.WORK_ICON.icon,
+    var currentTag: Int = 0
 )
 
 enum class TagColors(val color: Color){

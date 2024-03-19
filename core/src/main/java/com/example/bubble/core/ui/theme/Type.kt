@@ -1,5 +1,6 @@
 package com.example.bubble.core.ui.theme
 
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -49,7 +50,8 @@ val bubbleShapes = BubbleShapes(
     basePadding = 10.dp,
     itemsPadding = 15.dp,
     textPadding = 5.dp,
-    cornerStyle = RoundedCornerShape(10.dp)
+    cornerStyle = RoundedCornerShape(10.dp),
+    circleStyle = RoundedCornerShape(50)
 )
 
 // Set of Material typography styles to start with

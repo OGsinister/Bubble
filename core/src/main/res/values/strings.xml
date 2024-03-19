@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bubble</string>
+
+    <string name="you_can_everything">Ты все сможешь 👍</string>
+    <string name="good_for_you">Молодец 👏</string>
+    <string name="tag_work">Работа</string>
+    <string name="tag_study">Учеба</string>
+    <string name="tag_reading">Чтение</string>
+    <string name="tag_sport">Спорт</string>
+    <string name="tag_home">Дом</string>
+    <string name="ok">Хорошо</string>
+</resources>

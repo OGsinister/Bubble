@@ -6,4 +6,7 @@ object Constants {
 
     const val AWARD_SHARED_PREF_NAME = "AwardPref"
     const val AWARD_SHARED_PREF_TOKEN = "AwardToken"
+
+    const val USER_SHARED_PREF_NAME = "UserPref"
+    const val USER_SHARED_PREF_TOKEN = "UserToken"
 }

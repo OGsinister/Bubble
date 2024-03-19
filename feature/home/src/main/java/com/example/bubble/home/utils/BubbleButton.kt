@@ -1,5 +1,7 @@
 package com.example.bubble.home.utils
 
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -30,13 +32,13 @@ fun BubbleButton(
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "")
     val minPulsingSize = 120.dp
-    val maxPulsingSize = 160.dp
+    val maxPulsingSize = 150.dp
     val durationMillis = 2_000
     val bubbleButtonSize by infiniteTransition.animateFloat(
         initialValue = minPulsingSize.value,
         targetValue = maxPulsingSize.value,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis, easing = LinearEasing),
+            animation = tween(durationMillis, easing = FastOutLinearInEasing),
             repeatMode = RepeatMode.Restart
         ),
         label = ""
@@ -51,6 +53,8 @@ fun BubbleButton(
         label = ""
     )
     Box(
+        modifier = Modifier
+            .size(maxPulsingSize),
         contentAlignment = Alignment.Center
     ){
         Button(

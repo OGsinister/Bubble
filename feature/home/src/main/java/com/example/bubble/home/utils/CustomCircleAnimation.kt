@@ -1,6 +1,6 @@
 package com.example.bubble.home.utils
 
-import androidx.compose.animation.AnimatedVisibility
+import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector4D
 import androidx.compose.animation.core.InfiniteRepeatableSpec
@@ -14,19 +14,15 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.rotate
@@ -35,6 +31,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.unit.dp
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.floor
 
 @Composable
 fun CustomCircleAnimation(
@@ -44,24 +43,30 @@ fun CustomCircleAnimation(
     onClick: () -> Unit
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "")
+    val randomValueOne = (floor(Math.random() * (200-350)+350))
+    val randomValueTwo = (floor(Math.random() * (200-350)+350))
+    val randomValueThree = (floor(Math.random() * (200-350)+350))
+    val randomValueFour = (floor(Math.random() * (200-350)+350))
+
     val borderTopStart by getBorder(
         valueOf = 200,
-        valueTo = 215,
+        valueTo = 200 + randomValueOne.toInt(),
         infiniteTransition = infiniteTransition
     )
     val borderTopEnd by getBorder(
         valueOf = 200,
-        valueTo = 267,
+        valueTo = 200 + randomValueTwo.toInt(),
         infiniteTransition = infiniteTransition
     )
     val borderBottomStart by getBorder(
-        valueOf = 267,
-        valueTo = 340,
+        valueOf = 200,
+        valueTo = 200 + randomValueThree.toInt(),
         infiniteTransition = infiniteTransition
     )
+    Log.d("checkMF", randomValueThree.toString())
     val borderBottomEnd by getBorder(
         valueOf = 200,
-        valueTo = 340,
+        valueTo = 200 + randomValueFour.toInt(),
         infiniteTransition = infiniteTransition
     )
     val angle by infiniteTransition.animateFloat(
@@ -82,7 +87,6 @@ fun CustomCircleAnimation(
             repeatMode = RepeatMode.Reverse
         ), label = ""
     )
-
     Button(
         onClick = {
             onClick()

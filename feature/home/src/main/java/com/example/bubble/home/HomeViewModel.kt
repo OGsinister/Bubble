@@ -1,6 +1,7 @@
 package com.example.bubble.home
 
 import android.os.CountDownTimer
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,9 +20,13 @@ import com.example.bubble.home.model.HomeEvents
 import com.example.bubble.home.model.HomeState
 import com.example.bubble.home.model.SelectedTime
 import com.example.bubble.core.ui.utils.TagUI
+import com.example.bubble.domain.model.User
 import com.example.bubble.home.utils.toTag
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -47,11 +52,14 @@ class HomeViewModel @Inject constructor(
     private var _affirmation = MutableStateFlow(Affirmation())
     internal val affirmation = _affirmation.asStateFlow()
 
-    private var _bubbleTimer = MutableStateFlow<BubbleTimer>(BubbleTimer())
+    private var _bubbleTimer = MutableStateFlow(BubbleTimer())
     internal val bubbleTimer: StateFlow<BubbleTimer> = _bubbleTimer.asStateFlow()
 
     private var _tag = MutableStateFlow(TagUI())
     internal val tag: StateFlow<TagUI> = _tag.asStateFlow()
+
+    private var _user = MutableStateFlow(User())
+    internal val user: StateFlow<User> = _user.asStateFlow()
 
     internal var showTimeBottomSheet = mutableStateOf(false)
     internal var showTagBottomSheet = mutableStateOf(false)
@@ -111,6 +119,8 @@ class HomeViewModel @Inject constructor(
 
     internal fun updateCurrentTag(currentTag: TagUI){
         _tag.value = currentTag
+        _tag.value.currentTag = currentTag.currentTag
+        Log.d("checkTag", currentTag.toString())
     }
 
     private fun startTimer(){
@@ -121,10 +131,11 @@ class HomeViewModel @Inject constructor(
                        _currentTime.value = millisUntilFinished
                        isActive = true
 
-                       if(currentTime.value % 6L == 0L && _currentTime.value > 5_000L){
+                       if(
+                           ((currentTime.value / 1_000L).toInt() % 30) == 0
+                           && _currentTime.value > 5_000L
+                       ){
                             showAffirmation()
-                       }else{
-                            stopAffirmation()
                        }
                    }
 
@@ -157,6 +168,8 @@ class HomeViewModel @Inject constructor(
                     .random(),
                 isVisible = true
             )
+            delay(5_000L)
+            stopAffirmation()
         }
     }
 
@@ -190,5 +203,12 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch(bubbleDispatchers.io) {
             repository.addBubbleToHistory(history.toHistoryEntity())
         }
+    }
+
+    // need sharedPreferences
+    private fun changeUserName(newName: String){
+        _user.value = _user.value.copy(
+            name = newName
+        )
     }
 }

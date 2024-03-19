@@ -45,7 +45,8 @@ data class BubbleShapes(
     val basePadding: Dp,
     val itemsPadding: Dp,
     val textPadding: Dp,
-    val cornerStyle: Shape
+    val cornerStyle: Shape,
+    val circleStyle: Shape
 )
 
 val LocalBubbleColors = compositionLocalOf<BubbleColors> {

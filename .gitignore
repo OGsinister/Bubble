@@ -13,3 +13,8 @@
 .externalNativeBuild
 .cxx
 local.properties
+/feature/home/src/main/res/drawable/*
+/core/src/main/res/drawable*
+/hs_err_pid7652.log
+/hs_err_pid9456.log
+/feature/home/src/main/res/raw/lto4qjh6.lottie

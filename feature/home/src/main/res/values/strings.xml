@@ -20,4 +20,8 @@
     <string name="statistic">Статистика</string>
     <string name="settings">Настройки</string>
     <string name="relax">Релакс</string>
+    <string name="start">Начать</string>
+    <string name="select_time">Выберите время работы таймера</string>
+    <string name="save">Сохранить</string>
+    <string name="give_up">Сдаться</string>
 </resources>

@@ -66,6 +66,9 @@ dependencies {
     // Lottie
     implementation("com.airbnb.android:lottie-compose:6.1.0")
 
+    implementation("androidx.palette:palette-ktx:1.0.0")
+
+
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":core"))

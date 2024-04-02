@@ -52,7 +52,6 @@ fun FocusHomeScreen(
             viewModel.event(HomeEvents.StopFocus(result = FocusResult.FAIL))
         }
     }
-
     Column(
         modifier = modifier
             .fillMaxHeight(0.4f)
@@ -88,8 +87,10 @@ fun FocusHomeScreen(
                 repeatableColorOne = repeatableColorOne,
                 repeatableColorTwo = repeatableColorTwo,
                 onClick = {
-                    if (currentTime == 0L) {
-                        viewModel.event(HomeEvents.StopFocus(result = FocusResult.SUCCESS))
+                    if (currentTime == 0L){
+                        if (viewModel.getPopBubbleSetting()){
+                            viewModel.event(HomeEvents.StopFocus(result = FocusResult.SUCCESS))
+                        }
                     }
                 }
             )

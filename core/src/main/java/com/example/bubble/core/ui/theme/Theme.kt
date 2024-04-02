@@ -45,6 +45,8 @@ data class BubbleShapes(
     val basePadding: Dp,
     val itemsPadding: Dp,
     val textPadding: Dp,
+    val largePadding: Dp,
+    val noPadding: Dp,
     val cornerStyle: Shape,
     val circleStyle: Shape
 )

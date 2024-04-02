@@ -3,7 +3,6 @@ package com.example.bubble.award.presentation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,6 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.bubble.award.AwardViewModel
 import com.example.bubble.award.model.AwardState
 import com.example.bubble.core.ui.theme.BubbleTheme
+import com.example.bubble.core.ui.utils.GradientColumn
 import com.example.bubble.domain.model.Award
 
 @Composable
@@ -37,28 +37,27 @@ fun AwardScreen(
     val state by viewModel.state.collectAsState()
     val currentState = state
 
-
     if(currentState != AwardState.DefaultState){
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-        ) {
-            if(currentState is AwardState.IsLoadingState){
-                LoadingStateScreen()
-            }
+        GradientColumn(
+            accentGradientColor = BubbleTheme.colors.backgroundGradientAwardAccentColor4,
+            content = {
+                if(currentState is AwardState.IsLoadingState){
+                    LoadingStateScreen()
+                }
 
-            if(currentState is AwardState.EmptyDataState){
-                EmptyDataScreen(currentState.message)
-            }
+                if(currentState is AwardState.EmptyDataState){
+                    EmptyDataScreen(currentState.message)
+                }
 
-            if(currentState is AwardState.ErrorState){
-                ErrorStateScreen(currentState.message)
-            }
+                if(currentState is AwardState.ErrorState){
+                    ErrorStateScreen(currentState.message)
+                }
 
-            if(currentState is AwardState.LoadedAwardsState){
-                LoadedAwardStateScreen(modifier, currentState.data)
+                if(currentState is AwardState.LoadedAwardsState){
+                    LoadedAwardStateScreen(modifier, currentState.data)
+                }
             }
-        }
+        )
     }
 }
 
@@ -80,12 +79,15 @@ private fun ErrorStateScreen(error: String){
 @Composable
 private fun LoadedAwardStateScreen(modifier: Modifier, awards: List<Award>){
     LazyColumn {
-        items(
+        /*items(
             items = awards,
             key = {
                 it.id ?: 0
             }
         ){
+            AwardItem(modifier = modifier, item = it)
+        }*/
+        items(awards){
             AwardItem(modifier = modifier, item = it)
         }
     }

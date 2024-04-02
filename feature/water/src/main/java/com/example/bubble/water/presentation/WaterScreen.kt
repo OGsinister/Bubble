@@ -30,6 +30,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.bubble.core.ui.theme.BubbleTheme
+import com.example.bubble.core.ui.utils.GradientColumn
 import com.example.bubble.domain.model.Water
 import com.example.bubble.water.R
 import com.example.bubble.water.WaterViewModel
@@ -57,7 +58,28 @@ fun WaterScreen(
     }*/
 
     if(currentState !is WaterState.DefaultState){
-        Column(
+        GradientColumn(
+            accentGradientColor = BubbleTheme.colors.backgroundGradientWaterAccentColor4,
+            content = {
+                if(currentState is WaterState.IsLoadingState){
+                    CircularProgressIndicator()
+                }
+
+                if(currentState is WaterState.EmptyDataState){
+                    EmptyWaterScreen(currentState.message)
+                }
+
+                if(currentState is WaterState.ErrorState){
+                    ErrorWaterScreen(currentState.message)
+                }
+
+                if(currentState is WaterState.LoadedDataState){
+                    WaterContentScreen(modifier = modifier, water = currentState.data)
+                }
+            }
+        )
+
+        /*Column(
             modifier = modifier
                 .padding(BubbleTheme.shapes.basePadding)
                 .fillMaxSize(),
@@ -78,7 +100,7 @@ fun WaterScreen(
             if(currentState is WaterState.LoadedDataState){
                 WaterContentScreen(modifier = modifier, water = currentState.data)
             }
-        }
+        }*/
     }
 }
 

@@ -18,8 +18,10 @@ class AwardSharedPref @Inject constructor(
         context.getSharedPreferences(prefName, Context.MODE_PRIVATE)
     private var editor: SharedPreferences.Editor = awardSharedPref.edit()
 
-    companion object{
+    companion object {
         private const val TOKEN = Constants.AWARD_SHARED_PREF_TOKEN
+
+        const val ALL_AWARDS_COUNT = 5
     }
 
     fun updateAward(awardEntity: List<AwardEntity>) {

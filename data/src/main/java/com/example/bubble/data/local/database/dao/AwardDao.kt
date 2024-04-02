@@ -16,4 +16,7 @@ interface AwardDao {
 
     @Query("UPDATE Award SET is_open = 1 WHERE id = :id")
     suspend fun updateAward(id: Int)
+
+    @Query("SELECT * FROM Award WHERE is_open = 1")
+    suspend fun getUserUnlockedAwards(): List<AwardEntity>
 }

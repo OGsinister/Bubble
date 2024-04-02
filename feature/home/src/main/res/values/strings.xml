@@ -24,4 +24,5 @@
     <string name="select_time">Выберите время работы таймера</string>
     <string name="save">Сохранить</string>
     <string name="give_up">Сдаться</string>
+    <string name="type_your_name">Введите ваше имя</string>
 </resources>

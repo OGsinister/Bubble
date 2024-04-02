@@ -50,6 +50,8 @@ val bubbleShapes = BubbleShapes(
     basePadding = 10.dp,
     itemsPadding = 15.dp,
     textPadding = 5.dp,
+    largePadding = 25.dp,
+    noPadding = 0.dp,
     cornerStyle = RoundedCornerShape(10.dp),
     circleStyle = RoundedCornerShape(50)
 )

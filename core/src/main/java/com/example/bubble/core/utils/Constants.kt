@@ -7,6 +7,10 @@ object Constants {
     const val AWARD_SHARED_PREF_NAME = "AwardPref"
     const val AWARD_SHARED_PREF_TOKEN = "AwardToken"
 
-    const val USER_SHARED_PREF_NAME = "UserPref"
-    const val USER_SHARED_PREF_TOKEN = "UserToken"
+    const val SETTINGS_SHARED_PREF_NAME = "SettingsPref"
+
+    const val TOKEN_AVATAR = "AvatarToken"
+    const val TOKEN_AFFIRMATION = "AffirmationToken"
+    const val TOKEN_POP_BUBBLE = "PopBubbleToken"
+    const val TOKEN_USER_NAME = "UserNameToken"
 }

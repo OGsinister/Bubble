@@ -1,7 +1,7 @@
 package com.example.bubble.home
 
 import android.os.CountDownTimer
-import android.util.Log
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,13 +20,13 @@ import com.example.bubble.home.model.HomeEvents
 import com.example.bubble.home.model.HomeState
 import com.example.bubble.home.model.SelectedTime
 import com.example.bubble.core.ui.utils.TagUI
-import com.example.bubble.domain.model.User
+import com.example.bubble.data.local.database.dbo.AwardEntity
+import com.example.bubble.data.local.sharedPref.AwardSharedPref
+import com.example.bubble.data.local.sharedPref.SettingsSharedPref
 import com.example.bubble.home.utils.toTag
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -37,7 +37,10 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val bubbleDispatchers: BubbleDispatchers,
     private val repository: HistoryRepository,
-    private val sharedPref: WaterSharedPref
+    private val sharedPref: WaterSharedPref,
+    private val settingsSharedPref: SettingsSharedPref,
+    //private val awardSharedPref: AwardSharedPref,
+    private val getUserUnlockedAwardsCountUseCase: GetUserUnlockedAwardsCountUseCase
 ) : ViewModel() {
 
     private var _state = MutableStateFlow<HomeState>(HomeState.DefaultState)
@@ -57,9 +60,6 @@ class HomeViewModel @Inject constructor(
 
     private var _tag = MutableStateFlow(TagUI())
     internal val tag: StateFlow<TagUI> = _tag.asStateFlow()
-
-    private var _user = MutableStateFlow(User())
-    internal val user: StateFlow<User> = _user.asStateFlow()
 
     internal var showTimeBottomSheet = mutableStateOf(false)
     internal var showTagBottomSheet = mutableStateOf(false)
@@ -120,7 +120,6 @@ class HomeViewModel @Inject constructor(
     internal fun updateCurrentTag(currentTag: TagUI){
         _tag.value = currentTag
         _tag.value.currentTag = currentTag.currentTag
-        Log.d("checkTag", currentTag.toString())
     }
 
     private fun startTimer(){
@@ -131,11 +130,13 @@ class HomeViewModel @Inject constructor(
                        _currentTime.value = millisUntilFinished
                        isActive = true
 
-                       if(
-                           ((currentTime.value / 1_000L).toInt() % 30) == 0
-                           && _currentTime.value > 5_000L
-                       ){
-                            showAffirmation()
+                       if (settingsSharedPref.getAffirmationSetting()){
+                           if(
+                               ((currentTime.value / 1_000L).toInt() % 30) == 0
+                               && _currentTime.value > 5_000L
+                           ){
+                               showAffirmation()
+                           }
                        }
                    }
 
@@ -143,7 +144,9 @@ class HomeViewModel @Inject constructor(
                        _currentTime.value = 0L
                        isActive = false
 
-                       event(HomeEvents.StopFocus(result = FocusResult.SUCCESS))
+                       if (!settingsSharedPref.getPopBubbleSetting())
+                           event(HomeEvents.StopFocus(result = FocusResult.SUCCESS))
+
                        addToHistory(isDone = true)
                    }
                }.start()
@@ -205,10 +208,21 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    // need sharedPreferences
-    private fun changeUserName(newName: String){
-        _user.value = _user.value.copy(
-            name = newName
-        )
+    internal fun getPopBubbleSetting(): Boolean {
+        return settingsSharedPref.getPopBubbleSetting()
+    }
+
+    internal fun getUserName(): String? {
+        return settingsSharedPref.getUserName()
+    }
+
+    internal fun getUserAvatar(): Int {
+        return settingsSharedPref.getAvatar()
+    }
+
+    internal fun getAwardCount() {
+        viewModelScope.launch(bubbleDispatchers.io) {
+            "${getUserUnlockedAwardsCountUseCase()} / ${AwardSharedPref.ALL_AWARDS_COUNT}"
+        }
     }
 }

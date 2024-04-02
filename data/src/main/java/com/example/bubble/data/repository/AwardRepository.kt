@@ -47,4 +47,8 @@ class AwardRepository @Inject constructor(
     suspend fun addAward(awardEntity: AwardEntity){
         database.awardDao().addAward(awardEntity)
     }
+
+    suspend fun getUserUnlockedAwards(): List<AwardEntity> {
+        return database.awardDao().getUserUnlockedAwards()
+    }
 }

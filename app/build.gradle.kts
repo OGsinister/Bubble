@@ -82,6 +82,8 @@ dependencies {
     implementation(libs.kotlinx.room)
     ksp(libs.kotlinx.android.room.compiler)
 
+    implementation("androidx.palette:palette-ktx:1.0.0")
+
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":core"))
@@ -90,4 +92,6 @@ dependencies {
     implementation(project(":feature:history"))
     implementation(project(":feature:water"))
     implementation(project(":feature:settings"))
+    implementation(project(":feature:statistics"))
+    implementation(project(":feature:relax"))
 }

@@ -23,7 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.bubble.core.ui.theme.BubbleTheme
 import com.example.bubble.core.ui.utils.BubbleTextField
-import com.example.bubble.home.HomeViewModel
 import com.example.bubble.home.R
 
 @Composable

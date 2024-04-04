@@ -2,14 +2,12 @@ package com.example.bubble.home.presentation
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.Animatable
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.Dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.bubble.core.ui.theme.BubbleTheme
 import com.example.bubble.core.ui.utils.GradientColumn
@@ -20,7 +18,7 @@ import com.example.bubble.home.model.HomeState
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel = hiltViewModel<HomeViewModel>()
 ) {
     val state by viewModel.state.collectAsState()
     val bubbleTimer by viewModel.bubbleTimer.collectAsState()

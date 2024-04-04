@@ -1,12 +1,13 @@
 package com.example.bubble.home
 
 import android.os.CountDownTimer
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.bubble.core.utils.BubbleDispatchers
 import com.example.bubble.core.ui.utils.NeedRefactoring
+import com.example.bubble.core.ui.utils.TagUI
+import com.example.bubble.core.utils.BubbleDispatchers
+import com.example.bubble.data.local.sharedPref.SettingsSharedPref
 import com.example.bubble.data.local.sharedPref.WaterSharedPref
 import com.example.bubble.data.repository.HistoryRepository
 import com.example.bubble.data.utils.toHistoryEntity
@@ -19,10 +20,6 @@ import com.example.bubble.home.model.FocusResult
 import com.example.bubble.home.model.HomeEvents
 import com.example.bubble.home.model.HomeState
 import com.example.bubble.home.model.SelectedTime
-import com.example.bubble.core.ui.utils.TagUI
-import com.example.bubble.data.local.database.dbo.AwardEntity
-import com.example.bubble.data.local.sharedPref.AwardSharedPref
-import com.example.bubble.data.local.sharedPref.SettingsSharedPref
 import com.example.bubble.home.utils.toTag
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -38,9 +35,7 @@ class HomeViewModel @Inject constructor(
     private val bubbleDispatchers: BubbleDispatchers,
     private val repository: HistoryRepository,
     private val sharedPref: WaterSharedPref,
-    private val settingsSharedPref: SettingsSharedPref,
-    //private val awardSharedPref: AwardSharedPref,
-    private val getUserUnlockedAwardsCountUseCase: GetUserUnlockedAwardsCountUseCase
+    private val settingsSharedPref: SettingsSharedPref
 ) : ViewModel() {
 
     private var _state = MutableStateFlow<HomeState>(HomeState.DefaultState)
@@ -210,19 +205,5 @@ class HomeViewModel @Inject constructor(
 
     internal fun getPopBubbleSetting(): Boolean {
         return settingsSharedPref.getPopBubbleSetting()
-    }
-
-    internal fun getUserName(): String? {
-        return settingsSharedPref.getUserName()
-    }
-
-    internal fun getUserAvatar(): Int {
-        return settingsSharedPref.getAvatar()
-    }
-
-    internal fun getAwardCount() {
-        viewModelScope.launch(bubbleDispatchers.io) {
-            "${getUserUnlockedAwardsCountUseCase()} / ${AwardSharedPref.ALL_AWARDS_COUNT}"
-        }
     }
 }

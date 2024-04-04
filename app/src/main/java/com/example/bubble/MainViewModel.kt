@@ -7,7 +7,13 @@ import com.example.bubble.award.useCase.UpdateAwardUseCase
 import com.example.bubble.award.utils.AwardCodes
 import com.example.bubble.core.utils.BubbleDispatchers
 import com.example.bubble.data.local.database.dbo.AwardEntity
+import com.example.bubble.data.local.sharedPref.AwardSharedPref
+import com.example.bubble.data.local.sharedPref.SettingsSharedPref
+import com.example.bubble.home.GetUserUnlockedAwardsCountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,16 +21,21 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val updateAwardUseCase: UpdateAwardUseCase,
     private val bubbleDispatchers: BubbleDispatchers,
-    private val addAwardUseCase: AddAwardUseCase
+    private val addAwardUseCase: AddAwardUseCase,
+    private val getUserUnlockedAwardsCountUseCase: GetUserUnlockedAwardsCountUseCase,
+    private val settingsSharedPref: SettingsSharedPref
 ): ViewModel() {
 
-    fun updateAchiv(code: AwardCodes){
+    private var _userAwardsCount = MutableStateFlow("")
+    internal val userAwardsCount: StateFlow<String> = _userAwardsCount.asStateFlow()
+
+    fun updateAchiv(code: AwardCodes) {
         viewModelScope.launch(bubbleDispatchers.io) {
             updateAwardUseCase.updateAward(code)
         }
     }
 
-    fun addAchiv(){
+    fun addAchiv() {
         viewModelScope.launch(bubbleDispatchers.io) {
             val awardEntity = AwardEntity(
                 name = "name",
@@ -35,5 +46,18 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    internal fun getAwardCount() {
+        viewModelScope.launch(bubbleDispatchers.io) {
+            _userAwardsCount.value =
+                "${getUserUnlockedAwardsCountUseCase()} / ${AwardSharedPref.ALL_AWARDS_COUNT}"
+        }
+    }
 
+    internal fun getUserName(): String? {
+        return settingsSharedPref.getUserName()
+    }
+
+    internal fun getUserAvatar(): Int {
+        return settingsSharedPref.getAvatar()
+    }
 }

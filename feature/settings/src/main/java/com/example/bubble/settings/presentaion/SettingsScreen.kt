@@ -106,6 +106,10 @@ fun SettingItem(
         mutableStateOf(settings.isUserPopBubble)
     }
 
+    val checkedSound = rememberSaveable {
+        mutableStateOf(settings.isSoundOn)
+    }
+
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -166,6 +170,22 @@ fun SettingItem(
                         viewModel.event(SettingsEvent.ChangeBubblePopSetting(checkedPopBubble.value))
                     },
                     text = "Лопнуть Bubble самому"
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ){
+                SettingCard(
+                    checked = checkedSound.value,
+                    onCheckChange = {
+                        checkedSound.value = !checkedSound.value
+                        viewModel.event(SettingsEvent.ChangeSoundSetting(checkedSound.value))
+                    },
+                    text = "Звук"
                 )
             }
         }

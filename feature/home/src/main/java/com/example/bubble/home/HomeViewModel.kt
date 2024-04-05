@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bubble.core.ui.utils.NeedRefactoring
 import com.example.bubble.core.ui.utils.TagUI
+import com.example.bubble.core.use_cases.MediaPlayerIWorkUseCase
 import com.example.bubble.core.utils.BubbleDispatchers
 import com.example.bubble.data.local.sharedPref.SettingsSharedPref
 import com.example.bubble.data.local.sharedPref.WaterSharedPref
@@ -35,7 +36,8 @@ class HomeViewModel @Inject constructor(
     private val bubbleDispatchers: BubbleDispatchers,
     private val repository: HistoryRepository,
     private val sharedPref: WaterSharedPref,
-    private val settingsSharedPref: SettingsSharedPref
+    private val settingsSharedPref: SettingsSharedPref,
+    private val mediaWorkerUseCase: MediaPlayerIWorkUseCase
 ) : ViewModel() {
 
     private var _state = MutableStateFlow<HomeState>(HomeState.DefaultState)
@@ -84,6 +86,7 @@ class HomeViewModel @Inject constructor(
                         }
                     }
                 }
+                viewModelScope.launch { mediaWorkerUseCase() }
                 _state.value = HomeState.DefaultState
             }
 

@@ -30,7 +30,8 @@ class GetAllSettingsUseCase @Inject constructor(
                 val functionalSettings = Settings(
                     userSettings = userSettings,
                     isAffirmationOn = settingsSharedPref.getAffirmationSetting(),
-                    isUserPopBubble = settingsSharedPref.getPopBubbleSetting()
+                    isUserPopBubble = settingsSharedPref.getPopBubbleSetting(),
+                    isSoundOn = settingsSharedPref.getSoundSetting()
                 )
                 emit(
                     SettingsState.LoadedState(

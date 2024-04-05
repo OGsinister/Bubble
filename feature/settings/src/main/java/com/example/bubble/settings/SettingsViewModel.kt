@@ -7,15 +7,13 @@ import com.example.bubble.settings.model.SettingsState
 import com.example.bubble.settings.useCases.ChangeAffirmationSettingUseCase
 import com.example.bubble.settings.useCases.ChangeAvatarUseCase
 import com.example.bubble.settings.useCases.ChangeBubblePopSettingUseCase
+import com.example.bubble.settings.useCases.ChangeSoundSettingUseCase
 import com.example.bubble.settings.useCases.ChangeUserNameUseCase
 import com.example.bubble.settings.useCases.GetAllSettingsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,6 +22,7 @@ class SettingsViewModel @Inject constructor(
     private val changeUserNameUseCase: ChangeUserNameUseCase,
     private val changeAffirmationSettingUseCase: ChangeAffirmationSettingUseCase,
     private val changeBubblePopSettingUseCase: ChangeBubblePopSettingUseCase,
+    private val changeSoundSettingUseCase: ChangeSoundSettingUseCase,
     private val changeAvatarUseCase: ChangeAvatarUseCase
 ): ViewModel() {
 
@@ -47,6 +46,10 @@ class SettingsViewModel @Inject constructor(
 
                 is SettingsEvent.ChangeUserAvatar -> {
                     changeAvatarUseCase(avatar = event.avatar)
+                }
+
+                is SettingsEvent.ChangeSoundSetting -> {
+                    changeSoundSettingUseCase(isSoundOn = event.isSoundOn)
                 }
             }
         }

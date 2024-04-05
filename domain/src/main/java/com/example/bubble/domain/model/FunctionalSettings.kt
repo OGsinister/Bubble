@@ -4,6 +4,7 @@ data class Settings(
     val userSettings: UserSettings? = null,
     val isAffirmationOn: Boolean = true,
     val isUserPopBubble: Boolean = true,
+    val isSoundOn: Boolean = true,
 )
 
 data class UserSettings(

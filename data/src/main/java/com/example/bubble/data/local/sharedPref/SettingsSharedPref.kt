@@ -20,11 +20,21 @@ class SettingsSharedPref @Inject constructor(
         private const val TOKEN_AFFIRMATION = Constants.TOKEN_AFFIRMATION
         private const val TOKEN_POP_BUBBLE = Constants.TOKEN_POP_BUBBLE
         private const val TOKEN_USER_NAME = Constants.TOKEN_USER_NAME
+        private const val TOKEN_SOUND = Constants.TOKEN_SOUND
 
+        private const val DEFAULT_SOUND_SETTING = true
         private const val DEFAULT_AFFIRMATION_SETTING = false
 
         // По дефолту система сама лопает Bubble
         private const val DEFAULT_POP_BUBBLE_SETTING = false
+    }
+
+    fun updateSoundSetting(isSoundOn: Boolean){
+        editor.putBoolean(TOKEN_SOUND, isSoundOn).commit()
+    }
+
+    fun getSoundSetting(): Boolean {
+        return settingsSharedPref.getBoolean(TOKEN_SOUND, DEFAULT_SOUND_SETTING)
     }
 
     fun updateAvatar(avatar: Int){

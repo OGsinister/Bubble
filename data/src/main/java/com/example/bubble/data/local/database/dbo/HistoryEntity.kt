@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "History")
 data class HistoryEntity(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id") val id: Int,
+    @ColumnInfo(name = "id") val id: Int = 0,
     @ColumnInfo(name = "is_done") val isDone: Boolean,
     @Embedded(prefix = "bubble") val bubble: BubbleEntity
 )

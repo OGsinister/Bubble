@@ -1,6 +1,7 @@
 package com.example.bubble.home
 
 import android.os.CountDownTimer
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,6 +23,7 @@ import com.example.bubble.home.model.HomeEvents
 import com.example.bubble.home.model.HomeState
 import com.example.bubble.home.model.SelectedTime
 import com.example.bubble.home.utils.toTag
+import com.example.bubble.home.utils.toTimeUIFormat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,6 +50,7 @@ class HomeViewModel @Inject constructor(
 
     private var _currentTime = MutableStateFlow(0L)
     internal val currentTime = _currentTime.asStateFlow()
+    private var selectedTime = 0L
 
     private var _affirmation = MutableStateFlow(Affirmation())
     internal val affirmation = _affirmation.asStateFlow()
@@ -80,8 +83,8 @@ class HomeViewModel @Inject constructor(
                             showDialog(event.result.value)
                         }
                         FocusResult.SUCCESS -> {
-                            updateWater(count = Bubble.BUBBLE_COUNT)
                             addToHistory(isDone = event.result.value)
+                            updateWater(count = Bubble.BUBBLE_COUNT)
                             showDialog(event.result.value)
                         }
                     }
@@ -89,7 +92,6 @@ class HomeViewModel @Inject constructor(
 
                 viewModelScope.launch {
                     mediaWorkerUseCase()
-                    //startPopAnimation()
                 }
 
                 _state.value = HomeState.DefaultState
@@ -103,13 +105,9 @@ class HomeViewModel @Inject constructor(
 
             is HomeEvents.SelectTime -> {
                 changeMillisInFuture(event.time)
+                selectedTime = event.time.time
             }
         }
-    }
-
-    private suspend fun startPopAnimation(){
-        _bubble.value.startAnimation = !(_bubble.value.startAnimation)!!
-        delay(2_000L)
     }
 
     @NeedRefactoring
@@ -117,7 +115,7 @@ class HomeViewModel @Inject constructor(
         _bubble.value = Bubble(
             id = (0..1_000).random(),
             tag = _tag.value.toTag(),
-            dateTime = "12"
+            dateTime = selectedTime.toTimeUIFormat()
         )
     }
     private fun showDialog(result: Boolean){
@@ -154,8 +152,6 @@ class HomeViewModel @Inject constructor(
 
                        if (!settingsSharedPref.getPopBubbleSetting())
                            event(HomeEvents.StopFocus(result = FocusResult.SUCCESS))
-
-                       addToHistory(isDone = true)
                    }
                }.start()
            }
@@ -202,10 +198,13 @@ class HomeViewModel @Inject constructor(
 
     private fun addToHistory(isDone: Boolean){
         val history = History(
-            id = (0..1_000).random(),
             isDone = isDone,
-            bubble = _bubble.value
+            bubble = _bubble.value.copy(
+                dateTime = selectedTime.toTimeUIFormat()
+            )
         )
+
+        Log.d("checkMF", history.toString())
         viewModelScope.launch(bubbleDispatchers.io) {
             repository.addBubbleToHistory(history.toHistoryEntity())
         }

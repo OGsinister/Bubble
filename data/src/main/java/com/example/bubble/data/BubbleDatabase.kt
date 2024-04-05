@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.bubble.data.local.database.dao.AwardDao
 import com.example.bubble.data.local.database.dao.HistoryDao
 import com.example.bubble.data.local.database.dao.TaskDao
@@ -29,6 +30,6 @@ fun bubbleDatabase(applicationContext: Context): BubbleDatabase {
     return Room.databaseBuilder(
         context = applicationContext.applicationContext,
         klass = BubbleDatabase::class.java,
-        name = BubbleDatabase.DATABASE_NAME
+        name = BubbleDatabase.DATABASE_NAME,
     ).build()
 }

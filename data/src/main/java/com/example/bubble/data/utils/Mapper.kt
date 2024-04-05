@@ -75,7 +75,6 @@ fun Task.toTaskEntity(): TaskEntity {
 
 fun HistoryEntity.toUIHistory(): History {
     return History(
-        id = id,
         isDone = isDone,
         bubble = bubble.toBubble()
     )
@@ -83,7 +82,6 @@ fun HistoryEntity.toUIHistory(): History {
 
 fun History.toHistoryEntity(): HistoryEntity {
     return HistoryEntity(
-        id = id!!,
         isDone = isDone,
         bubble = bubble.toBubbleEntity()
     )

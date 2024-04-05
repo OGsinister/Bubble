@@ -28,9 +28,9 @@ class HistoryViewModel @Inject constructor(
         }
         .stateIn(viewModelScope, SharingStarted.Lazily, HistoryState.DefaultState)
 
-    internal fun addHistory(historyEntity: HistoryEntity){
+    /*internal fun addHistory(historyEntity: HistoryEntity){
         viewModelScope.launch(Dispatchers.IO) {
             repository.addBubbleToHistory(historyEntity)
         }
-    }
+    }*/
 }

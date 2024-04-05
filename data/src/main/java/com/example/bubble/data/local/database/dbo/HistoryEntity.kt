@@ -23,5 +23,6 @@ data class TagEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") val id: Int,
     @ColumnInfo(name = "name") val name: Int? = 0,
-    @ColumnInfo(name = "color") val color: Int = 0
+    @ColumnInfo(name = "color") val color: Int = 0,
+    @ColumnInfo(name = "icon") val icon: Int = 0
 )

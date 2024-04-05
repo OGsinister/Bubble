@@ -1,6 +1,5 @@
 package com.example.bubble.home.utils
 
-import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector4D
 import androidx.compose.animation.core.InfiniteRepeatableSpec
@@ -14,7 +13,6 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,8 +29,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.unit.dp
-import kotlin.math.PI
-import kotlin.math.cos
 import kotlin.math.floor
 
 @Composable
@@ -43,10 +39,10 @@ fun CustomCircleAnimation(
     onClick: () -> Unit
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "")
-    val randomValueOne = (floor(Math.random() * (200-350)+350))
-    val randomValueTwo = (floor(Math.random() * (200-350)+350))
-    val randomValueThree = (floor(Math.random() * (200-350)+350))
-    val randomValueFour = (floor(Math.random() * (200-350)+350))
+    val randomValueOne = (floor(Math.random() * (200 - 350) + 350))
+    val randomValueTwo = (floor(Math.random() * (200 - 350) + 350))
+    val randomValueThree = (floor(Math.random() * (200 - 350) + 350))
+    val randomValueFour = (floor(Math.random() * (200 - 350) + 350))
 
     val borderTopStart by getBorder(
         valueOf = 200,
@@ -63,7 +59,6 @@ fun CustomCircleAnimation(
         valueTo = 200 + randomValueThree.toInt(),
         infiniteTransition = infiniteTransition
     )
-    Log.d("checkMF", randomValueThree.toString())
     val borderBottomEnd by getBorder(
         valueOf = 200,
         valueTo = 200 + randomValueFour.toInt(),
@@ -87,6 +82,7 @@ fun CustomCircleAnimation(
             repeatMode = RepeatMode.Reverse
         ), label = ""
     )
+
     Button(
         onClick = {
             onClick()

@@ -86,7 +86,12 @@ class HomeViewModel @Inject constructor(
                         }
                     }
                 }
-                viewModelScope.launch { mediaWorkerUseCase() }
+
+                viewModelScope.launch {
+                    mediaWorkerUseCase()
+                    //startPopAnimation()
+                }
+
                 _state.value = HomeState.DefaultState
             }
 
@@ -102,10 +107,15 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private suspend fun startPopAnimation(){
+        _bubble.value.startAnimation = !(_bubble.value.startAnimation)!!
+        delay(2_000L)
+    }
+
     @NeedRefactoring
     private fun createBubble() {
         _bubble.value = Bubble(
-            id = 0,
+            id = (0..1_000).random(),
             tag = _tag.value.toTag(),
             dateTime = "12"
         )
@@ -151,7 +161,6 @@ class HomeViewModel @Inject constructor(
            }
        }
     }
-
     private fun stopTimer(){
         viewModelScope.launch(bubbleDispatchers.main) {
             _bubbleTimer.value.apply {
@@ -160,7 +169,6 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
-
     private fun showAffirmation(){
         viewModelScope.launch(bubbleDispatchers.main) {
             _affirmation.value = Affirmation(
@@ -173,7 +181,6 @@ class HomeViewModel @Inject constructor(
             stopAffirmation()
         }
     }
-
     private fun stopAffirmation(){
         viewModelScope.launch(bubbleDispatchers.main) {
             _affirmation.value = Affirmation(
@@ -182,7 +189,6 @@ class HomeViewModel @Inject constructor(
             )
         }
     }
-
     private fun changeMillisInFuture(selectedTime: SelectedTime){
         viewModelScope.launch(bubbleDispatchers.main) {
             _bubbleTimer.value = BubbleTimer(
@@ -190,14 +196,13 @@ class HomeViewModel @Inject constructor(
             )
         }
     }
-
     private fun updateWater(count: Int){
         sharedPref.updateBubbleCount(count)
     }
 
     private fun addToHistory(isDone: Boolean){
         val history = History(
-            id = 0,
+            id = (0..1_000).random(),
             isDone = isDone,
             bubble = _bubble.value
         )

@@ -9,7 +9,7 @@ import com.example.bubble.core.utils.BubbleDispatchers
 import com.example.bubble.data.local.database.dbo.AwardEntity
 import com.example.bubble.data.local.sharedPref.AwardSharedPref
 import com.example.bubble.data.local.sharedPref.SettingsSharedPref
-import com.example.bubble.home.GetUserUnlockedAwardsCountUseCase
+import com.example.bubble.home.use_cases.GetUserUnlockedAwardsCountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

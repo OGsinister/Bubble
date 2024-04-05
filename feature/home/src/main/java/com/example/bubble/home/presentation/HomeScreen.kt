@@ -1,6 +1,5 @@
 package com.example.bubble.home.presentation
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.Animatable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -14,7 +13,6 @@ import com.example.bubble.core.ui.utils.GradientColumn
 import com.example.bubble.home.HomeViewModel
 import com.example.bubble.home.model.HomeState
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,

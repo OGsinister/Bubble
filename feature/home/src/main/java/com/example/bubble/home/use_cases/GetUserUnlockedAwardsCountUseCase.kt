@@ -1,4 +1,4 @@
-package com.example.bubble.home
+package com.example.bubble.home.use_cases
 
 import com.example.bubble.data.repository.AwardRepository
 import javax.inject.Inject

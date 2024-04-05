@@ -8,8 +8,8 @@ import com.example.bubble.data.local.database.dbo.TaskEntity
 import com.example.bubble.domain.model.Award
 import com.example.bubble.domain.model.Bubble
 import com.example.bubble.domain.model.History
-import com.example.bubble.domain.model.Task
 import com.example.bubble.domain.model.Tag
+import com.example.bubble.domain.model.Task
 
 fun AwardEntity.toAward(): Award {
     return Award(
@@ -93,7 +93,8 @@ fun Tag.toTagEntity(): TagEntity{
     return TagEntity(
         id = id,
         name = tagName,
-        color = tagColor
+        color = tagColor,
+        icon = tagIcon
     )
 }
 
@@ -101,7 +102,8 @@ fun TagEntity.toTag(): Tag{
     return Tag(
         id = id,
         tagName = name!!,
-        tagColor = color
+        tagColor = color,
+        tagIcon = icon
     )
 }
 

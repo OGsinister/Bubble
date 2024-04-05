@@ -18,6 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,11 +49,16 @@ fun FocusHomeScreen(
     val currentTime by viewModel.currentTime.collectAsState()
     val affirmation by viewModel.affirmation.collectAsState()
 
+    val isPopBubbleAnimationStart = remember {
+        mutableStateOf(viewModel.bubble.value.startAnimation)
+    }
+
     LaunchedEffect(key1 = lifecycleEvent) {
         if (lifecycleEvent == Lifecycle.Event.ON_STOP) {
             viewModel.event(HomeEvents.StopFocus(result = FocusResult.FAIL))
         }
     }
+
     Column(
         modifier = modifier
             .fillMaxHeight(0.4f)

@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -15,13 +14,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.lottie.compose.LottieAnimation
@@ -30,6 +29,8 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.bubble.core.ui.theme.BubbleTheme
+import com.example.bubble.core.ui.utils.BubbleEmptyDataScreen
+import com.example.bubble.core.ui.utils.BubbleErrorScreen
 import com.example.bubble.core.ui.utils.GradientColumn
 import com.example.bubble.domain.model.Water
 import com.example.bubble.water.R
@@ -44,19 +45,6 @@ fun WaterScreen(
     val state by viewModel.waterState.collectAsState()
     val currentState = state
 
-    /*Box(
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        Button(
-            onClick = {
-                viewModel.addWaterBubble(1)
-            }
-        ) {
-            Text(text = "click")
-        }
-    }*/
-
     if(currentState !is WaterState.DefaultState){
         GradientColumn(
             accentGradientColor = BubbleTheme.colors.backgroundGradientWaterAccentColor4,
@@ -66,11 +54,11 @@ fun WaterScreen(
                 }
 
                 if(currentState is WaterState.EmptyDataState){
-                    EmptyWaterScreen(currentState.message)
+                    EmptyWaterScreen(message = currentState.message)
                 }
 
                 if(currentState is WaterState.ErrorState){
-                    ErrorWaterScreen(currentState.message)
+                    ErrorWaterScreen(error = currentState.message)
                 }
 
                 if(currentState is WaterState.LoadedDataState){
@@ -78,54 +66,33 @@ fun WaterScreen(
                 }
             }
         )
-
-        /*Column(
-            modifier = modifier
-                .padding(BubbleTheme.shapes.basePadding)
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            if(currentState is WaterState.IsLoadingState){
-                CircularProgressIndicator()
-            }
-
-            if(currentState is WaterState.EmptyDataState){
-                EmptyWaterScreen(currentState.message)
-            }
-
-            if(currentState is WaterState.ErrorState){
-                ErrorWaterScreen(currentState.message)
-            }
-
-            if(currentState is WaterState.LoadedDataState){
-                WaterContentScreen(modifier = modifier, water = currentState.data)
-            }
-        }*/
     }
 }
 
 @Composable
-private fun EmptyWaterScreen(message: String){
-    Text(text = message)
+private fun EmptyWaterScreen(
+    modifier: Modifier = Modifier,
+    message: String
+){
+    BubbleEmptyDataScreen(modifier = modifier)
 }
 
 @Composable
-private fun ErrorWaterScreen(error: String){
-    Text(text = error)
+private fun ErrorWaterScreen(
+    modifier: Modifier = Modifier,
+    error: String
+){
+    BubbleErrorScreen(modifier = modifier, errorMessage = error)
 }
 
 @Composable
-private fun WaterContentScreen(modifier: Modifier, water: Water){
-    val isLottiePlaying by remember{
-        mutableStateOf(true)
-    }
-
-    val lottieSpeed by remember{
-        mutableStateOf(1f)
-    }
-    val composition by rememberLottieComposition(
-        spec = LottieCompositionSpec.RawRes(R.raw.bubble_water_animation)
-    )
+private fun WaterContentScreen(
+    modifier: Modifier,
+    water: Water
+){
+    val isLottiePlaying by remember{ mutableStateOf(true) }
+    val lottieSpeed by remember{ mutableFloatStateOf(1f) }
+    val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.bubble_water_animation))
     val progress by animateLottieCompositionAsState(
         composition = composition,
         iterations = LottieConstants.IterateForever,
@@ -201,12 +168,5 @@ private fun WaterContentScreen(modifier: Modifier, water: Water){
                 color = BubbleTheme.colors.primaryTextColor
             )
         }
-    }
-}
-@Composable
-@Preview(showBackground = true)
-fun TestAnimationPreview() {
-    BubbleTheme {
-
     }
 }

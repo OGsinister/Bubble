@@ -1,7 +1,7 @@
 package com.example.bubble.settings.presentaion
 
-import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,19 +10,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -30,11 +28,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.bubble.core.ui.theme.BubbleTheme
 import com.example.bubble.core.ui.utils.BubbleImage
+import com.example.bubble.core.ui.utils.ChangeUserNameDialog
 import com.example.bubble.core.ui.utils.GradientColumn
 import com.example.bubble.core.utils.getDominantColor
 import com.example.bubble.domain.model.Settings
 import com.example.bubble.domain.model.UserSettings
-import com.example.bubble.settings.R
 import com.example.bubble.settings.SettingsViewModel
 import com.example.bubble.settings.model.SettingsEvent
 import com.example.bubble.settings.model.SettingsState
@@ -76,19 +74,47 @@ fun LoadedScreen(
     paddingValues: Dp,
     viewModel: SettingsViewModel
 ) {
+    val userNameValue = rememberSaveable {
+        mutableStateOf("")
+    }
+
+    val user by viewModel.user.collectAsState()
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(top = paddingValues)
     ) {
         settings.userSettings?.let {
-            UserSection(userSettings = it)
+            UserSection(
+                userSettings = it,
+                viewModel = viewModel
+            )
         }
 
         SettingItem(
             settings = settings,
             viewModel = viewModel
         )
+
+        if (user.name.isNullOrEmpty()){
+            viewModel.isOpenUserNameDialog.value = true
+        }
+
+        if (viewModel.isOpenUserNameDialog.value){
+            ChangeUserNameDialog(
+                text = userNameValue.value,
+                onValueChange = {
+                    userNameValue.value = it
+                },
+                onClick = {
+                    viewModel.updateUserName(userNameValue.value)
+                },
+                onDismiss = {
+                    viewModel.isOpenUserNameDialog.value = !viewModel.isOpenUserNameDialog.value
+                }
+            )
+        }
     }
 }
 
@@ -195,11 +221,14 @@ fun SettingItem(
 @Composable
 fun UserSection(
     modifier: Modifier = Modifier,
-    userSettings: UserSettings
+    userSettings: UserSettings,
+    viewModel: SettingsViewModel
 ) {
     val userAvatar = userSettings.avatar
         .takeIf { it != 0 } ?: com.example.bubble.core.R.drawable.default_user_avatar
     val dominantColor = getDominantColor(LocalContext.current, userAvatar)?.rgb
+
+    val user by viewModel.user.collectAsState()
 
     Row(
         modifier = modifier
@@ -225,14 +254,31 @@ fun UserSection(
             }
         )
 
-        userSettings.name?.let {
+        user.name?.let {
             Text(
                 text = it,
                 style = BubbleTheme.typography.heading,
                 color = BubbleTheme.colors.primaryTextColor,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .clickable {
+                        viewModel.isOpenUserNameDialog.value = !viewModel.isOpenUserNameDialog.value
+                    }
             )
         }
+        /*userSettings.name?.let {
+            Text(
+                text = it,
+                style = BubbleTheme.typography.heading,
+                color = BubbleTheme.colors.primaryTextColor,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .clickable {
+                        viewModel.isOpenUserNameDialog.value = !viewModel.isOpenUserNameDialog.value
+                    }
+            )
+        }*/
     }
 }

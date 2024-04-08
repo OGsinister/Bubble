@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -17,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.bubble.MainViewModel
 import com.example.bubble.award.utils.AwardCodes
 import com.example.bubble.core.ui.theme.BubbleTheme
+import com.example.bubble.core.ui.utils.ChangeUserNameDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

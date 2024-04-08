@@ -69,6 +69,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.hilt.navigation.compose)
 
+    // Graphics
+    implementation(libs.vico.compose.m3)
+
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":core"))

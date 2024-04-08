@@ -7,12 +7,11 @@ import androidx.compose.ui.Modifier
 @Composable
 fun BubbleTextField(
     modifier: Modifier = Modifier,
-    value: String
+    value: String,
+    onValueChange: (String) -> Unit
 ) {
     OutlinedTextField(
         value = value,
-        onValueChange = {
-
-        }
+        onValueChange = onValueChange
     )
 }

@@ -70,7 +70,7 @@ fun BubbleModalNavDrawer(
             ModalDrawerSheet(
                 drawerContainerColor = BubbleTheme.colors.backgroundGradientColorDark1
             ) {
-                DrawerHeader(viewModel = mainViewModel)
+                DrawerHeader(viewModel = mainViewModel, navController = navController)
                 Spacer(Modifier.height(5.dp))
                 HorizontalDivider(
                     modifier = Modifier
@@ -142,7 +142,11 @@ fun BubbleModalNavDrawer(
                 )
             },
             content = { paddingValues ->
-                NavGraph(navController = navController, innerPaddingValues = paddingValues)
+                NavGraph(
+                    navController = navController,
+                    innerPaddingValues = paddingValues,
+                    mainViewModel = mainViewModel
+                )
             }
         )
     }

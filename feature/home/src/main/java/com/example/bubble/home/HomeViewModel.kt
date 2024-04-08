@@ -15,6 +15,7 @@ import com.example.bubble.data.repository.HistoryRepository
 import com.example.bubble.data.utils.toHistoryEntity
 import com.example.bubble.domain.model.Bubble
 import com.example.bubble.domain.model.History
+import com.example.bubble.domain.model.User
 import com.example.bubble.home.model.Affirmation
 import com.example.bubble.home.model.AffirmationResource
 import com.example.bubble.home.model.BubbleTimer
@@ -23,7 +24,6 @@ import com.example.bubble.home.model.HomeEvents
 import com.example.bubble.home.model.HomeState
 import com.example.bubble.home.model.SelectedTime
 import com.example.bubble.home.utils.toTag
-import com.example.bubble.home.utils.toTimeUIFormat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -115,7 +115,7 @@ class HomeViewModel @Inject constructor(
         _bubble.value = Bubble(
             id = (0..1_000).random(),
             tag = _tag.value.toTag(),
-            dateTime = selectedTime.toTimeUIFormat()
+            dateTime = selectedTime
         )
     }
     private fun showDialog(result: Boolean){
@@ -200,11 +200,9 @@ class HomeViewModel @Inject constructor(
         val history = History(
             isDone = isDone,
             bubble = _bubble.value.copy(
-                dateTime = selectedTime.toTimeUIFormat()
+                dateTime = selectedTime
             )
         )
-
-        Log.d("checkMF", history.toString())
         viewModelScope.launch(bubbleDispatchers.io) {
             repository.addBubbleToHistory(history.toHistoryEntity())
         }

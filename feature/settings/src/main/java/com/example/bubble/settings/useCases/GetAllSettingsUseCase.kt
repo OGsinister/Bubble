@@ -20,8 +20,6 @@ class GetAllSettingsUseCase @Inject constructor(
 
             emit(SettingsState.IsLoadingState)
             try {
-                settingsSharedPref.updateUserName("Miha yo")
-
                 val userSettings = UserSettings(
                     name = settingsSharedPref.getUserName(),
                     avatar = settingsSharedPref.getAvatar()

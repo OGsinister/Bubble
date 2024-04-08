@@ -8,6 +8,6 @@ data class Settings(
 )
 
 data class UserSettings(
-    val name: String? = "",
+    val name: String? = null,
     var avatar: Int = 0
 )

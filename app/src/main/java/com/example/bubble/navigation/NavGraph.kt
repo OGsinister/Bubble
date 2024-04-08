@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.bubble.MainViewModel
 import com.example.bubble.award.presentation.AwardScreen
 import com.example.bubble.history.presentation.HistoryScreen
 import com.example.bubble.home.presentation.HomeScreen
@@ -16,11 +17,13 @@ import com.example.bubble.water.presentation.WaterScreen
 @Composable
 fun NavGraph(
     navController: NavHostController,
-    innerPaddingValues: PaddingValues
+    innerPaddingValues: PaddingValues,
+    mainViewModel: MainViewModel
 ){
     NavHost(
         navController = navController,
-        startDestination = Screens.HomeScreen.route
+        startDestination = if (mainViewModel.getUserName().isNullOrEmpty())
+            Screens.SettingScreen.route else Screens.HomeScreen.route
     ){
         composable(route = Screens.HomeScreen.route){
             HomeScreen()

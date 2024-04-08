@@ -1,6 +1,5 @@
 package com.example.bubble.home.presentation
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
@@ -21,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -34,7 +34,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.bubble.core.ui.theme.BubbleTheme
 import com.example.bubble.core.ui.utils.BubbleDialog
+import com.example.bubble.core.ui.utils.ChangeUserNameDialog
 import com.example.bubble.core.ui.utils.TagUI
+import com.example.bubble.core.utils.toTimeUIFormat
 import com.example.bubble.home.HomeViewModel
 import com.example.bubble.home.R
 import com.example.bubble.home.model.BubbleTimer
@@ -42,8 +44,7 @@ import com.example.bubble.home.model.HomeEvents
 import com.example.bubble.home.utils.BubbleButton
 import com.example.bubble.home.utils.TagBottomSheet
 import com.example.bubble.home.utils.TimeBottomSheet
-import com.example.bubble.home.utils.toTimeUIFormat
-@SuppressLint("StateFlowValueCalledInComposition")
+
 @Composable
 fun DefaultHomeScreen(
     modifier: Modifier = Modifier,

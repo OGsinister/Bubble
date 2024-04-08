@@ -17,17 +17,22 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.bubble.MainViewModel
+import com.example.bubble.R
 import com.example.bubble.core.ui.theme.BubbleTheme
 import com.example.bubble.core.ui.utils.BubbleImage
 import com.example.bubble.core.utils.getDominantColor
+import com.example.bubble.navigation.Screens
 
 @Composable
 fun DrawerHeader(
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
+    navController: NavController
 ){
     val userAvatar = viewModel.getUserAvatar()
         .takeIf { it != 0 } ?: com.example.bubble.core.R.drawable.default_user_avatar
@@ -65,9 +70,7 @@ fun DrawerHeader(
             BubbleImage(
                 size = 56.dp,
                 image = userAvatar,
-                onClick = {
-                    // navigate to settings screen
-                }
+                onClick = {}
             )
         }
 
@@ -84,9 +87,8 @@ fun DrawerHeader(
                     overflow = TextOverflow.Ellipsis
                 )
             }
-
             Text(
-                text = userAwardsCount.value,
+                text = "${userAwardsCount.value} ${stringResource(id = com.example.bubble.home.R.string.awards)}",
                 style = BubbleTheme.typography.smallText,
                 color = BubbleTheme.colors.unselectedDefaultColor,
                 maxLines = 1,

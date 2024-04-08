@@ -3,7 +3,7 @@ package com.example.bubble.domain.model
 data class Bubble(
     val id: Int? = null,
     val tag: Tag? = null,
-    val dateTime: String? = null,
+    val dateTime: Long? = null,
     var startAnimation: Boolean? = false
 ){
     companion object {

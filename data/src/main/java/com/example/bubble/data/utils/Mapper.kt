@@ -2,12 +2,16 @@ package com.example.bubble.data.utils
 
 import com.example.bubble.data.local.database.dbo.AwardEntity
 import com.example.bubble.data.local.database.dbo.BubbleEntity
+import com.example.bubble.data.local.database.dbo.FocusTagEntity
 import com.example.bubble.data.local.database.dbo.HistoryEntity
+import com.example.bubble.data.local.database.dbo.StatisticEntity
 import com.example.bubble.data.local.database.dbo.TagEntity
 import com.example.bubble.data.local.database.dbo.TaskEntity
 import com.example.bubble.domain.model.Award
 import com.example.bubble.domain.model.Bubble
+import com.example.bubble.domain.model.FocusTag
 import com.example.bubble.domain.model.History
+import com.example.bubble.domain.model.Statistic
 import com.example.bubble.domain.model.Tag
 import com.example.bubble.domain.model.Task
 
@@ -87,9 +91,33 @@ fun History.toHistoryEntity(): HistoryEntity {
     )
 }
 
+fun StatisticEntity.toStatistic(): Statistic {
+    return Statistic(
+        countOfSession = countOfSession,
+        avgFocusTime = avgFocusTime,
+        tagFocusData = tagFocusData?.toFocusTag(),
+        weeklyFocusTime = weeklyFocusTime,
+        weeklyFocusMainData = weeklyFocusMainData,
+        successPercent = successPercent
+    )
+}
+
+fun FocusTag.toFocusTagEntity(): FocusTagEntity{
+    return FocusTagEntity(
+        tag = tag,
+        focusTime = focusTime
+    )
+}
+
+fun FocusTagEntity.toFocusTag(): FocusTag{
+    return FocusTag(
+        tag = tag,
+        focusTime = focusTime
+    )
+}
+
 fun Tag.toTagEntity(): TagEntity{
     return TagEntity(
-        id = id,
         name = tagName,
         color = tagColor,
         icon = tagIcon
@@ -98,7 +126,6 @@ fun Tag.toTagEntity(): TagEntity{
 
 fun TagEntity.toTag(): Tag{
     return Tag(
-        id = id,
         tagName = name!!,
         tagColor = color,
         tagIcon = icon

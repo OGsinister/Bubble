@@ -28,13 +28,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import com.example.bubble.core.ui.theme.BubbleTheme
+import com.example.bubble.core.utils.toTimeUIFormat
 import com.example.bubble.home.HomeViewModel
 import com.example.bubble.home.R
 import com.example.bubble.home.model.FocusResult
 import com.example.bubble.home.model.HomeEvents
 import com.example.bubble.home.utils.CustomCircleAnimation
 import com.example.bubble.home.utils.rememberLifecycleEvent
-import com.example.bubble.home.utils.toTimeUIFormat
 import kotlin.random.Random
 
 @Composable

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="times">раз</string>
+    <string name="you_focused">фокусировки</string>
+    <string name="sessions">сессий</string>
+    <string name="minutes">минут</string>
+    <string name="all_time">За все время</string>
+</resources>

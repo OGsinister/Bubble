@@ -2,7 +2,6 @@ package com.example.bubble.data.local.database.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.example.bubble.data.local.database.dbo.FocusTagEntity
 import com.example.bubble.data.local.database.dbo.TagEntity
 
 @Dao
@@ -20,6 +19,10 @@ interface StatisticDao {
     // это именно те данные, которые показываются в гистограмме
     @Query("SELECT bubbledate_time FROM  History")
     fun getWeeklyFocusData(): Long
+
+   /* @Query("SELECT SUM(bubbledate_time) as total_sum FROM History")
+    fun getWeeklyFocusData(): Long*/
+
 
     // это именно те данные, которые показываются в круговой диаграмме тегов
     /*@Query("SELECT bubbletagcolor, " +

@@ -131,7 +131,7 @@ fun HistoryItemScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                history.bubble.dateTime?.let {
+                history.bubble.focusTime?.let {
                     Text(
                         text = "${it.toTimeUIFormat()} ${stringResource(id = R.string.minutes)}",
                         style = BubbleTheme.typography.body,

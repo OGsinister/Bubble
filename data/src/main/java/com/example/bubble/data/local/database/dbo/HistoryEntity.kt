@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.Date
 
 @Entity(tableName = "History")
 data class HistoryEntity(
@@ -16,7 +17,8 @@ data class HistoryEntity(
 data class BubbleEntity(
     @ColumnInfo(name = "id") val id: Int,
     @Embedded(prefix = "tag") val tag: TagEntity,
-    @ColumnInfo(name = "date_time") val dateTime: Long,
+    @ColumnInfo(name = "date_time") val focusTime: Long,
+    @ColumnInfo(name = "date") val date: String,
     @ColumnInfo(name = "dayOfTheWeek") val dayOfWeek: String? = null
 )
 

@@ -27,5 +27,4 @@ class StatisticsViewModel @Inject constructor(
         }
         .stateIn(viewModelScope, SharingStarted.Lazily, StatisticsState.DefaultState)
 
-
 }

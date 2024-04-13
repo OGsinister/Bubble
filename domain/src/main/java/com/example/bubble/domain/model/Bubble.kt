@@ -1,9 +1,12 @@
 package com.example.bubble.domain.model
 
+import java.util.Date
+
 data class Bubble(
     val id: Int? = null,
     val tag: Tag? = null,
-    val dateTime: Long? = null,
+    val focusTime: Long? = null,
+    val date: String? = null,
     var startAnimation: Boolean? = false
 ){
     companion object {

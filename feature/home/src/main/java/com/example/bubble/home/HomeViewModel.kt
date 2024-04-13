@@ -1,6 +1,8 @@
 package com.example.bubble.home
 
+import android.os.Build
 import android.os.CountDownTimer
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -28,6 +30,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Date
 import javax.inject.Inject
 
 @Suppress("SameParameterValue")
@@ -108,12 +113,14 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @NeedRefactoring
     private fun createBubble() {
         _bubble.value = Bubble(
             id = (0..1_000).random(),
             tag = _tag.value.toTag(),
-            dateTime = selectedTime
+            focusTime = selectedTime,
+            date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
         )
     }
     private fun showDialog(result: Boolean){
@@ -198,7 +205,7 @@ class HomeViewModel @Inject constructor(
         val history = History(
             isDone = isDone,
             bubble = _bubble.value.copy(
-                dateTime = selectedTime
+                focusTime = selectedTime
             )
         )
         viewModelScope.launch(bubbleDispatchers.io) {

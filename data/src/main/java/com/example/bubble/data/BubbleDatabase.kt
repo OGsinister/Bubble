@@ -13,11 +13,13 @@ import com.example.bubble.data.local.database.dbo.AwardEntity
 import com.example.bubble.data.local.database.dbo.HistoryEntity
 import com.example.bubble.data.local.database.dbo.StatisticEntity
 import com.example.bubble.data.local.database.dbo.TaskEntity
+import com.example.bubble.data.utils.TypeConverter
 
 @Database(
     entities = [AwardEntity::class, HistoryEntity::class, TaskEntity::class, StatisticEntity::class],
     version = 1
 )
+@TypeConverters(TypeConverter::class)
 abstract class BubbleDatabase: RoomDatabase() {
     abstract fun awardDao(): AwardDao
     abstract fun historyDao(): HistoryDao

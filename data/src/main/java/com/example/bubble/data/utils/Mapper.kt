@@ -45,7 +45,7 @@ fun BubbleEntity.toBubble(): Bubble {
     return Bubble(
         id = id,
         tag = tag.toTag(),
-        dateTime = dateTime
+        focusTime = focusTime
     )
 }
 
@@ -53,7 +53,8 @@ fun Bubble.toBubbleEntity(): BubbleEntity{
     return BubbleEntity(
         id = id!!,
         tag = tag?.toTagEntity()!!,
-        dateTime = dateTime!!
+        focusTime = focusTime!!,
+        date = date!!
     )
 }
 

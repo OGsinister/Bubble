@@ -37,8 +37,6 @@ class MainViewModel @Inject constructor(
         .getUserData()
         .stateIn(viewModelScope, SharingStarted.Lazily, User())
 
-    internal val selectedImage = mutableStateOf(user.value.image)
-
     fun updateAchiv(code: AwardCodes) {
         viewModelScope.launch(bubbleDispatchers.io) {
             updateAwardUseCase.updateAward(code)

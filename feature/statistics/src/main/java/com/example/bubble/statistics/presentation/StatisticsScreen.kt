@@ -1,5 +1,6 @@
 package com.example.bubble.statistics.presentation
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -56,6 +57,8 @@ fun StatisticsScreen(
 
             if (currentState is StatisticsState.LoadedDataState){
                 StatLoadedDataScreen(statistic = currentState.data)
+
+                Log.d("checkMf", currentState.data.weeklyFocusMainData.toString())
             }
 
             if (currentState is StatisticsState.LoadingState){
@@ -81,7 +84,7 @@ fun StatLoadedDataScreen(
             countOfSessions = statistic.countOfSession
         )
 
-        AllTimeBarChartSection()
+        AllTimeBarChartSection(statistic = statistic)
 
         AllTimeTagPieChartSection()
     }
@@ -131,7 +134,7 @@ fun AllTimeTagPieChartSection(
 @Composable
 fun AllTimeBarChartSection(
     modifier: Modifier = Modifier,
-
+    statistic: Statistic
 ){
     AllTimeSection(text = "Статистика за все время") {
         Box(
@@ -141,6 +144,8 @@ fun AllTimeBarChartSection(
                 .background(Color.Blue),
             contentAlignment = Alignment.Center
         ){
+
+
             // Bar chart content
         }
     }

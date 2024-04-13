@@ -6,7 +6,9 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.util.Base64
+import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -42,15 +44,18 @@ class DataStoreManager @Inject constructor(
     fun getUserData(): Flow<User> {
         return context.dataStore.data
             .map { preference ->
+                val pref: String = preference[stringPreferencesKey("user_avatar")] ?: ""
 
                 val decoder = Base64.decode(
-                    preference[stringPreferencesKey("user_avatar")],
+                    pref,
                     Base64.DEFAULT
                 )
 
+               val bitmap: Bitmap? = BitmapFactory.decodeByteArray(decoder, 0, decoder?.size!!)
+
                 return@map User(
                     name = preference[stringPreferencesKey("user_name")] ?: "John Doe",
-                    image = BitmapFactory.decodeByteArray(decoder, 0, decoder.size)
+                    image = bitmap
                 )
         }
     }

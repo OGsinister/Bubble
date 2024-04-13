@@ -82,13 +82,11 @@ fun DrawerHeader(
                 },
             contentAlignment = Alignment.Center
         ) {
-            user.image?.let {
-                BubbleImage(
-                    size = 56.dp,
-                    image = it,
-                    onClick = {}
-                )
-            }
+            BubbleImage(
+                size = 56.dp,
+                image = user.image,
+                onClick = {}
+            )
         }
 
         Column(

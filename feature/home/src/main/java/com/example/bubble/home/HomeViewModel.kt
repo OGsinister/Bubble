@@ -1,7 +1,6 @@
 package com.example.bubble.home
 
 import android.os.CountDownTimer
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,7 +14,6 @@ import com.example.bubble.data.repository.HistoryRepository
 import com.example.bubble.data.utils.toHistoryEntity
 import com.example.bubble.domain.model.Bubble
 import com.example.bubble.domain.model.History
-import com.example.bubble.domain.model.User
 import com.example.bubble.home.model.Affirmation
 import com.example.bubble.home.model.AffirmationResource
 import com.example.bubble.home.model.BubbleTimer

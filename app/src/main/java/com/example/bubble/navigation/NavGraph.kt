@@ -2,6 +2,8 @@ package com.example.bubble.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,8 +24,7 @@ fun NavGraph(
 ){
     NavHost(
         navController = navController,
-        startDestination = if (mainViewModel.getUserName().isNullOrEmpty())
-            Screens.SettingScreen.route else Screens.HomeScreen.route
+        startDestination = Screens.HomeScreen.route
     ){
         composable(route = Screens.HomeScreen.route){
             HomeScreen()

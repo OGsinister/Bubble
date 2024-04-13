@@ -28,14 +28,15 @@ fun ChangeUserNameDialog(
     modifier: Modifier = Modifier,
     text: String,
     onValueChange: (String) -> Unit,
-    onClick: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     AlertDialog(
         onDismissRequest = { onDismiss() },
         confirmButton = {
             TextButton(
-                onClick = { onDismiss() }
+                onClick = {
+                    onDismiss()
+                }
             ) {
                 Text(
                     text = stringResource(id = R.string.ok),
@@ -68,12 +69,6 @@ fun ChangeUserNameDialog(
                         value = text,
                         onValueChange = onValueChange
                     )
-
-                    Button(
-                        onClick = onClick,
-                    ) {
-                        Text(text = "Отправить")
-                    }
                 }
             }
         },

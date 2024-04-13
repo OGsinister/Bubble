@@ -4,7 +4,6 @@ import android.util.Log
 import com.example.bubble.core.utils.BubbleDispatchers
 import com.example.bubble.data.local.sharedPref.SettingsSharedPref
 import com.example.bubble.domain.model.Settings
-import com.example.bubble.domain.model.UserSettings
 import com.example.bubble.settings.model.SettingsState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -20,13 +19,7 @@ class GetAllSettingsUseCase @Inject constructor(
 
             emit(SettingsState.IsLoadingState)
             try {
-                val userSettings = UserSettings(
-                    name = settingsSharedPref.getUserName(),
-                    avatar = settingsSharedPref.getAvatar()
-                )
-
                 val functionalSettings = Settings(
-                    userSettings = userSettings,
                     isAffirmationOn = settingsSharedPref.getAffirmationSetting(),
                     isUserPopBubble = settingsSharedPref.getPopBubbleSetting(),
                     isSoundOn = settingsSharedPref.getSoundSetting()

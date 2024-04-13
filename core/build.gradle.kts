@@ -63,4 +63,7 @@ dependencies {
 
     implementation("androidx.palette:palette-ktx:1.0.0")
     implementation("javax.inject:javax.inject:1")
+
+    // coil
+    implementation("io.coil-kt:coil-compose:2.6.0")
 }

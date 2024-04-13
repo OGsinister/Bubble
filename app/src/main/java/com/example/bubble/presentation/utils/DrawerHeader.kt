@@ -1,5 +1,12 @@
 package com.example.bubble.presentation.utils
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,33 +18,41 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.navigation.NavController
 import com.example.bubble.MainViewModel
-import com.example.bubble.R
 import com.example.bubble.core.ui.theme.BubbleTheme
 import com.example.bubble.core.ui.utils.BubbleImage
 import com.example.bubble.core.utils.getDominantColor
-import com.example.bubble.navigation.Screens
+import com.example.bubble.settings.model.SettingsEvent
 
 @Composable
 fun DrawerHeader(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel,
     navController: NavController
-){
-    val userAvatar = viewModel.getUserAvatar()
-        .takeIf { it != 0 } ?: com.example.bubble.core.R.drawable.default_user_avatar
-    val dominantColor = getDominantColor(LocalContext.current, userAvatar)?.rgb
+) {
+    val context = LocalContext.current
+    val user by viewModel.user.collectAsState()
+
     val userAwardsCount = viewModel.userAwardsCount.collectAsState()
+    val dominantColor = getDominantColor(
+        LocalContext.current,
+        user.image
+    )?.rgb
 
     viewModel.getAwardCount()
 
@@ -48,7 +63,7 @@ fun DrawerHeader(
                 Brush.linearGradient(
                     colors = listOf(
                         BubbleTheme.colors.backgroundGradientColorDark1,
-                        Color(dominantColor!!),
+                        Color(dominantColor ?: Color.Red.toArgb()),
                         BubbleTheme.colors.backgroundGradientColorDark1.copy(0.4f)
                     )
                 )
@@ -67,18 +82,20 @@ fun DrawerHeader(
                 },
             contentAlignment = Alignment.Center
         ) {
-            BubbleImage(
-                size = 56.dp,
-                image = userAvatar,
-                onClick = {}
-            )
+            user.image?.let {
+                BubbleImage(
+                    size = 56.dp,
+                    image = it,
+                    onClick = {}
+                )
+            }
         }
 
         Column(
             verticalArrangement = Arrangement.spacedBy(5.dp),
             horizontalAlignment = Alignment.Start
         ) {
-            viewModel.getUserName()?.let {
+            user.name.let {
                 Text(
                     text = it,
                     style = BubbleTheme.typography.heading,
@@ -87,6 +104,7 @@ fun DrawerHeader(
                     overflow = TextOverflow.Ellipsis
                 )
             }
+
             Text(
                 text = "${userAwardsCount.value} ${stringResource(id = com.example.bubble.home.R.string.awards)}",
                 style = BubbleTheme.typography.smallText,

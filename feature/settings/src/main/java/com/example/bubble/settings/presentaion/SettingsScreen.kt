@@ -1,5 +1,12 @@
 package com.example.bubble.settings.presentaion
 
+import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -8,19 +15,22 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -32,7 +42,6 @@ import com.example.bubble.core.ui.utils.ChangeUserNameDialog
 import com.example.bubble.core.ui.utils.GradientColumn
 import com.example.bubble.core.utils.getDominantColor
 import com.example.bubble.domain.model.Settings
-import com.example.bubble.domain.model.UserSettings
 import com.example.bubble.settings.SettingsViewModel
 import com.example.bubble.settings.model.SettingsEvent
 import com.example.bubble.settings.model.SettingsState
@@ -67,6 +76,7 @@ fun SettingsScreen(
     )
 }
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun LoadedScreen(
     modifier: Modifier = Modifier,
@@ -78,40 +88,27 @@ fun LoadedScreen(
         mutableStateOf("")
     }
 
-    val user by viewModel.user.collectAsState()
-
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(top = paddingValues)
     ) {
-        settings.userSettings?.let {
-            UserSection(
-                userSettings = it,
-                viewModel = viewModel
-            )
-        }
+        UserSection(viewModel = viewModel)
 
         SettingItem(
             settings = settings,
             viewModel = viewModel
         )
 
-        if (user.name.isNullOrEmpty()){
-            viewModel.isOpenUserNameDialog.value = true
-        }
-
-        if (viewModel.isOpenUserNameDialog.value){
+        if (viewModel.isOpenUserNameDialog.value) {
             ChangeUserNameDialog(
                 text = userNameValue.value,
                 onValueChange = {
                     userNameValue.value = it
                 },
-                onClick = {
-                    viewModel.updateUserName(userNameValue.value)
-                },
                 onDismiss = {
-                    viewModel.isOpenUserNameDialog.value = !viewModel.isOpenUserNameDialog.value
+                    viewModel.changeDialog(!viewModel.isOpenUserNameDialog.value)
+                    viewModel.event(SettingsEvent.ChangeUserName(name = userNameValue.value))
                 }
             )
         }
@@ -157,7 +154,7 @@ fun SettingItem(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
-            ){
+            ) {
                 Text(
                     text = "Функциональные",
                     style = BubbleTheme.typography.heading,
@@ -172,7 +169,7 @@ fun SettingItem(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
-            ){
+            ) {
                 SettingCard(
                     checked = checkedAffirmation.value,
                     onCheckChange = {
@@ -188,7 +185,7 @@ fun SettingItem(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
-            ){
+            ) {
                 SettingCard(
                     checked = checkedPopBubble.value,
                     onCheckChange = {
@@ -204,7 +201,7 @@ fun SettingItem(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
-            ){
+            ) {
                 SettingCard(
                     checked = checkedSound.value,
                     onCheckChange = {
@@ -221,14 +218,29 @@ fun SettingItem(
 @Composable
 fun UserSection(
     modifier: Modifier = Modifier,
-    userSettings: UserSettings,
     viewModel: SettingsViewModel
 ) {
-    val userAvatar = userSettings.avatar
-        .takeIf { it != 0 } ?: com.example.bubble.core.R.drawable.default_user_avatar
-    val dominantColor = getDominantColor(LocalContext.current, userAvatar)?.rgb
-
+    val context = LocalContext.current
     val user by viewModel.user.collectAsState()
+
+    val photoPicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) {
+        it?.let {
+            viewModel.event(
+                SettingsEvent.ChangeUserAvatar(
+                    avatar = BitmapFactory.decodeStream(
+                        context.contentResolver.openInputStream(it)
+                    )
+                )
+            )
+        }
+    }
+
+    val dominantColor = getDominantColor(
+        LocalContext.current,
+        user.image
+    )?.rgb
 
     Row(
         modifier = modifier
@@ -248,37 +260,26 @@ fun UserSection(
     ) {
         BubbleImage(
             size = 100.dp,
-            image = userAvatar,
+            image = user.image,
             onClick = {
-                // open user's gallery
+                photoPicker.launch(
+                    PickVisualMediaRequest(
+                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                    )
+                )
             }
         )
 
-        user.name?.let {
-            Text(
-                text = it,
-                style = BubbleTheme.typography.heading,
-                color = BubbleTheme.colors.primaryTextColor,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier
-                    .clickable {
-                        viewModel.isOpenUserNameDialog.value = !viewModel.isOpenUserNameDialog.value
-                    }
-            )
-        }
-        /*userSettings.name?.let {
-            Text(
-                text = it,
-                style = BubbleTheme.typography.heading,
-                color = BubbleTheme.colors.primaryTextColor,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier
-                    .clickable {
-                        viewModel.isOpenUserNameDialog.value = !viewModel.isOpenUserNameDialog.value
-                    }
-            )
-        }*/
+        Text(
+            text = user.name,
+            style = BubbleTheme.typography.heading,
+            color = BubbleTheme.colors.primaryTextColor,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+                .clickable {
+                    viewModel.changeDialog(!viewModel.isOpenUserNameDialog.value)
+                }
+        )
     }
 }

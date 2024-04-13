@@ -14,4 +14,5 @@ object Constants {
     const val TOKEN_POP_BUBBLE = "PopBubbleToken"
     const val TOKEN_USER_NAME = "UserNameToken"
     const val TOKEN_SOUND = "Sound"
+    const val TOKEN_SIGN_IN = "TokenSignIn"
 }

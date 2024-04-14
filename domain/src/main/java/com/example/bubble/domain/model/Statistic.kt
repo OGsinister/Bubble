@@ -5,11 +5,16 @@ data class Statistic(
     val avgFocusTime: Long? = null,
     val weeklyFocusTime: Long? = null,
     val tagFocusData: FocusTag? = null,
-    val weeklyFocusMainData: Long? = null,
-    val successPercent: Int? = null
+    val weeklyFocusMainData: WeeklyFocus? = null,
+    val successPercent: Float? = null
 )
 
 data class FocusTag(
     val tag: Tag? = null,
     val focusTime: Int? = null
+)
+
+data class WeeklyFocus(
+    val totalTime: Long,
+    val dayOfWeek: String
 )

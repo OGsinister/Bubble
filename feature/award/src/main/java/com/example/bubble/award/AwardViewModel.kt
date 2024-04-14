@@ -16,7 +16,6 @@ import javax.inject.Inject
 class AwardViewModel @Inject constructor(
     private val getAllAwardsUseCase: GetAllAwardsUseCase
 ): ViewModel() {
-
     internal val state: StateFlow<AwardState> = getAllAwardsUseCase()
         .map {
             it.toAwardState()

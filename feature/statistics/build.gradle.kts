@@ -72,6 +72,7 @@ dependencies {
     // Graphics
     implementation(libs.vico.compose.m3)
 
+
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":core"))

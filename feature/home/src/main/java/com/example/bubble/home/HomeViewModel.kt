@@ -31,8 +31,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.Date
 import javax.inject.Inject
 
 @Suppress("SameParameterValue")
@@ -69,6 +67,7 @@ class HomeViewModel @Inject constructor(
     internal var dialogState = mutableStateOf(false)
     internal var showDialog = mutableStateOf(false)
 
+    @RequiresApi(Build.VERSION_CODES.O)
     internal fun event(event: HomeEvents){
         when(event){
             HomeEvents.RunFocus -> {
@@ -120,7 +119,7 @@ class HomeViewModel @Inject constructor(
             id = (0..1_000).random(),
             tag = _tag.value.toTag(),
             focusTime = selectedTime,
-            date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+            date = LocalDate.now().toString()
         )
     }
     private fun showDialog(result: Boolean){
@@ -151,6 +150,7 @@ class HomeViewModel @Inject constructor(
                        }
                    }
 
+                   @RequiresApi(Build.VERSION_CODES.O)
                    override fun onFinish() {
                        _currentTime.value = 0L
                        isActive = false

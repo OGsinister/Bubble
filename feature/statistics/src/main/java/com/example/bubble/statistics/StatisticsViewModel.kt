@@ -3,12 +3,12 @@ package com.example.bubble.statistics
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bubble.core.utils.BubbleDispatchers
+import com.example.bubble.data.utils.DatabaseResource
 import com.example.bubble.domain.model.Statistic
 import com.example.bubble.statistics.model.StatisticsState
 import com.example.bubble.statistics.useCases.GetStatisticDataUseCase
 import com.example.bubble.statistics.utls.toStatisticState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map

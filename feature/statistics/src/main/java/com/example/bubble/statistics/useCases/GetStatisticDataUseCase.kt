@@ -15,10 +15,14 @@ class GetStatisticDataUseCase @Inject constructor(
     private val repository: StatisticRepository,
     private val bubbleDispatchers: BubbleDispatchers
 ) {
-    operator fun invoke(): Flow<DatabaseResource<Statistic>> {
+    operator fun invoke(): Flow<DatabaseResource<List<Statistic>>> {
         return repository.getAllStatistic()
-            .map { databaseResource ->
-                databaseResource.map { it.toStatistic() }
+            .map { resource ->
+                resource.map { listStat ->
+                    listStat.map { statisticEntity ->
+                        statisticEntity.toStatistic()
+                    }
+                }
             }
             .flowOn(bubbleDispatchers.io)
     }

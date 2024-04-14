@@ -7,6 +7,7 @@ import com.example.bubble.data.local.database.dbo.HistoryEntity
 import com.example.bubble.data.local.database.dbo.StatisticEntity
 import com.example.bubble.data.local.database.dbo.TagEntity
 import com.example.bubble.data.local.database.dbo.TaskEntity
+import com.example.bubble.data.local.database.dbo.WeeklyFocusEntity
 import com.example.bubble.domain.model.Award
 import com.example.bubble.domain.model.Bubble
 import com.example.bubble.domain.model.FocusTag
@@ -14,6 +15,7 @@ import com.example.bubble.domain.model.History
 import com.example.bubble.domain.model.Statistic
 import com.example.bubble.domain.model.Tag
 import com.example.bubble.domain.model.Task
+import com.example.bubble.domain.model.WeeklyFocus
 
 fun AwardEntity.toAward(): Award {
     return Award(
@@ -98,8 +100,22 @@ fun StatisticEntity.toStatistic(): Statistic {
         avgFocusTime = avgFocusTime,
         tagFocusData = tagFocusData?.toFocusTag(),
         weeklyFocusTime = weeklyFocusTime,
-        weeklyFocusMainData = weeklyFocusMainData,
+        weeklyFocusMainData = weeklyFocusMainData.toWeeklyFocus(),
         successPercent = successPercent
+    )
+}
+
+fun WeeklyFocusEntity.toWeeklyFocus(): WeeklyFocus {
+    return WeeklyFocus(
+        totalTime = totalTime!!,
+        dayOfWeek = dayOfWeek!!
+    )
+}
+
+fun WeeklyFocus.toWeeklyFocusEntity(): WeeklyFocusEntity {
+    return WeeklyFocusEntity(
+        totalTime = totalTime,
+        dayOfWeek = dayOfWeek
     )
 }
 

@@ -1,6 +1,5 @@
 package com.example.bubble.data.repository
 
-import android.util.Log
 import com.example.bubble.data.BubbleDatabase
 import com.example.bubble.data.local.database.dbo.AwardEntity
 import com.example.bubble.data.local.sharedPref.AwardSharedPref
@@ -27,8 +26,6 @@ class AwardRepository @Inject constructor(
                 }else{
                     emit(DatabaseResource.Empty(message = "Empty list"))
                 }
-
-                Log.d("Checks", cachedAwards.toString())
 
             }catch (e: IOException){
                 emit(DatabaseResource.Error(message = e.localizedMessage))

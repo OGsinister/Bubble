@@ -13,6 +13,7 @@ import com.example.bubble.data.local.database.dbo.AwardEntity
 import com.example.bubble.data.local.database.dbo.HistoryEntity
 import com.example.bubble.data.local.database.dbo.StatisticEntity
 import com.example.bubble.data.local.database.dbo.TaskEntity
+import com.example.bubble.data.local.database.dbo.WeeklyFocusEntity
 import com.example.bubble.data.utils.TypeConverter
 
 @Database(

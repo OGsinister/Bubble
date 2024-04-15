@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface StatisticDao {
 
-   /* @Query("SELECT COUNT(*) FROM History")
+    @Query("SELECT COUNT(*) FROM History")
     fun getTimeCountOfSessions(): Int
 
     @Query("SELECT AVG(bubbledate_time) FROM History")
@@ -28,8 +28,8 @@ interface StatisticDao {
     fun getWeeklyTotalFocusTime(): Long
 
     // это именно те данные, которые показываются в гистограмме
-    *//*@Query("SELECT bubbledate_time FROM  History")
-    fun getWeeklyFocusData(): Long*//*
+    @Query("SELECT bubbledate_time FROM  History")
+    fun getWeeklyFocusData(): Long
 
     @Query("SELECT SUM(bubbledate_time) as total_focus, strftime('%w', bubbledate) as day_of_week FROM History GROUP BY day_of_week")
     fun getWeeklyFocus(): WeeklyFocusEntity
@@ -43,5 +43,5 @@ interface StatisticDao {
     fun getSuccessfullyFocusCount(): Int
 
     @Query("SELECT COUNT(*) FROM HISTORY")
-    fun getAllFocusCount(): Int*/
+    fun getAllFocusCount(): Int
 }

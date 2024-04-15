@@ -22,7 +22,9 @@ data class BubbleColors(
     val backgroundGradientHistoryAccentColor4: Color,
     val backgroundGradientStatsAccentColor4: Color,
     val backgroundGradientRelaxAccentColor4: Color,
-    val selectedContainerColor: Color
+    val selectedContainerColor: Color,
+    val chartBackgroundColor: Color,
+    val chartTitleTextColor: Color,
 )
 
 val bubbleLightPalette = BubbleColors(
@@ -45,5 +47,7 @@ val bubbleLightPalette = BubbleColors(
     backgroundGradientHistoryAccentColor4 = Color(0xFF6B6383),
     backgroundGradientStatsAccentColor4 = Color(0xFF7CA099),
     backgroundGradientRelaxAccentColor4 = Color(0xFF4B614E),
-    selectedContainerColor = Color(0x1915CCC1)
+    selectedContainerColor = Color(0x1915CCC1),
+    chartBackgroundColor = Color(0xFF211f28),
+    chartTitleTextColor = Color(0xFF403f46)
 )

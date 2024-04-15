@@ -1,46 +1,27 @@
 package com.example.bubble.data.repository
 
-import android.util.Log
 import com.example.bubble.data.BubbleDatabase
-import com.example.bubble.data.local.database.dbo.BubbleEntity
 import com.example.bubble.data.local.database.dbo.FocusTagEntity
-import com.example.bubble.data.local.database.dbo.HistoryEntity
 import com.example.bubble.data.local.database.dbo.StatisticEntity
 import com.example.bubble.data.local.database.dbo.TagEntity
 import com.example.bubble.data.local.database.dbo.WeeklyFocusEntity
 import com.example.bubble.data.utils.DatabaseResource
 import com.example.bubble.data.utils.toTag
-import com.example.bubble.domain.model.History
-import com.example.bubble.domain.model.WeeklyFocus
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.stateIn
 import java.io.IOException
 import javax.inject.Inject
 
 class StatisticRepository @Inject constructor(
     private val database: BubbleDatabase
 ) {
-    fun getAllStatistic(): Flow<DatabaseResource<List<StatisticEntity>>> {
+    fun getAllStatistic(): Flow<DatabaseResource<StatisticEntity>> {
         return flow {
 
             emit(DatabaseResource.Loading())
             try {
-                getCountOfSessions()
-                getAverageFocusTime()
-                getWeeklyTotalFocusTime()
-                getTagFocusTime()
-                getSuccessfullyFocusPercent()
-                getAllFocusCount()
-                getWeeklyFocus()
 
-                val statisticCached = database.statisticDao().getStatistics()
-
-                /*val cachedStatistic = StatisticEntity(
+                val cachedStatistic = StatisticEntity(
                     countOfSession = getCountOfSessions(),
                     avgFocusTime = getAverageFocusTime(),
                     weeklyFocusTime = getWeeklyTotalFocusTime(),
@@ -50,17 +31,13 @@ class StatisticRepository @Inject constructor(
                     ),
                     weeklyFocusMainData = database.statisticDao().getWeeklyFocus(),
                     successPercent = (getSuccessfullyFocusPercent() / getAllFocusCount()).toFloat()
-                )*/
+                )
 
-                /*if (cachedStatistic.tagFocusData != null){
+                if (cachedStatistic.tagFocusData != null){
                     emit(DatabaseResource.LoadedData(loadedData = cachedStatistic))
-                }*/
-
-                if (statisticCached.isEmpty()){
-                    emit(DatabaseResource.Empty(message = "empty"))
                 }
-                Log.d("checkMf", statisticCached.toString())
-                emit(DatabaseResource.LoadedData(loadedData = statisticCached, message = null))
+
+                emit(DatabaseResource.LoadedData(loadedData = cachedStatistic, message = null))
             } catch (e: IOException) {
                 emit(DatabaseResource.Error(message = e.localizedMessage.toString()))
             }

@@ -1,6 +1,5 @@
 package com.example.bubble.statistics.presentation
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -23,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -34,7 +32,6 @@ import com.example.bubble.core.ui.utils.BubbleLoadingScreen
 import com.example.bubble.core.ui.utils.GradientColumn
 import com.example.bubble.core.utils.toValueOnlyTimeUIFormat
 import com.example.bubble.domain.model.Statistic
-import com.example.bubble.domain.model.WeeklyFocus
 import com.example.bubble.statistics.R
 import com.example.bubble.statistics.StatisticsViewModel
 import com.example.bubble.statistics.model.StatisticsState
@@ -45,20 +42,19 @@ import com.patrykandpatrick.vico.compose.chart.layer.rememberColumnCartesianLaye
 import com.patrykandpatrick.vico.compose.chart.layer.rememberLineCartesianLayer
 import com.patrykandpatrick.vico.compose.chart.layer.rememberLineSpec
 import com.patrykandpatrick.vico.compose.chart.rememberCartesianChart
+import com.patrykandpatrick.vico.compose.component.rememberLineComponent
+import com.patrykandpatrick.vico.compose.component.rememberTextComponent
 import com.patrykandpatrick.vico.compose.component.shape.shader.color
-import com.patrykandpatrick.vico.compose.theme.ProvideVicoTheme
-import com.patrykandpatrick.vico.compose.theme.VicoTheme
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
-import com.patrykandpatrick.vico.core.component.shape.shader.DynamicShader
+import com.patrykandpatrick.vico.core.chart.layer.ColumnCartesianLayer
+import com.patrykandpatrick.vico.core.chart.values.AxisValueOverrider
+import com.patrykandpatrick.vico.core.component.shape.Shapes
 import com.patrykandpatrick.vico.core.component.shape.shader.DynamicShaders
 import com.patrykandpatrick.vico.core.model.CartesianChartModelProducer
-import com.patrykandpatrick.vico.core.model.ExtraStore
 import com.patrykandpatrick.vico.core.model.columnSeries
-import com.patrykandpatrick.vico.core.model.lineSeries
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlin.random.Random
 
 @Composable
 fun StatisticsScreen(
@@ -82,13 +78,7 @@ fun StatisticsScreen(
             }
 
             if (currentState is StatisticsState.LoadedDataState) {
-                Log.d("checkMf", currentState.data.toString())
-
-                LazyColumn {
-                    items(currentState.data){
-                        StatLoadedDataScreen(statistic = it)
-                    }
-                }
+                StatLoadedDataScreen(statistic = currentState.data)
             }
 
             if (currentState is StatisticsState.LoadingState) {
@@ -189,29 +179,69 @@ fun BarChartSection(
 ) {
 
     val modelProducer = remember { CartesianChartModelProducer.build() }
+    val daysOfWeek = listOf("Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс")
+
+    val axisValueOverrider = AxisValueOverrider.adaptiveYValues(yFraction = 1.2f, round = true)
+    val bottomAxisValueFormatter =
+        AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ -> daysOfWeek[x.toInt() % daysOfWeek.size] }
 
     LaunchedEffect(Unit) {
         withContext(Dispatchers.Default) {
             modelProducer.tryRunTransaction {
-                columnSeries { statistic.weeklyFocusMainData?.totalTime?.let { series(it) } }
+               // columnSeries { statistic.weeklyFocusMainData?.totalTime?.let { series(it) } }
+                columnSeries { series(listOf(10,20,50,56,34,15,25)  ) }
             }
         }
     }
 
     AllTimeSection(text = "Статистика за все время") {
-        Box(
+        Column(
             modifier = Modifier
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center
+                .fillMaxWidth()
+                .padding(top = BubbleTheme.shapes.basePadding)
+                .clip(BubbleTheme.shapes.cornerStyle)
+                .background(BubbleTheme.colors.chartBackgroundColor.copy(alpha = 0.4f)),
+            verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ){
+                Text(text = "Всего времени: ", color = Color.White)
+                Text(text = "${statistic.weeklyFocusTime?.toValueOnlyTimeUIFormat()} минут", color = Color.White)
+            }
+
             CartesianChartHost(
                 chart = rememberCartesianChart(
-                    rememberColumnCartesianLayer(),
-                    startAxis = rememberStartAxis(),
-                    bottomAxis = rememberBottomAxis()
+                    rememberColumnCartesianLayer(
+                        columnProvider = ColumnCartesianLayer.ColumnProvider.series(
+                            rememberLineComponent(
+                                color = Color(0xffd877d8),
+                                thickness = 5.dp,
+                                shape = Shapes.roundedCornerShape(10)
+                            )
+                        ),
+                        mergeMode = { ColumnCartesianLayer.MergeMode.Stacked }
+                    ),
+                    startAxis = rememberStartAxis(
+                        label = rememberTextComponent(
+                            color = BubbleTheme.colors.chartTitleTextColor
+                        )
+                    ),
+                    bottomAxis = rememberBottomAxis(
+                        valueFormatter = bottomAxisValueFormatter,
+                        label = rememberTextComponent(
+                            color = Color.White
+                        ),
+                        guideline = null
+                    )
                 ),
                 modelProducer = modelProducer,
                 modifier = modifier
+                    .padding(BubbleTheme.shapes.basePadding)
             )
             // Bar chart content
         }

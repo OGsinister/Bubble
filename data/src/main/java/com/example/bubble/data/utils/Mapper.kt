@@ -98,9 +98,9 @@ fun StatisticEntity.toStatistic(): Statistic {
     return Statistic(
         countOfSession = countOfSession,
         avgFocusTime = avgFocusTime,
-        tagFocusData = tagFocusData?.toFocusTag(),
+        tagFocusData = tagFocusData?.map { it.toFocusTag() },
         weeklyFocusTime = weeklyFocusTime,
-        weeklyFocusMainData = weeklyFocusMainData.toWeeklyFocus(),
+        weeklyFocusMainData = weeklyFocusMainData.map { it.toWeeklyFocus() },
         successPercent = successPercent
     )
 }
@@ -121,14 +121,14 @@ fun WeeklyFocus.toWeeklyFocusEntity(): WeeklyFocusEntity {
 
 fun FocusTag.toFocusTagEntity(): FocusTagEntity{
     return FocusTagEntity(
-        tag = tag,
+        tag = tag?.map { it.toTagEntity() },
         focusTime = focusTime
     )
 }
 
 fun FocusTagEntity.toFocusTag(): FocusTag{
     return FocusTag(
-        tag = tag,
+        tag = tag?.map { it.toTag() },
         focusTime = focusTime
     )
 }

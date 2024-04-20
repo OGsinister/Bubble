@@ -5,9 +5,12 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
+import androidx.room.TypeConverters
+import com.example.bubble.data.utils.TypeConverter
 import com.example.bubble.domain.model.Tag
 
 @Entity(tableName = "Statistic")
+@TypeConverters(TypeConverter::class)
 data class StatisticEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id") val id: Int = 0,
@@ -15,16 +18,15 @@ data class StatisticEntity(
     @ColumnInfo(name = "average_focus_time") val avgFocusTime: Long?,
     @ColumnInfo(name = "weekly_total_focus_time") val weeklyFocusTime: Long?,
     @ColumnInfo(name = "success_percent") val successPercent: Float?,
-    @Embedded(prefix = "tag_focus_data") val tagFocusData: FocusTagEntity?,
+    @ColumnInfo(name = "tag_focus_data") val tagFocusData: List<FocusTagEntity>?,
 
-    @Embedded(prefix = "weekly_focus_data") val weeklyFocusMainData: WeeklyFocusEntity,
+    @ColumnInfo(name = "weekly_focus_data") val weeklyFocusMainData: List<WeeklyFocusEntity>,
     @ColumnInfo(name = "day_of_week") val dayOfWeek: String? = null
 )
 
+@TypeConverters(TypeConverter::class)
 data class FocusTagEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id") val id: Int = 0,
-    @Embedded(prefix = "tag") val tag: Tag? = null,
+    @ColumnInfo(name = "tag") val tag: List<TagEntity>? = null,
     @ColumnInfo(name = "focus_time") val focusTime: Int? = null
 )
 

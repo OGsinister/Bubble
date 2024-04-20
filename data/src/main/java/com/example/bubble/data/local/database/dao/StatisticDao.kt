@@ -5,6 +5,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import androidx.room.Update
 import com.example.bubble.data.local.database.dbo.BubbleEntity
 import com.example.bubble.data.local.database.dbo.HistoryEntity
@@ -15,6 +17,7 @@ import com.example.bubble.domain.model.WeeklyFocus
 import kotlinx.coroutines.flow.Flow
 
 @Dao
+@TypeConverters(com.example.bubble.data.utils.TypeConverter::class)
 interface StatisticDao {
 
     @Query("SELECT COUNT(*) FROM History")
@@ -32,11 +35,11 @@ interface StatisticDao {
     fun getWeeklyFocusData(): Long
 
     @Query("SELECT SUM(bubbledate_time) as total_focus, strftime('%w', bubbledate) as day_of_week FROM History GROUP BY day_of_week")
-    fun getWeeklyFocus(): WeeklyFocusEntity
+    fun getWeeklyFocus(): List<WeeklyFocusEntity>
 
     // это именно те данные, которые показываются в круговой диаграмме тегов
     @Query("SELECT bubbletagname AS name, bubbletagcolor AS color, bubbletagicon AS icon FROM History")
-    fun getTags(): TagEntity?
+    fun getTags(): List<TagEntity>
 
     // это процент успешных фокусировок ко всем фокусировкам
     @Query(" SELECT COUNT(*) FROM HISTORY WHERE is_done == 1")

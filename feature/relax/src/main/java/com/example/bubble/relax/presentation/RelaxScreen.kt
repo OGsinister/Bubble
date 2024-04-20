@@ -16,7 +16,7 @@ fun RelaxScreen(
         padding = paddingValues.calculateTopPadding(),
         accentGradientColor = BubbleTheme.colors.backgroundGradientStatsAccentColor4,
         content = {
-            Text(text = "Stats")
+            Text(text = "Relax")
         }
     )
 }

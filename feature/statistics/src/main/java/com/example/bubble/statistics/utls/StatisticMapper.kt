@@ -13,3 +13,30 @@ internal fun DatabaseResource<Statistic>.toStatisticState(): StatisticsState {
         is DatabaseResource.Loading -> StatisticsState.LoadingState
     }
 }
+
+
+/**
+ * Маппер дней недели. Из Int в String
+ * 0 - Понедельник
+ * 1 - Вторник
+ * 2 - Среда
+ * 3 - Четверг
+ * 4 - Пятница
+ * 5 - Суббота
+ * 6 - Воскресенье
+ */
+internal fun String.toWeekly(): String {
+    return when(this){
+        "0" -> "Понедельник"
+        "1" -> "Вторник"
+        "2" -> "Среда"
+        "3" -> "Четверг"
+        "4" -> "Пятница"
+        "5" -> "Суббота"
+        else -> "Воскресенье"
+    }
+}
+
+internal fun Long.toWeeklyInt(): Int {
+    return (this / 1_000 / 60).toInt()
+}

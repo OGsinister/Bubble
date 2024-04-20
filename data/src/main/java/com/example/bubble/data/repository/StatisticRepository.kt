@@ -25,10 +25,14 @@ class StatisticRepository @Inject constructor(
                     countOfSession = getCountOfSessions(),
                     avgFocusTime = getAverageFocusTime(),
                     weeklyFocusTime = getWeeklyTotalFocusTime(),
-                    tagFocusData = FocusTagEntity(
-                        tag = getTagFocusTime()?.toTag(),
+                   /* tagFocusData = FocusTagEntity(
+                        tag = getTagFocusTime(), //getTagFocusTime(),
                         focusTime = getWeeklyTotalFocusTime().toInt()
-                    ),
+                    ),*/
+                    tagFocusData = listOf(FocusTagEntity(
+                        tag = getTagFocusTime(),
+                        focusTime = getWeeklyTotalFocusTime().toInt()
+                    )),
                     weeklyFocusMainData = database.statisticDao().getWeeklyFocus(),
                     successPercent = (getSuccessfullyFocusPercent() / getAllFocusCount()).toFloat()
                 )
@@ -47,8 +51,8 @@ class StatisticRepository @Inject constructor(
     private fun getCountOfSessions(): Int = database.statisticDao().getTimeCountOfSessions()
     private fun getAverageFocusTime(): Long = database.statisticDao().getAverageFocusTime()
     private fun getWeeklyTotalFocusTime(): Long = database.statisticDao().getWeeklyTotalFocusTime()
-    private fun getTagFocusTime(): TagEntity? = database.statisticDao().getTags()
+    private fun getTagFocusTime(): List<TagEntity> = database.statisticDao().getTags()
     private fun getSuccessfullyFocusPercent(): Int = database.statisticDao().getSuccessfullyFocusCount()
     private fun getAllFocusCount(): Int = database.statisticDao().getAllFocusCount()
-    private fun getWeeklyFocus(): WeeklyFocusEntity = database.statisticDao().getWeeklyFocus()
+    //private fun getWeeklyFocus(): WeeklyFocusEntity = database.statisticDao().getWeeklyFocus()
 }

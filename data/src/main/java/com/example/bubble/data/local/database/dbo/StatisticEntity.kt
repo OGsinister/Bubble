@@ -21,7 +21,8 @@ data class StatisticEntity(
     @ColumnInfo(name = "tag_focus_data") val tagFocusData: List<FocusTagEntity>?,
 
     @ColumnInfo(name = "weekly_focus_data") val weeklyFocusMainData: List<WeeklyFocusEntity>,
-    @ColumnInfo(name = "day_of_week") val dayOfWeek: String? = null
+    @ColumnInfo(name = "day_of_week") val dayOfWeek: String? = null,
+    @ColumnInfo(name = "all_focus_count") val allFocusCounts: Int? = null
 )
 
 @TypeConverters(TypeConverter::class)

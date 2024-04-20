@@ -1,7 +1,5 @@
 package com.example.bubble.domain.model
 
-import java.util.Date
-
 data class Bubble(
     val id: Int? = null,
     val tag: Tag? = null,
@@ -18,5 +16,6 @@ data class Tag(
     val id: Int = 0,
     val tagName: Int = 0,
     val tagColor: Int = 0,
-    val tagIcon: Int = 0
+    val tagIcon: Int = 0,
+    val totalTime: Long = 0L
 )

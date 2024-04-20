@@ -25,5 +25,6 @@ data class BubbleEntity(
 data class TagEntity(
     @ColumnInfo(name = "name") val name: Int? = 0,
     @ColumnInfo(name = "color") val color: Int = 0,
-    @ColumnInfo(name = "icon") val icon: Int = 0
+    @ColumnInfo(name = "icon") val icon: Int = 0,
+    @ColumnInfo(name = "total_time") val totalTime: Long = 0
 )

@@ -34,7 +34,8 @@ class StatisticRepository @Inject constructor(
                         focusTime = getWeeklyTotalFocusTime().toInt()
                     )),
                     weeklyFocusMainData = database.statisticDao().getWeeklyFocus(),
-                    successPercent = (getSuccessfullyFocusPercent() / getAllFocusCount()).toFloat()
+                    successPercent = getSuccessfullyFocusPercent().toFloat(),
+                    allFocusCounts = getAllFocusCount()
                 )
 
                 if (cachedStatistic.tagFocusData != null){

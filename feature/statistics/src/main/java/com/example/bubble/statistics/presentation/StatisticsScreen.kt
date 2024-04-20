@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.bubble.core.ui.theme.BubbleTheme
@@ -31,7 +32,9 @@ import com.example.bubble.core.ui.utils.BubbleErrorScreen
 import com.example.bubble.core.ui.utils.BubbleLoadingScreen
 import com.example.bubble.core.ui.utils.GradientColumn
 import com.example.bubble.core.utils.toValueOnlyTimeUIFormat
+import com.example.bubble.domain.model.FocusTag
 import com.example.bubble.domain.model.Statistic
+import com.example.bubble.domain.model.Tag
 import com.example.bubble.statistics.R
 import com.example.bubble.statistics.StatisticsViewModel
 import com.example.bubble.statistics.model.StatisticsState
@@ -103,7 +106,7 @@ fun StatLoadedDataScreen(
 
         BarChartSection(statistic = statistic)
 
-        TagPieChartSection(statistic = statistic)
+        TagPieChartSection(tagsFocusData = statistic.tagFocusData!!)
 
         SuccessPercentSection(statistic = statistic)
     }
@@ -114,16 +117,24 @@ fun SuccessPercentSection(
     modifier: Modifier = Modifier,
     statistic: Statistic
 ) {
-    AllTimeSection(text = "Статистика по тэгам") {
+    AllTimeSection(text = "Процент успешных фокусировок") {
         Box(
             modifier = modifier
-                .fillMaxWidth()
-                .background(Color.Red),
+                .fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = statistic.successPercent?.toString() + " %"
-            )
+            Log.d("checkData", statistic.successPercent.toString())
+            if (statistic.allFocusCounts != 0){
+                val successPercent = (statistic.successPercent ?: 0F) / (statistic.allFocusCounts?.toFloat() ?: 0F)
+
+                Text(
+                    text = "$successPercent %",
+                    style = BubbleTheme.typography.heading,
+                    color = BubbleTheme.colors.primaryTextColor,
+                    maxLines = 1,
+                    overflow = TextOverflow.Clip
+                )
+            }
         }
     }
 }
@@ -154,33 +165,33 @@ fun AllTimeSection(
 @Composable
 fun TagPieChartSection(
     modifier: Modifier = Modifier,
-    statistic: Statistic
+    tagsFocusData: List<FocusTag>,
 ) {
     val modelProducer = remember { CartesianChartModelProducer.build() }
-    val tags: MutableList<String> = mutableListOf()
+    val tagList: MutableList<String> = mutableListOf()
+    val valuesList: MutableList<Int> = mutableListOf()
 
-    statistic.tagFocusData?.forEach {
-        it.tag?.forEach { name ->
-            tags.add(stringResource(id = name.tagName))
+    tagsFocusData.forEach {
+        it.tag?.forEach { tagName ->
+            tagList.add(stringResource(id = tagName.tagName))
+            valuesList.add(tagName.totalTime.toWeeklyInt())
         }
     }
 
-    val values = statistic.tagFocusData?.map { it.focusTime ?: 0 } ?: emptyList()
-
     val bottomAxisValueFormatter =
         AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ ->
-            tags[x.toInt() % tags.size]
+            tagList[x.toInt() % tagList.size]
         }
 
     LaunchedEffect(Unit) {
         withContext(Dispatchers.Default) {
             modelProducer.tryRunTransaction {
-                columnSeries { series(0,1,2,3)}
+                columnSeries { series(valuesList)}
             }
         }
     }
 
-    AllTimeSection(text = "Статистика за все время") {
+    AllTimeSection(text = "Статистика по тэгам") {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -226,7 +237,6 @@ fun BarChartSection(
     modifier: Modifier = Modifier,
     statistic: Statistic
 ) {
-
     val modelProducer = remember { CartesianChartModelProducer.build() }
     val daysOfWeek: MutableList<String> = mutableListOf()
     statistic.weeklyFocusMainData?.forEach {

@@ -6,7 +6,8 @@ data class Statistic(
     val weeklyFocusTime: Long? = null,
     val tagFocusData: List<FocusTag>? = null,
     val weeklyFocusMainData: List<WeeklyFocus>? = null,
-    val successPercent: Float? = null
+    val successPercent: Float? = null,
+    val allFocusCounts: Int? = null
 )
 
 data class FocusTag(

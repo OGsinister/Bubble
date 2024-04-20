@@ -101,7 +101,8 @@ fun StatisticEntity.toStatistic(): Statistic {
         tagFocusData = tagFocusData?.map { it.toFocusTag() },
         weeklyFocusTime = weeklyFocusTime,
         weeklyFocusMainData = weeklyFocusMainData.map { it.toWeeklyFocus() },
-        successPercent = successPercent
+        successPercent = successPercent,
+        allFocusCounts = allFocusCounts
     )
 }
 
@@ -137,7 +138,8 @@ fun Tag.toTagEntity(): TagEntity{
     return TagEntity(
         name = tagName,
         color = tagColor,
-        icon = tagIcon
+        icon = tagIcon,
+        totalTime = totalTime
     )
 }
 
@@ -145,7 +147,8 @@ fun TagEntity.toTag(): Tag{
     return Tag(
         tagName = name!!,
         tagColor = color,
-        tagIcon = icon
+        tagIcon = icon,
+        totalTime = totalTime
     )
 }
 

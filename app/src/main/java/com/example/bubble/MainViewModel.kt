@@ -1,6 +1,5 @@
 package com.example.bubble
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bubble.award.useCase.AddAwardUseCase
@@ -27,7 +26,8 @@ class MainViewModel @Inject constructor(
     private val bubbleDispatchers: BubbleDispatchers,
     private val addAwardUseCase: AddAwardUseCase,
     private val getUserUnlockedAwardsCountUseCase: GetUserUnlockedAwardsCountUseCase,
-    private val dataStoreManager: DataStoreManager
+    private val dataStoreManager: DataStoreManager,
+    private val awardSharedPref: AwardSharedPref
 ): ViewModel() {
 
     private var _userAwardsCount = MutableStateFlow("")
@@ -37,20 +37,9 @@ class MainViewModel @Inject constructor(
         .getUserData()
         .stateIn(viewModelScope, SharingStarted.Lazily, User())
 
-    fun updateAchiv(code: AwardCodes) {
+    fun updateAchievement(code: AwardCodes) {
         viewModelScope.launch(bubbleDispatchers.io) {
             updateAwardUseCase.updateAward(code)
-        }
-    }
-
-    fun addAchiv() {
-        viewModelScope.launch(bubbleDispatchers.io) {
-            val awardEntity = AwardEntity(
-                name = "name",
-                title = "title",
-                isUnlocked = false
-            )
-            addAwardUseCase.invoke(awardEntity)
         }
     }
 
@@ -60,8 +49,4 @@ class MainViewModel @Inject constructor(
                 "${getUserUnlockedAwardsCountUseCase()} / ${AwardSharedPref.ALL_AWARDS_COUNT}"
         }
     }
-}
-
-sealed interface HeaderState{
-    data object Default: HeaderState
 }

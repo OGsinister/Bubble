@@ -36,5 +36,7 @@ fun bubbleDatabase(applicationContext: Context): BubbleDatabase {
         context = applicationContext.applicationContext,
         klass = BubbleDatabase::class.java,
         name = BubbleDatabase.DATABASE_NAME,
-    ).build()
+    )
+        .createFromAsset("database/Bubble.db")
+        .build()
 }

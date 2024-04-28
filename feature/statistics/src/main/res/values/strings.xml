@@ -5,4 +5,6 @@
     <string name="sessions">сессий</string>
     <string name="minutes">минут</string>
     <string name="all_time">За все время</string>
+    <string name="success_focus_percent">Процент успешных фокусировок</string>
+    <string name="total_time">"Всего времени: "</string>
 </resources>

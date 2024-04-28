@@ -1,6 +1,5 @@
 package com.example.bubble.settings.useCases
 
-import android.util.Log
 import com.example.bubble.core.utils.BubbleDispatchers
 import com.example.bubble.data.local.sharedPref.SettingsSharedPref
 import com.example.bubble.domain.model.Settings
@@ -30,7 +29,6 @@ class GetAllSettingsUseCase @Inject constructor(
                 ))
             }catch (e: Exception){
                 emit(SettingsState.ErrorState(message = e.localizedMessage.toString()))
-                e.localizedMessage?.let { Log.d("checkExceptionsMFFFF", it) }
             }
         }.flowOn(bubbleDispatchers.main)
     }

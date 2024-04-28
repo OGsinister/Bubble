@@ -1,6 +1,15 @@
 package com.example.bubble.statistics.presentation
 
 import android.util.Log
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.EaseInOut
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,6 +19,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -21,10 +31,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.graphics.shapes.CornerRounding
+import androidx.graphics.shapes.RoundedPolygon
+import androidx.graphics.shapes.toPath
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.bubble.core.ui.theme.BubbleTheme
 import com.example.bubble.core.ui.utils.BubbleEmptyDataScreen
@@ -34,7 +50,6 @@ import com.example.bubble.core.ui.utils.GradientColumn
 import com.example.bubble.core.utils.toValueOnlyTimeUIFormat
 import com.example.bubble.domain.model.FocusTag
 import com.example.bubble.domain.model.Statistic
-import com.example.bubble.domain.model.Tag
 import com.example.bubble.statistics.R
 import com.example.bubble.statistics.StatisticsViewModel
 import com.example.bubble.statistics.model.StatisticsState
@@ -44,13 +59,19 @@ import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.chart.CartesianChartHost
 import com.patrykandpatrick.vico.compose.chart.layer.rememberColumnCartesianLayer
+import com.patrykandpatrick.vico.compose.chart.layer.rememberLineCartesianLayer
+import com.patrykandpatrick.vico.compose.chart.layer.rememberLineSpec
 import com.patrykandpatrick.vico.compose.chart.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.component.rememberLineComponent
 import com.patrykandpatrick.vico.compose.component.rememberTextComponent
+import com.patrykandpatrick.vico.compose.component.shape.shader.color
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.chart.layer.ColumnCartesianLayer
+import com.patrykandpatrick.vico.core.chart.values.AxisValueOverrider
 import com.patrykandpatrick.vico.core.component.shape.Shapes
+import com.patrykandpatrick.vico.core.component.shape.shader.DynamicShader
+import com.patrykandpatrick.vico.core.component.shape.shader.DynamicShaders
 import com.patrykandpatrick.vico.core.model.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.model.columnSeries
 import kotlinx.coroutines.Dispatchers
@@ -106,7 +127,7 @@ fun StatLoadedDataScreen(
 
         BarChartSection(statistic = statistic)
 
-        TagPieChartSection(tagsFocusData = statistic.tagFocusData!!)
+        TagChartSection(tagsFocusData = statistic.tagFocusData!!)
 
         SuccessPercentSection(statistic = statistic)
     }
@@ -117,22 +138,72 @@ fun SuccessPercentSection(
     modifier: Modifier = Modifier,
     statistic: Statistic
 ) {
-    AllTimeSection(text = "Процент успешных фокусировок") {
+    val successFocus = remember { statistic.successPercent ?: 1F }
+    val allFocus = remember { statistic.allFocusCounts ?: 1 }
+
+    val infiniteTransition = rememberInfiniteTransition(label = "")
+    val color by infiniteTransition.animateColor(
+        initialValue = Color(0xFF124241),
+        targetValue = Color(0xFF2755B1),
+        animationSpec = infiniteRepeatable(
+            animation = tween(5_000, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ), label = ""
+    )
+    val secondColor by infiniteTransition.animateColor(
+        initialValue = Color(0xFF89FC22),
+        targetValue = Color(0xFF90EFF1),
+        animationSpec = infiniteRepeatable(
+            animation = tween(5_000, easing = EaseInOut),
+            repeatMode = RepeatMode.Reverse
+        ), label = ""
+    )
+    val cornerRounding by infiniteTransition.animateFloat(
+        initialValue = 120f,
+        targetValue = 150f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(3_000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ), label = ""
+    )
+
+    AllTimeSection(text = stringResource(id = R.string.success_focus_percent)) {
         Box(
             modifier = modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .size(250.dp)
+                .drawWithCache {
+                    val rectangle = RoundedPolygon(
+                        numVertices = 3,
+                        radius = size.minDimension / 2f,
+                        centerX = size.width / 2f,
+                        centerY = size.height / 2f,
+                        rounding = CornerRounding(cornerRounding)
+                    )
+
+                    onDrawBehind {
+                        drawPath(
+                            rectangle
+                                .toPath()
+                                .asComposePath(),
+                            brush = Brush.radialGradient(listOf(color, secondColor))
+                        )
+                    }
+                },
             contentAlignment = Alignment.Center
         ) {
-            Log.d("checkData", statistic.successPercent.toString())
-            if (statistic.allFocusCounts != 0){
-                val successPercent = (statistic.successPercent ?: 0F) / (statistic.allFocusCounts?.toFloat() ?: 0F)
+            if (statistic.allFocusCounts != 0) {
+                val successPercent =
+                    (successFocus / allFocus) * 100
+
+                val format = "%.2f".format(successPercent)
 
                 Text(
-                    text = "$successPercent %",
+                    text = "$format %",
                     style = BubbleTheme.typography.heading,
                     color = BubbleTheme.colors.primaryTextColor,
                     maxLines = 1,
-                    overflow = TextOverflow.Clip
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }
@@ -163,7 +234,7 @@ fun AllTimeSection(
 }
 
 @Composable
-fun TagPieChartSection(
+fun TagChartSection(
     modifier: Modifier = Modifier,
     tagsFocusData: List<FocusTag>,
 ) {
@@ -186,10 +257,11 @@ fun TagPieChartSection(
     LaunchedEffect(Unit) {
         withContext(Dispatchers.Default) {
             modelProducer.tryRunTransaction {
-                columnSeries { series(valuesList)}
+                columnSeries { series(valuesList) }
             }
         }
     }
+
 
     AllTimeSection(text = "Статистика по тэгам") {
         Column(
@@ -211,8 +283,12 @@ fun TagPieChartSection(
                             )
                         )
                     ),
-                    startAxis = rememberStartAxis(
-                        label = rememberTextComponent(
+                    rememberLineCartesianLayer(
+                        lines = listOf(rememberLineSpec(shader = DynamicShaders.color(Color.Magenta))),
+                    ),
+                    startAxis =
+                        rememberStartAxis(
+                            label = rememberTextComponent(
                             color = BubbleTheme.colors.chartTitleTextColor
                         )
                     ),
@@ -273,9 +349,11 @@ fun BarChartSection(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Всего времени: ", color = Color.White)
+                Text(text = stringResource(id = R.string.total_time), color = Color.White)
                 Text(
-                    text = "${statistic.weeklyFocusTime?.toValueOnlyTimeUIFormat()} минут",
+                    text = "${statistic.weeklyFocusTime?.toValueOnlyTimeUIFormat()} ${stringResource(
+                        id = R.string.minutes
+                    )}",
                     color = Color.White
                 )
             }

@@ -1,5 +1,7 @@
 package com.example.bubble.home.presentation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.Animatable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -13,6 +15,7 @@ import com.example.bubble.core.ui.utils.GradientColumn
 import com.example.bubble.home.HomeViewModel
 import com.example.bubble.home.model.HomeState
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,

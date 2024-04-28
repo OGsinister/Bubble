@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,9 +17,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -32,12 +35,15 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.bubble.core.R
 import com.example.bubble.core.ui.theme.BubbleTheme
 import com.example.bubble.core.ui.utils.BubbleImage
+import com.example.bubble.core.ui.utils.BubbleTextField
 import com.example.bubble.core.ui.utils.ChangeUserNameDialog
 import com.example.bubble.core.ui.utils.GradientColumn
 import com.example.bubble.core.utils.getDominantColor
@@ -84,9 +90,7 @@ fun LoadedScreen(
     paddingValues: Dp,
     viewModel: SettingsViewModel
 ) {
-    val userNameValue = rememberSaveable {
-        mutableStateOf("")
-    }
+    val userNameValue = rememberSaveable { mutableStateOf("") }
 
     Column(
         modifier = modifier
@@ -100,7 +104,46 @@ fun LoadedScreen(
             viewModel = viewModel
         )
 
-        if (viewModel.isOpenUserNameDialog.value) {
+        AnimatedVisibility(viewModel.isOpenUserNameDialog.value) {
+            Column(
+                modifier = Modifier
+                    .padding(BubbleTheme.shapes.basePadding)
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                Text(
+                    text = stringResource(id = R.string.type_your_name),
+                    style = BubbleTheme.typography.heading,
+                    color = BubbleTheme.colors.primaryTextColor,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(5.dp)
+                ){
+                    BubbleTextField(
+                        value = userNameValue.value,
+                        onValueChange = {
+                            userNameValue.value = it
+                        }
+                    )
+
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = null,
+                        modifier = Modifier.clickable {
+                            viewModel.changeDialog(!viewModel.isOpenUserNameDialog.value)
+                            viewModel.event(SettingsEvent.ChangeUserName(name = userNameValue.value))
+                        }
+                    )
+                }
+            }
+        }
+
+        /*if (viewModel.isOpenUserNameDialog.value) {
             ChangeUserNameDialog(
                 text = userNameValue.value,
                 onValueChange = {
@@ -111,7 +154,7 @@ fun LoadedScreen(
                     viewModel.event(SettingsEvent.ChangeUserName(name = userNameValue.value))
                 }
             )
-        }
+        }*/
     }
 }
 

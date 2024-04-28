@@ -38,7 +38,7 @@ interface StatisticDao {
     fun getWeeklyFocus(): List<WeeklyFocusEntity>
 
     // это именно те данные, которые показываются в круговой диаграмме тегов
-    @Query("SELECT bubbletagname AS name, bubbletagcolor AS color, bubbletagicon AS icon,  bubbledate_time as total_time FROM History GROUP BY name")
+    @Query("SELECT bubbletagname AS name, bubbletagcolor AS color, bubbletagicon AS icon,  SUM(bubbledate_time) as total_time FROM History GROUP BY name")
     fun getTags(): List<TagEntity>
 
     // это процент успешных фокусировок ко всем фокусировкам

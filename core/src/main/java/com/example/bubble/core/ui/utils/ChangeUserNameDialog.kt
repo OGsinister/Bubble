@@ -72,6 +72,6 @@ fun ChangeUserNameDialog(
                 }
             }
         },
-        containerColor = Color.Green
+        containerColor = Color.White.copy(alpha = 0.2f)
     )
 }

@@ -9,7 +9,7 @@ class MediaPlayerIWorkUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(){
         mediaHelper.playSound()
-        delay(500)
+        delay(100)
         mediaHelper.stopSound()
     }
 }

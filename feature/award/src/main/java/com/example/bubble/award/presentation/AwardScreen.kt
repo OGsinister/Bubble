@@ -11,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +25,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.bubble.award.AwardViewModel
 import com.example.bubble.award.model.AwardState
 import com.example.bubble.core.ui.theme.BubbleTheme
+import com.example.bubble.core.ui.utils.BubbleEmptyDataScreen
+import com.example.bubble.core.ui.utils.BubbleErrorScreen
+import com.example.bubble.core.ui.utils.BubbleLoadingScreen
 import com.example.bubble.core.ui.utils.GradientColumn
 import com.example.bubble.domain.model.Award
 
@@ -46,11 +48,11 @@ fun AwardScreen(
                 }
 
                 if(currentState is AwardState.EmptyDataState){
-                    EmptyDataScreen(currentState.message)
+                    EmptyDataScreen(message = currentState.message)
                 }
 
                 if(currentState is AwardState.ErrorState){
-                    ErrorStateScreen(currentState.message)
+                    ErrorStateScreen(error = currentState.message)
                 }
 
                 if(currentState is AwardState.LoadedAwardsState){
@@ -63,17 +65,23 @@ fun AwardScreen(
 
 @Composable
 private fun LoadingStateScreen(){
-    CircularProgressIndicator()
+    BubbleLoadingScreen()
 }
 
 @Composable
-private fun EmptyDataScreen(message: String){
-    Text(text = message)
+private fun EmptyDataScreen(
+    modifier: Modifier = Modifier,
+    message: String
+){
+    BubbleEmptyDataScreen(modifier = modifier)
 }
 
 @Composable
-private fun ErrorStateScreen(error: String){
-    Text(text = error)
+private fun ErrorStateScreen(
+    modifier: Modifier = Modifier,
+    error: String
+){
+    BubbleErrorScreen(modifier = modifier, errorMessage = error)
 }
 
 @Composable

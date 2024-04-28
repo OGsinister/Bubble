@@ -1,5 +1,7 @@
 package com.example.bubble.home.presentation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector4D
 import androidx.compose.animation.core.tween
@@ -37,6 +39,7 @@ import com.example.bubble.home.utils.CustomCircleAnimation
 import com.example.bubble.home.utils.rememberLifecycleEvent
 import kotlin.random.Random
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun FocusHomeScreen(
     modifier: Modifier = Modifier,
@@ -48,10 +51,6 @@ fun FocusHomeScreen(
     val lifecycleEvent = rememberLifecycleEvent()
     val currentTime by viewModel.currentTime.collectAsState()
     val affirmation by viewModel.affirmation.collectAsState()
-
-    val isPopBubbleAnimationStart = remember {
-        mutableStateOf(viewModel.bubble.value.startAnimation)
-    }
 
     LaunchedEffect(key1 = lifecycleEvent) {
         if (lifecycleEvent == Lifecycle.Event.ON_STOP) {

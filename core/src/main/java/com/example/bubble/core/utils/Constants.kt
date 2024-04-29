@@ -15,4 +15,6 @@ object Constants {
     const val TOKEN_USER_NAME = "UserNameToken"
     const val TOKEN_SOUND = "Sound"
     const val TOKEN_SIGN_IN = "TokenSignIn"
+
+    const val TEXT_FILED_MAX_LENGTH = 25
 }

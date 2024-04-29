@@ -8,6 +8,8 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateValue
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -29,12 +32,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -46,6 +51,7 @@ import com.example.bubble.core.ui.utils.BubbleImage
 import com.example.bubble.core.ui.utils.BubbleTextField
 import com.example.bubble.core.ui.utils.ChangeUserNameDialog
 import com.example.bubble.core.ui.utils.GradientColumn
+import com.example.bubble.core.utils.Constants
 import com.example.bubble.core.utils.getDominantColor
 import com.example.bubble.domain.model.Settings
 import com.example.bubble.settings.SettingsViewModel
@@ -90,7 +96,7 @@ fun LoadedScreen(
     paddingValues: Dp,
     viewModel: SettingsViewModel
 ) {
-    val userNameValue = rememberSaveable { mutableStateOf("") }
+    var userNameValue by rememberSaveable { mutableStateOf("") }
 
     Column(
         modifier = modifier
@@ -125,36 +131,24 @@ fun LoadedScreen(
                     horizontalArrangement = Arrangement.spacedBy(5.dp)
                 ){
                     BubbleTextField(
-                        value = userNameValue.value,
-                        onValueChange = {
-                            userNameValue.value = it
-                        }
+                        value = userNameValue,
+                        onValueChange = { userNameValue = it },
+                        placeholderText = viewModel.user.value.name,
+                        focusedTextColor = BubbleTheme.colors.chartLineColor
                     )
 
                     Icon(
-                        imageVector = Icons.Default.Add,
+                        imageVector = Icons.Default.Done,
                         contentDescription = null,
+                        tint = BubbleTheme.colors.bubbleButtonColor,
                         modifier = Modifier.clickable {
                             viewModel.changeDialog(!viewModel.isOpenUserNameDialog.value)
-                            viewModel.event(SettingsEvent.ChangeUserName(name = userNameValue.value))
+                            viewModel.event(SettingsEvent.ChangeUserName(name = userNameValue))
                         }
                     )
                 }
             }
         }
-
-        /*if (viewModel.isOpenUserNameDialog.value) {
-            ChangeUserNameDialog(
-                text = userNameValue.value,
-                onValueChange = {
-                    userNameValue.value = it
-                },
-                onDismiss = {
-                    viewModel.changeDialog(!viewModel.isOpenUserNameDialog.value)
-                    viewModel.event(SettingsEvent.ChangeUserName(name = userNameValue.value))
-                }
-            )
-        }*/
     }
 }
 
@@ -265,7 +259,6 @@ fun UserSection(
 ) {
     val context = LocalContext.current
     val user by viewModel.user.collectAsState()
-
     val photoPicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia()
     ) {
@@ -279,7 +272,6 @@ fun UserSection(
             )
         }
     }
-
     val dominantColor = getDominantColor(
         LocalContext.current,
         user.image
@@ -289,11 +281,13 @@ fun UserSection(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                Brush.verticalGradient(
+                Brush.linearGradient(
                     colors = listOf(
                         BubbleTheme.colors.backgroundGradientColorDark1,
                         Color(dominantColor!!),
-                        BubbleTheme.colors.backgroundGradientColorDark1.copy(0.1f),
+                        BubbleTheme.colors.backgroundGradientColorDark1.copy(0.4f),
+                        BubbleTheme.colors.backgroundGradientColorDark1.copy(0.38f),
+                        BubbleTheme.colors.backgroundGradientColorDark1
                     )
                 )
             )

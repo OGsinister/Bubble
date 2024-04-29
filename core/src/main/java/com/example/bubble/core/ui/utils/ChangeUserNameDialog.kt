@@ -65,10 +65,10 @@ fun ChangeUserNameDialog(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
-                    BubbleTextField(
+                    /*BubbleTextField(
                         value = text,
                         onValueChange = onValueChange
-                    )
+                    )*/
                 }
             }
         },

@@ -1,6 +1,5 @@
 package com.example.bubble.statistics.presentation
 
-import android.util.Log
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -58,20 +57,15 @@ import com.example.bubble.statistics.utls.toWeeklyInt
 import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
 import com.patrykandpatrick.vico.compose.chart.CartesianChartHost
+import com.patrykandpatrick.vico.compose.chart.edges.rememberFadingEdges
 import com.patrykandpatrick.vico.compose.chart.layer.rememberColumnCartesianLayer
-import com.patrykandpatrick.vico.compose.chart.layer.rememberLineCartesianLayer
-import com.patrykandpatrick.vico.compose.chart.layer.rememberLineSpec
 import com.patrykandpatrick.vico.compose.chart.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.component.rememberLineComponent
 import com.patrykandpatrick.vico.compose.component.rememberTextComponent
-import com.patrykandpatrick.vico.compose.component.shape.shader.color
 import com.patrykandpatrick.vico.core.axis.AxisPosition
 import com.patrykandpatrick.vico.core.axis.formatter.AxisValueFormatter
 import com.patrykandpatrick.vico.core.chart.layer.ColumnCartesianLayer
-import com.patrykandpatrick.vico.core.chart.values.AxisValueOverrider
 import com.patrykandpatrick.vico.core.component.shape.Shapes
-import com.patrykandpatrick.vico.core.component.shape.shader.DynamicShader
-import com.patrykandpatrick.vico.core.component.shape.shader.DynamicShaders
 import com.patrykandpatrick.vico.core.model.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.model.columnSeries
 import kotlinx.coroutines.Dispatchers
@@ -241,11 +235,13 @@ fun TagChartSection(
     val modelProducer = remember { CartesianChartModelProducer.build() }
     val tagList: MutableList<String> = mutableListOf()
     val valuesList: MutableList<Int> = mutableListOf()
+    val tagsColor: MutableList<Color> = mutableListOf()
 
     tagsFocusData.forEach {
         it.tag?.forEach { tagName ->
             tagList.add(stringResource(id = tagName.tagName))
             valuesList.add(tagName.totalTime.toWeeklyInt())
+            tagsColor.add(Color(tagName.tagColor))
         }
     }
 
@@ -253,6 +249,7 @@ fun TagChartSection(
         AxisValueFormatter<AxisPosition.Horizontal.Bottom> { x, _, _ ->
             tagList[x.toInt() % tagList.size]
         }
+
 
     LaunchedEffect(Unit) {
         withContext(Dispatchers.Default) {
@@ -262,8 +259,7 @@ fun TagChartSection(
         }
     }
 
-
-    AllTimeSection(text = "Статистика по тэгам") {
+    AllTimeSection(text = stringResource(id = R.string.stat_by_tag)) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -277,19 +273,15 @@ fun TagChartSection(
                     rememberColumnCartesianLayer(
                         columnProvider = ColumnCartesianLayer.ColumnProvider.series(
                             rememberLineComponent(
-                                color = Color(0xffd877d8),
-                                thickness = 5.dp,
-                                shape = Shapes.roundedCornerShape(10)
+                                color = BubbleTheme.colors.tagChartLineColor,
+                                thickness = 8.dp,
+                                shape = Shapes.pillShape
                             )
                         )
                     ),
-                    rememberLineCartesianLayer(
-                        lines = listOf(rememberLineSpec(shader = DynamicShaders.color(Color.Magenta))),
-                    ),
-                    startAxis =
-                        rememberStartAxis(
-                            label = rememberTextComponent(
-                            color = BubbleTheme.colors.chartTitleTextColor
+                    startAxis = rememberStartAxis(
+                        label = rememberTextComponent(
+                            color = Color.White
                         )
                     ),
                     bottomAxis = rememberBottomAxis(
@@ -298,7 +290,8 @@ fun TagChartSection(
                             color = Color.White
                         ),
                         guideline = null
-                    )
+                    ),
+                    fadingEdges = rememberFadingEdges()
                 ),
                 modelProducer = modelProducer,
                 modifier = modifier
@@ -333,7 +326,7 @@ fun BarChartSection(
         }
     }
 
-    AllTimeSection(text = "Статистика за все время") {
+    AllTimeSection(text = stringResource(id = R.string.all_time_stat)) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -351,9 +344,11 @@ fun BarChartSection(
             ) {
                 Text(text = stringResource(id = R.string.total_time), color = Color.White)
                 Text(
-                    text = "${statistic.weeklyFocusTime?.toValueOnlyTimeUIFormat()} ${stringResource(
-                        id = R.string.minutes
-                    )}",
+                    text = "${statistic.weeklyFocusTime?.toValueOnlyTimeUIFormat()} ${
+                        stringResource(
+                            id = R.string.minutes
+                        )
+                    }",
                     color = Color.White
                 )
             }
@@ -363,7 +358,7 @@ fun BarChartSection(
                     rememberColumnCartesianLayer(
                         columnProvider = ColumnCartesianLayer.ColumnProvider.series(
                             rememberLineComponent(
-                                color = Color(0xffd877d8),
+                                color = BubbleTheme.colors.chartLineColor,
                                 thickness = 5.dp,
                                 shape = Shapes.roundedCornerShape(10)
                             )
@@ -372,7 +367,7 @@ fun BarChartSection(
                     ),
                     startAxis = rememberStartAxis(
                         label = rememberTextComponent(
-                            color = BubbleTheme.colors.chartTitleTextColor
+                            color = Color.White
                         )
                     ),
                     bottomAxis = rememberBottomAxis(
@@ -407,8 +402,8 @@ fun InfoSection(
         BubbleTheme.colors.backgroundGradientNavDrawerAccentColor2
     )
 
-    val sessionIcon = com.example.bubble.core.R.drawable.ic_tag_home_icon
-    val timeIcon = com.example.bubble.core.R.drawable.ic_tag_reading_icon
+    val sessionIcon = com.example.bubble.core.R.drawable.ic_total_focus
+    val timeIcon = com.example.bubble.core.R.drawable.ic_average
 
     AllTimeSection(text = stringResource(id = R.string.all_time)) {
         Row(
@@ -428,7 +423,7 @@ fun InfoSection(
                 gradientColor = timeGradientColor,
                 icon = timeIcon,
                 title = "${avgFocusTime?.toValueOnlyTimeUIFormat()} ${stringResource(id = R.string.minutes)}",
-                text = "${stringResource(id = R.string.you_focused)} в среднем"
+                text = stringResource(id = R.string.average)
             )
         }
     }

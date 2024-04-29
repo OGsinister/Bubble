@@ -71,9 +71,10 @@ dependencies {
 
     // Graphics
     implementation(libs.vico.compose.m3)
+    implementation(libs.vico.core)
+    implementation(libs.vico.compose)
 
     implementation("androidx.graphics:graphics-shapes:1.0.0-alpha05")
-
 
     implementation(project(":domain"))
     implementation(project(":data"))

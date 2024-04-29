@@ -7,4 +7,7 @@
     <string name="all_time">За все время</string>
     <string name="success_focus_percent">Процент успешных фокусировок</string>
     <string name="total_time">"Всего времени: "</string>
+    <string name="all_time_stat">Статистика за все время</string>
+    <string name="stat_by_tag">Статистика по тэгам</string>
+    <string name="average">в среднем</string>
 </resources>

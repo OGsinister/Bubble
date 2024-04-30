@@ -2,6 +2,7 @@ package com.example.bubble.home
 
 import android.os.Build
 import android.os.CountDownTimer
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -95,7 +96,7 @@ class HomeViewModel @Inject constructor(
                 }
 
                 viewModelScope.launch {
-                    mediaWorkerUseCase()
+                    mediaWorkerUseCase.executeBubblePop()
                 }
 
                 _state.value = HomeState.DefaultState
@@ -110,6 +111,19 @@ class HomeViewModel @Inject constructor(
             is HomeEvents.SelectTime -> {
                 changeMillisInFuture(event.time)
                 selectedTime = event.time.time
+            }
+
+            HomeEvents.PlaySound -> {
+                viewModelScope.launch {
+                    mediaWorkerUseCase.executeAlarm()
+                }
+            }
+
+            HomeEvents.StopSound -> {
+                viewModelScope.launch {
+                    mediaWorkerUseCase.stopAlarm()
+                }
+                event(HomeEvents.StopFocus(result = FocusResult.SUCCESS))
             }
         }
     }
@@ -157,8 +171,11 @@ class HomeViewModel @Inject constructor(
                        _currentTime.value = 0L
                        isActive = false
 
-                       if (!settingsSharedPref.getPopBubbleSetting())
+                       if (settingsSharedPref.getPopBubbleSetting()){
+                           event(HomeEvents.PlaySound)
+                       }else {
                            event(HomeEvents.StopFocus(result = FocusResult.SUCCESS))
+                       }
                    }
                }.start()
            }

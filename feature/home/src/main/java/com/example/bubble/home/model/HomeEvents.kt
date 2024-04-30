@@ -7,6 +7,8 @@ sealed class HomeEvents {
     data class StopFocus(val result: FocusResult): HomeEvents()
     data class SelectTag(val tag: Tag): HomeEvents()
     data class SelectTime(val time: SelectedTime): HomeEvents()
+    data object PlaySound: HomeEvents()
+    data object StopSound: HomeEvents()
 }
 
 enum class FocusResult(val value: Boolean){

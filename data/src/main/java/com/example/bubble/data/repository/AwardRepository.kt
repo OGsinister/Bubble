@@ -7,7 +7,6 @@ import com.example.bubble.data.local.sharedPref.AwardSharedPref
 import com.example.bubble.data.utils.DatabaseResource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
 
@@ -56,15 +55,14 @@ class AwardRepository @Inject constructor(
     }
 
     private fun getSecondAward() {
-        val second = database.statisticDao().getTags().filter {
-            it.name == 2131755275
-        }
+        val cachedTags = database.awardDao().getDoneTags()
 
-        val result = second.find {
-           it.totalTime >= 3_600_000L
-        }
+        cachedTags
+            .filter { it.name == 2131755275 }
+            .find { it.totalTime >= 3_600_000L }
 
-        result?.let {
+        val result = cachedTags.filter { it.name != null }
+        if (result.isNotEmpty()){
             awardSharedPref.updateSecondAward(true)
         }
     }
@@ -95,5 +93,4 @@ class AwardRepository @Inject constructor(
             else -> {}
         }
     }
-
 }

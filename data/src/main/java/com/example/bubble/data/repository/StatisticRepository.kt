@@ -1,5 +1,6 @@
 package com.example.bubble.data.repository
 
+import android.util.Log
 import com.example.bubble.data.BubbleDatabase
 import com.example.bubble.data.local.database.dbo.FocusTagEntity
 import com.example.bubble.data.local.database.dbo.StatisticEntity
@@ -20,15 +21,10 @@ class StatisticRepository @Inject constructor(
 
             emit(DatabaseResource.Loading())
             try {
-
                 val cachedStatistic = StatisticEntity(
                     countOfSession = getCountOfSessions(),
                     avgFocusTime = getAverageFocusTime(),
                     weeklyFocusTime = getWeeklyTotalFocusTime(),
-                   /* tagFocusData = FocusTagEntity(
-                        tag = getTagFocusTime(), //getTagFocusTime(),
-                        focusTime = getWeeklyTotalFocusTime().toInt()
-                    ),*/
                     tagFocusData = listOf(FocusTagEntity(
                         tag = getTagFocusTime(),
                         focusTime = getWeeklyTotalFocusTime().toInt()
@@ -38,11 +34,11 @@ class StatisticRepository @Inject constructor(
                     allFocusCounts = getAllFocusCount()
                 )
 
-                if (cachedStatistic.tagFocusData != null){
-                    emit(DatabaseResource.LoadedData(loadedData = cachedStatistic))
+                if (cachedStatistic.countOfSession!! != 0){
+                    emit(DatabaseResource.LoadedData(loadedData = cachedStatistic, message = null))
+                } else {
+                    emit(DatabaseResource.Empty(message = "empty"))
                 }
-
-                emit(DatabaseResource.LoadedData(loadedData = cachedStatistic, message = null))
             } catch (e: IOException) {
                 emit(DatabaseResource.Error(message = e.localizedMessage.toString()))
             }

@@ -10,6 +10,7 @@ import com.example.bubble.core.ui.utils.NeedRefactoring
 import com.example.bubble.core.ui.utils.TagUI
 import com.example.bubble.core.use_cases.MediaPlayerIWorkUseCase
 import com.example.bubble.core.utils.BubbleDispatchers
+import com.example.bubble.data.local.sharedPref.AwardSharedPref
 import com.example.bubble.data.local.sharedPref.SettingsSharedPref
 import com.example.bubble.data.local.sharedPref.WaterSharedPref
 import com.example.bubble.data.repository.HistoryRepository
@@ -40,6 +41,7 @@ class HomeViewModel @Inject constructor(
     private val repository: HistoryRepository,
     private val sharedPref: WaterSharedPref,
     private val settingsSharedPref: SettingsSharedPref,
+    private val awardSharedPref: AwardSharedPref,
     private val mediaWorkerUseCase: MediaPlayerIWorkUseCase
 ) : ViewModel() {
 
@@ -215,5 +217,9 @@ class HomeViewModel @Inject constructor(
 
     internal fun getPopBubbleSetting(): Boolean {
         return settingsSharedPref.getPopBubbleSetting()
+    }
+
+    internal fun addClickToAward(count: Int) {
+        awardSharedPref.updateClicksCount(count)
     }
 }

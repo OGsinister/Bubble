@@ -27,6 +27,7 @@ data class BubbleColors(
     val chartTitleTextColor: Color,
     val chartLineColor: Color,
     val tagChartLineColor: Color,
+    val awardCardColor: Color,
 )
 
 val bubbleLightPalette = BubbleColors(
@@ -53,5 +54,6 @@ val bubbleLightPalette = BubbleColors(
     chartBackgroundColor = Color(0xFF211f28),
     chartTitleTextColor = Color(0xFF403f46),
     chartLineColor = Color(0xFF217074),
-    tagChartLineColor = Color(0xFFc6d8ff)
+    tagChartLineColor = Color(0xFFc6d8ff),
+    awardCardColor = Color(0x197BA6E7)
 )

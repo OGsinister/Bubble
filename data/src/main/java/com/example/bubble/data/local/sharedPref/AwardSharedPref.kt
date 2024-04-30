@@ -20,8 +20,59 @@ class AwardSharedPref @Inject constructor(
 
     companion object {
         private const val TOKEN = Constants.AWARD_SHARED_PREF_TOKEN
+        private const val FIRST_AWARD_TOKEN = Constants.FIRST_AWARD_TOKEN
+        private const val SECOND_AWARD_TOKEN = Constants.SECOND_AWARD_TOKEN
+        private const val THIRD_AWARD_TOKEN = Constants.THIRD_AWARD_TOKEN
+        private const val FOURTH_AWARD_TOKEN = Constants.FOURTH_AWARD_TOKEN
 
-        const val ALL_AWARDS_COUNT = 5
+        private const val BADGE_AWARD = Constants.BADGE_AWARD
+
+        const val ALL_AWARDS_COUNT = 4
+    }
+
+    fun getBadgeAward(): Boolean {
+        return awardSharedPref.getBoolean(BADGE_AWARD, false)
+    }
+
+    fun updateBadgeAward(isVisible: Boolean) {
+        editor.putBoolean(BADGE_AWARD, isVisible)
+    }
+
+    fun getClicksCount(): Int {
+        return awardSharedPref.getInt(FIRST_AWARD_TOKEN, 0)
+    }
+
+    fun updateClicksCount(count: Int) {
+        val allCounts = getClicksCount()
+        editor.putInt(FIRST_AWARD_TOKEN, allCounts + count).commit()
+    }
+
+    fun updateFirstAward(isFirst: Boolean) {
+        editor.putBoolean(FIRST_AWARD_TOKEN, isFirst).commit()
+    }
+
+    fun getSecondAward(): Boolean {
+        return awardSharedPref.getBoolean(SECOND_AWARD_TOKEN, false)
+    }
+
+    fun updateSecondAward(isProfessor: Boolean) {
+        editor.putBoolean(SECOND_AWARD_TOKEN, isProfessor).commit()
+    }
+
+    fun getThirdAward(): Boolean {
+        return awardSharedPref.getBoolean(THIRD_AWARD_TOKEN, false)
+    }
+
+    fun updateThirdAward(isFancy: Boolean) {
+        editor.putBoolean(THIRD_AWARD_TOKEN, isFancy).commit()
+    }
+
+    fun getFourthAward(): Boolean {
+        return awardSharedPref.getBoolean(FOURTH_AWARD_TOKEN, false)
+    }
+
+    fun updateFourthAward(isFourth: Boolean) {
+        editor.putBoolean(FOURTH_AWARD_TOKEN, isFourth).commit()
     }
 
     fun updateAward(awardEntity: List<AwardEntity>) {

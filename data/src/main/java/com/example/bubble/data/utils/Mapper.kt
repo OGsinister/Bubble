@@ -31,7 +31,8 @@ fun Award.toAwardEntity(): AwardEntity {
         icon = icon,
         isUnlocked = isUnlocked,
         name = name,
-        title = title
+        title = title,
+        id = id
     )
 }
 fun AwardEntity.toUIAward(): Award {
@@ -39,7 +40,8 @@ fun AwardEntity.toUIAward(): Award {
         name = name,
         title = title,
         icon = icon,
-        isUnlocked = isUnlocked
+        isUnlocked = isUnlocked,
+        id = id
     )
 }
 

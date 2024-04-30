@@ -304,6 +304,7 @@ fun UserSection(
                         ActivityResultContracts.PickVisualMedia.ImageOnly
                     )
                 )
+                viewModel.updateThirdAward()
             }
         )
 

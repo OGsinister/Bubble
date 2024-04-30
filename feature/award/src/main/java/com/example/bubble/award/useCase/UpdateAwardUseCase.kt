@@ -10,7 +10,13 @@ class UpdateAwardUseCase @Inject constructor(
     private val awardSharedPref: AwardSharedPref
 ) {
     suspend fun updateAward(code: AwardCodes) {
-        when (code) {
+        val awardFromJson = awardSharedPref.getAward()
+        val awardEntity = awardFromJson.find { it.id == code.id }
+
+        if (awardEntity != null) {
+            repository.updateAward(awardEntity)
+        }
+        /*when (code) {
             AwardCodes.FIRST_BUBBLE_CLICK -> {
                 val awardFromJson = awardSharedPref.getAward()
                 val awardEntity = awardFromJson.find {
@@ -20,19 +26,6 @@ class UpdateAwardUseCase @Inject constructor(
                     repository.updateAward(awardEntity)
                 }
             }
-
-            AwardCodes.FIRST_BUBBLE_CANCELLED -> {
-                TODO("Not implemented")
-            }
-            AwardCodes.FIRST_BUBBLE_DONE -> {
-                val awardFromJson = awardSharedPref.getAward()
-                val awardEntity = awardFromJson.find {
-                    it.id == code.id
-                }
-                if (awardEntity != null) {
-                    repository.updateAward(awardEntity)
-                }
-            }
-        }
+        }*/
     }
 }

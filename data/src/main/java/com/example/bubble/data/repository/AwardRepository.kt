@@ -1,11 +1,13 @@
 package com.example.bubble.data.repository
 
+import android.util.Log
 import com.example.bubble.data.BubbleDatabase
 import com.example.bubble.data.local.database.dbo.AwardEntity
 import com.example.bubble.data.local.sharedPref.AwardSharedPref
 import com.example.bubble.data.utils.DatabaseResource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
 
@@ -17,6 +19,10 @@ class AwardRepository @Inject constructor(
         return flow {
             emit(DatabaseResource.Loading())
             try {
+                getSecondAward()
+                checkAwardClicks()
+                checkAwards()
+
                 val cachedAwards = database.awardDao()
                     .getAllAwards()
 
@@ -48,4 +54,46 @@ class AwardRepository @Inject constructor(
     suspend fun getUserUnlockedAwards(): List<AwardEntity> {
         return database.awardDao().getUserUnlockedAwards()
     }
+
+    private fun getSecondAward() {
+        val second = database.statisticDao().getTags().filter {
+            it.name == 2131755275
+        }
+
+        val result = second.find {
+           it.totalTime >= 3_600_000L
+        }
+
+        result?.let {
+            awardSharedPref.updateSecondAward(true)
+        }
+    }
+
+    private suspend fun checkAwards() {
+        val thirdAward = awardSharedPref.getThirdAward()
+        val secondAward = awardSharedPref.getSecondAward()
+
+        if (thirdAward) {
+            database.awardDao().updateAward(3)
+        }
+
+        if (secondAward) {
+            database.awardDao().updateAward(2)
+        }
+    }
+
+    private suspend fun checkAwardClicks() {
+        val getAllCounts = awardSharedPref.getClicksCount()
+
+        when(getAllCounts) {
+            1 -> {
+                database.awardDao().updateAward(1)
+            }
+            50 -> {
+                database.awardDao().updateAward(4)
+            }
+            else -> {}
+        }
+    }
+
 }

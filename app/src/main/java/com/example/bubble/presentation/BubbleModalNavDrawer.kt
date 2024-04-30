@@ -1,5 +1,8 @@
 package com.example.bubble.presentation
 
+import android.annotation.SuppressLint
+import android.util.Log
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,7 +32,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.OffsetEffect
+import androidx.compose.ui.graphics.drawscope.draw
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -44,6 +51,7 @@ import com.example.bubble.navigation.Screens
 import com.example.bubble.presentation.utils.DrawerHeader
 import kotlinx.coroutines.launch
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BubbleModalNavDrawer(
@@ -62,6 +70,7 @@ fun BubbleModalNavDrawer(
         NavItem(route = Screens.RelaxScreen.route, stringResource(id = R.string.relax), painterResource(id = R.drawable.ic_relax_icon))
     )
     var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
+    val awardRoute = stringResource(id = R.string.awards)
     val scope = rememberCoroutineScope()
 
     ModalNavigationDrawer(

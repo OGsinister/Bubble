@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.bubble.core.utils.BubbleDispatchers
 import com.example.bubble.data.local.dataStore.DataStoreManager
 import com.example.bubble.core.utils.User
+import com.example.bubble.data.local.sharedPref.AwardSharedPref
 import com.example.bubble.settings.model.SettingsEvent
 import com.example.bubble.settings.model.SettingsState
 import com.example.bubble.settings.useCases.ChangeAffirmationSettingUseCase
@@ -26,6 +27,7 @@ class SettingsViewModel @Inject constructor(
     private val changeAffirmationSettingUseCase: ChangeAffirmationSettingUseCase,
     private val changeBubblePopSettingUseCase: ChangeBubblePopSettingUseCase,
     private val changeSoundSettingUseCase: ChangeSoundSettingUseCase,
+    private val awardSharedPref: AwardSharedPref,
     private val dataStoreManager: DataStoreManager,
     private val bubbleDispatchers: BubbleDispatchers
 ): ViewModel() {
@@ -88,5 +90,9 @@ class SettingsViewModel @Inject constructor(
 
     internal fun changeDialog(newValue: Boolean){
         isOpenUserNameDialog.value = newValue
+    }
+
+    internal fun updateThirdAward() {
+        awardSharedPref.updateThirdAward(true)
     }
 }

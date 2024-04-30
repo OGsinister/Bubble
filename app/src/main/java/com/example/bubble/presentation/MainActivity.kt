@@ -29,23 +29,8 @@ class MainActivity : ComponentActivity() {
                 val mainViewModel = hiltViewModel<MainViewModel>()
                 val navController = rememberNavController()
 
-                //CheckAwardSet()
                 BubbleModalNavDrawer(mainViewModel = mainViewModel, navController = navController)
             }
-        }
-    }
-}
-@Composable
-fun CheckAwardSet(
-    viewModel: MainViewModel = hiltViewModel()
-){
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(top = 150.dp)) {
-        Button(onClick = {
-            //viewModel.updateAchiv(AwardCodes.FIRST_BUBBLE_CLICK)
-        }) {
-            Text(text = "Click")
         }
     }
 }

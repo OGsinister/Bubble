@@ -9,7 +9,9 @@ import android.util.Base64
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.datastore.dataStore
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.bubble.core.utils.User
@@ -58,5 +60,35 @@ class DataStoreManager @Inject constructor(
                     image = bitmap
                 )
         }
+    }
+
+    suspend fun updateAwards(value: Int) {
+        context.dataStore.edit { preference ->
+            preference[intPreferencesKey("awardCount")] = value
+        }
+    }
+
+    fun getAwardsCount(): Flow<Int> {
+        return context.dataStore.data
+            .map { preference ->
+                val pref = preference[intPreferencesKey("awardCount")] ?: 0
+
+                return@map pref
+            }
+    }
+
+    suspend fun updateBadgeCount(value: Boolean) {
+        context.dataStore.edit { preference ->
+            preference[booleanPreferencesKey("badge")] = value
+        }
+    }
+
+    fun getBadgeCount(): Flow<Boolean> {
+        return context.dataStore.data
+            .map { preference ->
+                val pref = preference[booleanPreferencesKey("badge")] ?: false
+
+                return@map pref
+            }
     }
 }

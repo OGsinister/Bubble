@@ -7,6 +7,11 @@ object Constants {
     const val AWARD_SHARED_PREF_NAME = "AwardPref"
     const val AWARD_SHARED_PREF_TOKEN = "AwardToken"
 
+    const val FIRST_AWARD_TOKEN = "FirstAwardToken"
+    const val SECOND_AWARD_TOKEN = "SecondAwardToken"
+    const val THIRD_AWARD_TOKEN = "ThirdAwardToken"
+    const val FOURTH_AWARD_TOKEN = "FourthAwardToken"
+
     const val SETTINGS_SHARED_PREF_NAME = "SettingsPref"
 
     const val TOKEN_AVATAR = "AvatarToken"
@@ -15,6 +20,8 @@ object Constants {
     const val TOKEN_USER_NAME = "UserNameToken"
     const val TOKEN_SOUND = "Sound"
     const val TOKEN_SIGN_IN = "TokenSignIn"
+
+    const val BADGE_AWARD = "BadgeAward"
 
     const val TEXT_FILED_MAX_LENGTH = 25
 }

@@ -96,6 +96,7 @@ fun FocusHomeScreen(
                     if (currentTime == 0L){
                         if (viewModel.getPopBubbleSetting()){
                             viewModel.event(HomeEvents.StopFocus(result = FocusResult.SUCCESS))
+                            viewModel.addClickToAward(1)
                         }
                     }
                 }
